@@ -42,7 +42,7 @@ var VegetableSchema = new Schema({
 });
 ```
 
-Now let's look at the User. We've required the relevant mongoose middleware and set up a basic User model with a password and string. Passport is going to handle the hashing and salting of the password for us.
+Now let's look at the User. We've required the relevant mongoose middleware and set up a basic User model with a password and string. Passport is going to handle password management/hashing and salting for us.
 
 ```js
 var mongoose = require('mongoose'),
@@ -56,3 +56,40 @@ var UserSchema = new Schema({
 
 UserSchema.plugin(passportLocalMongoose);
 ```
+
+Now look at `server.js`.
+A lot of the route setup is the same - however, we can't really use `res.redirect()` here because our React routing / frontend is on a different server.
+
+```js
+//auth routes
+app.get('/api/users', controllers.user.index);
+app.delete('/api/users/:user_id',controllers.user.destroy);
+app.post('/signup', function signup(req, res) {
+  console.log(`${req.body.username} ${req.body.password}`);
+  User.register(new User({ username: req.body.username }), req.body.password,
+    function (err, newUser) {
+      passport.authenticate('local')(req, res, function() {
+        res.send(newUser);
+      });
+    }
+  )});
+app.post('/login', passport.authenticate('local'), function (req, res) {
+  console.log(JSON.stringify(req.user));
+  res.send(req.user);
+});
+app.get('/logout', function (req, res) {
+  console.log("BEFORE logout", req);
+  req.logout();
+  res.send(req);
+  console.log("AFTER logout", req);
+});
+```
+
+Instead, we will need to make ajax (or axios) calls from the frontend to these routes.
+
+Think about how React uses state. We want to conditionally render views depending on if the user is logged in. What are some ways we could do this?
+
+<details>
+ <summary>Answer</summary>
+We'll want to make some state property, `isAuthenticated`, and pass this down as props to child components as needed. We can then conditionally render components based on this.
+</details>
