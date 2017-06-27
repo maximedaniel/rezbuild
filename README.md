@@ -91,7 +91,9 @@ Think about how React uses state. We want to conditionally render views dependin
 
 <details>
  <summary>Answer</summary>
+ 
 We'll want to make some state property, `isAuthenticated`, and pass this down as props to child components as needed. We can then conditionally render components based on this.
+
 </details>
 
 ### making auth API calls from the backend
