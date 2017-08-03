@@ -96,7 +96,7 @@ We'll want to make some state property, `isAuthenticated`, and pass this down as
 
 ### making auth API calls from the backend
 
-Now, check out the Signup.js. Notice how we make an ajax call to the backend to create a new user with Passport. We're passing the username and password as data, as we would using Passport with a MEN stack app. Open up three terminal windows, run `mongod`, `node server.js`, and `nf start -p 3000` to run the app. CRUD some users and vegetables so you can get some data. You may use the seed file for inspiration.
+Now, check out the Signup.js. Notice how we make an ajax call to the backend to create a new user with Passport. We're passing the username and password as data, as we would using Passport with a MEN stack app. Open up three terminal windows, run `mongod`, `node server.js`, and `npm start` to run the app. CRUD some users and vegetables so you can get some data. You may use the seed file for inspiration.
 
 ### You do
 
