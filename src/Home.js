@@ -53,6 +53,7 @@ class Home extends Component {
 
   render() {
     if(this.state.isAuthenticated === false){
+      console.log('user is not logged in')
       return(
       <div>
       <h1>Welcome to Vegetable App</h1>
@@ -76,7 +77,7 @@ class Home extends Component {
       </div>
       )
     } else {
-      console.log('ljksdfjklsdfjkasflasdf')
+      console.log('user is already logged in')
       return(
         <div>
         <h1>Welcome to Vegetable App</h1>
