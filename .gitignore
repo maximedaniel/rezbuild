@@ -1,6 +1,13 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# idea
+.idea
+
+# server BIM
+/.BIMserver
+
 # dependencies
+*/node_modules
 /node_modules
 
 # testing
