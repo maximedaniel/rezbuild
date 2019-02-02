@@ -62,6 +62,11 @@ class Navbar extends Component {
   };
 
   render() {
+    let pathComponent;
+    pathComponent = this.props.path.map((level, index) =>
+
+                <a href={ (index == 0) ? '/' : '#!'} className="breadcrumb">{level}</a>
+    );
 
     return (
            <nav>
@@ -80,7 +85,7 @@ class Navbar extends Component {
               <a href="#!" data-target="slide-out" className="sidenav-trigger" style={{padding:'0', display:'inline-flex'}}> <i className="material-icons">menu</i></a>
               <a href="#!"><img  className="brand-logo right" src={logo} alt='logo' style={{maxHeight:'4rem'}} /></a>
               <div className="col s12 left">
-                <a href="#!" className="breadcrumb">Projects</a>
+                {pathComponent}
               </div>
             </div>
            </div> : ''}

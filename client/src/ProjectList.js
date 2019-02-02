@@ -3,6 +3,9 @@ import axios from 'axios'
 import $ from 'jquery'
 import M from "materialize-css/dist/js/materialize.js";
 import CreateProjectForm from './CreateProjectForm'
+import JoinProjectForm from './JoinProjectForm'
+import RemoveProjectForm from './RemoveProjectForm'
+import {browserHistory} from 'react-router'
 
 class ProjectList extends Component {
   constructor(props){
@@ -20,13 +23,12 @@ class ProjectList extends Component {
         M.Tooltip.init(elems, {});
     })
     .catch(err => {
-       //console.log(err)
+        console.log(err)
         if(err && err.response && err.response.data){
             this.setState({projectList : null, error : err.response.data, pending : false});
         } else {
             this.setState({projectList : null, error : 'Network error', pending : false});
         }
-        //browserHistory.push('/signin')
     });
   }
   componentDidMount() {
@@ -36,6 +38,7 @@ class ProjectList extends Component {
 
   render() {
         let preloaderComponent;
+
         if (this.state.pending){
             preloaderComponent = <div className="preloader-wrapper small active">
                                     <div className="spinner-layer">
@@ -64,10 +67,16 @@ class ProjectList extends Component {
         if (this.state.projectList){
             projectListComponent = this.state.projectList.map((project, index) =>
                   <tr key={index}>
-                    <td>{index}</td>
                     <td>{project.name}</td>
-                    <td>{project.name}</td>
-                    <td>{project.name}</td>
+                    <td>{project.hasAuthorizedUsers}</td>
+                    <td>{new Date(project.createdDate).toString().split('GMT')[0]}</td>
+                    <td>
+                        <a className="btn-floating waves-effect waves-light" onClick={() => browserHistory.push('/project/'+project.oid)}><i className="material-icons">folder_open</i></a>
+                        <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_createproject_"+project.oid}>
+                            <i className="material-icons rezbuild-text">close</i>
+                        </a>
+                        <RemoveProjectForm project={project} updateProjectList={this.updateProjectList.bind(this)}/>
+                    </td>
                   </tr>
             );
         }
@@ -97,11 +106,12 @@ class ProjectList extends Component {
                         <i className="large material-icons">mode_edit</i>
                       </a>
                       <ul>
-                        <li><a className="btn-floating tooltipped" data-position="left" data-tooltip="Join a project"><i className="material-icons">publish</i></a></li>
+                        <li><a className="btn-floating tooltipped modal-trigger" href="#modal_joinproject" data-position="left" data-tooltip="Join a project"><i className="material-icons">publish</i></a></li>
                         <li><a className="btn-floating tooltipped modal-trigger" href="#modal_createproject" data-position="left" data-tooltip="Create a project"><i className="material-icons">add</i></a></li>
                       </ul>
                     </div>
                     <CreateProjectForm updateProjectList={this.updateProjectList.bind(this)}/>
+                    <JoinProjectForm updateProjectList={this.updateProjectList.bind(this)}/>
                 </div>
         );
   }
