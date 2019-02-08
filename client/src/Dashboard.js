@@ -1,37 +1,107 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-import {browserHistory} from 'react-router'
+import Board from 'react-trello'
+
+
+const lanesStyle = {
+    color:'#fff',
+    backgroundColor:'#f7931e',
+    fontFamily: 'Exo 2'
+}
+
+const cardStyle = {
+    maxWidth:'50px',
+    color:'#000',
+    backgroundColor:'#fff',
+    fontFamily: 'Exo 2'
+}
 
 class Dashboard extends Component {
 
   constructor(props){
     super(props);
-    this.state = {user : null, project : null, error : false, pending : false}
-    //{this.props.location.pathname}
+    this.state = {data: null}
   }
 
   componentDidMount(){
-    this.setState({user: null, project: null, error : false, pending : false})
-     axios.get('http://localhost:3001/api/project/'+this.props.params.oid)
-           .then(res => {
-                   this.setState({user : res.data.user, project : res.data.project, error : false, pending : false})
-           })
-           .catch(err => {
-                console.log(err)
-                if(err && err.response && err.response.data){
-                    this.setState({user: null, project: null, error : err.response.data, pending : false});
-                } else {
-                    this.setState({user: null, project: null, error : 'Network error', pending : false});
-                }
-                browserHistory.push('/')
-           });
+  const data = {
+          lanes: [
+            {
+              id: 'lane1',
+              title: 'BACKLOG',
+              label: '2/2',
+              cards: [
+                {id: 'Card1', title: 'Manual preassessment',  description:'XXX',  cardStyle:cardStyle},
+                {id: 'Card2', title: 'Auto preassessment', description:'XXX', cardStyle:cardStyle},
+                {id: 'Card3', title: 'Update needs', description:'XXX', cardStyle:cardStyle},
+                {id: 'Card4', title: 'Upload IS model', description:'XXX', cardStyle:cardStyle},
+                {id: 'Card5', title: 'Upload TO-BE model', description:'XXX', cardStyle:cardStyle}
+              ],
+              style: lanesStyle
+            },
+            {
+              id: 'lane2',
+              title: 'TO DO',
+              label: '0/0',
+              cards: [],
+              style: lanesStyle
+            },
+            {
+              id: 'lane3',
+              title: 'IN PROGRESS',
+              label: '0/0',
+              cards: [],
+              style: lanesStyle
+            },
+            {
+              id: 'lane4',
+              title: 'DONE',
+              label: '0/0',
+              cards: [],
+              style: lanesStyle
+            }
+          ]
+        }
+   this.setState({data:data});
   }
 
 
   render() {
         return  (
-        <div>
-         <h1> Project {this.props.params.oid}</h1>
+           <div>
+             <div className="section"  style={{marginLeft:'2%', marginRight:'2%'}}>
+                 <div className="row">
+                      <div className="col s3 white">
+                            <h5 className="rezbuild-text">Collaborators</h5>
+                             <div className="divider rezbuild"></div>
+                             <div className="section">
+                                Test
+                             </div>
+                      </div>
+                      <div className="col s9 white">
+                                <h5 className="rezbuild-text">Board</h5>
+                                 <div className="divider rezbuild"></div>
+                                 <div className="section">
+                                 </div>
+                      </div>
+                 </div>
+             </div>
+             <div className="section" style={{marginLeft:'2%', marginRight:'2%'}}>
+              <div className='row'>
+                 <div className="col s12 white">
+                                <h5 className="rezbuild-text">Task</h5>
+                                 <div className="divider rezbuild"></div>
+                                 <div className="section">
+                                    { (this.state.data) ?
+                                        <Board data={this.state.data} style={
+                                            {padding: '0',
+                                            backgroundColor:'transparent',
+                                            fontFamily: 'Exo 2'}
+                                        } draggable/>
+                                     : '' }
+                                 </div>
+                 </div>
+              </div>
+             </div>
          </div>
         );
     }

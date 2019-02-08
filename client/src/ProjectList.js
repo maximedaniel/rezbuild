@@ -1,38 +1,42 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import $ from 'jquery'
-import M from "materialize-css/dist/js/materialize.js";
-import CreateProjectForm from './CreateProjectForm'
-import JoinProjectForm from './JoinProjectForm'
-import RemoveProjectForm from './RemoveProjectForm'
+//import $ from 'jquery'
+//import M from "materialize-css/dist/js/materialize.js";
+import CreateProjectForm from './forms/CreateProjectForm'
+import JoinProjectForm from './forms/JoinProjectForm'
+import RemoveProjectForm from './forms/RemoveProjectForm'
 import {browserHistory} from 'react-router'
+import Navbar from './Navbar'
+
+var $ = window.$
+
 
 class ProjectList extends Component {
   constructor(props){
     super(props);
-    this.state = {projectList : null, error : false, pending : false}
+    this.state = {user: null, projectList : null, error : false, pending : false}
   }
   updateProjectList(){
-    this.state = {projectList : null, error : false, pending : false}
-    axios.get('http://localhost:3001/api/projectList')
+    this.setState({user : null, projectList : null, error : false, pending : true})
+    axios.get('http://localhost:3001/api/listauthorizedproject')
     .then(res => {
-        this.setState({projectList : res.data.projectList, error : false, pending : false})
-        var elem = $('.fixed-action-btn');
-        M.FloatingActionButton.init(elem, {});
-        var elems = $('.tooltipped');
-        M.Tooltip.init(elems, {});
+        this.setState({user: res.data.user, projectList : res.data.projectList, error : false, pending : false})
+       // M.FloatingActionButton.init($('.fixed-action-btn'), {});
+        //M.Tooltip.init($('.tooltipped'), {});
     })
     .catch(err => {
         console.log(err)
         if(err && err.response && err.response.data){
-            this.setState({projectList : null, error : err.response.data, pending : false});
+            this.setState({user : null,  projectList : null, error : err.response.data, pending : false});
+            browserHistory.push('/signin')
         } else {
-            this.setState({projectList : null, error : 'Network error', pending : false});
+            this.setState({user : null,  projectList : null, error : 'Network error', pending : false});
         }
     });
   }
   componentDidMount() {
     this.updateProjectList()
+    $('.modal').modal();
   }
 
 
@@ -52,6 +56,7 @@ class ProjectList extends Component {
                                     </div>
                                   </div>
         }
+
         let errorComponent;
 
         if (this.state.error){
@@ -61,6 +66,11 @@ class ProjectList extends Component {
                                 </div>
                             </div>
         }
+        let navbarComponent;
+
+        if (this.state.user){
+            navbarComponent =  <Navbar user={this.state.user} path={['Projects']}/>
+        }
 
         let projectListComponent;
 
@@ -69,10 +79,10 @@ class ProjectList extends Component {
                   <tr key={index}>
                     <td>{project.name}</td>
                     <td>{project.hasAuthorizedUsers}</td>
-                    <td>{new Date(project.createdDate).toString().split('GMT')[0]}</td>
+                    <td>{new Date(project.date).toString().split('GMT')[0]}</td>
                     <td>
-                        <a className="btn-floating waves-effect waves-light" onClick={() => browserHistory.push('/project/'+project.oid)}><i className="material-icons">folder_open</i></a>
-                        <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_createproject_"+project.oid}>
+                        <a className="btn-floating waves-effect waves-light" onClick={() => browserHistory.push('/project/'+project._id) }><i className="material-icons">folder_open</i></a>
+                        <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
                             <i className="material-icons rezbuild-text">close</i>
                         </a>
                         <RemoveProjectForm project={project} updateProjectList={this.updateProjectList.bind(this)}/>
@@ -81,6 +91,8 @@ class ProjectList extends Component {
             );
         }
         return (
+                <div>
+                 {navbarComponent}
                  <div className='container white' style={{marginTop:'2rem'}}>
                     <div className='row'>
                       <div className='col s12'>
@@ -113,6 +125,7 @@ class ProjectList extends Component {
                     <CreateProjectForm updateProjectList={this.updateProjectList.bind(this)}/>
                     <JoinProjectForm updateProjectList={this.updateProjectList.bind(this)}/>
                 </div>
+               </div>
         );
   }
 }

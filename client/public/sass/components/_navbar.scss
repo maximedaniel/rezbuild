@@ -37,12 +37,12 @@ nav {
   }
 
   @media #{$large-and-up} {
-    a.sidenav-trigger { display: none; }
+    a.button-collapse { display: none; }
   }
 
 
   // Collapse button
-  .sidenav-trigger {
+  .button-collapse {
     float: left;
     position: relative;
     z-index: 1;
@@ -63,6 +63,7 @@ nav {
     display: inline-block;
     font-size: $navbar-brand-font-size;
     padding: 0;
+    white-space: nowrap;
 
     &.center {
       left: 50%;
@@ -198,7 +199,7 @@ nav {
   nav.nav-extended .nav-wrapper {
     min-height: $navbar-height;
   }
-  nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i {
+  nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
     height: $navbar-height;
     line-height: $navbar-line-height;
   }

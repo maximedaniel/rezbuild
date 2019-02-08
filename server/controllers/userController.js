@@ -1,23 +1,28 @@
 var db = require('../models');
 
-//all
-function index(req,res) {
-  db.User.find({}, function(err, allUsers){
-    res.json(allUsers);
-  });
-};
+app.post('/signup', (req, res) => {
+    db.User.register(new db.User({ username : req.body.username, firstname : req.body.firstname, lastname : req.body.lastname, roles : req.body.roles}), req.body.password, (err, user) => {
+        if (err) {
+            console.log(err.message)
+            req.session.destroy();
+            return  res.status(460).send(err.message);
+        }
 
-//destroy
-function destroy(req, res) {
-	var userId = req.params.user_id;
-	db.User.remove({_id:userId}, function(err, foundUser){
-		if(err){res.send(err)}
-		res.json('deleted a user');
-	})
-};
+        passport.authenticate('local')(req, res, function () {
+           console.log(req.user)
+           req.session.user = req.user; res.status(200).send({user : req.user});
+        });
+    });
+});
 
+app.post('/signin', passport.authenticate('local'), (req, res) => {
+           console.log(req.user)
+           req.session.user = req.user; res.status(200).send({user : req.user});
+        }
+);
 
-module.exports = {
-  index: index,
-  destroy: destroy
-}
+app.get('/signout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.status(200).send({user : null});
+});
