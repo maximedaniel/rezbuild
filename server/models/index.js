@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost:27017/veg-crud-auth");
+mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost:27017/rezbuild");
 module.exports.User = require('./user');
 module.exports.Project = require('./project');
 module.exports.Revision = require('./revision');

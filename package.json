@@ -1,0 +1,23 @@
+{
+  "name": "rezbuild",
+  "version": "1.0.0",
+  "description": "External pre-assessment tool => Revit, etc.\r User story -> marketplace techonology",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "(cd server & npm start) | (cd client & npm start)",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maximedaniel/rezbuild.git"
+  },
+  "author": "Maxime DANIEL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maximedaniel/rezbuild/issues"
+  },
+  "homepage": "https://github.com/maximedaniel/rezbuild#readme"
+}
