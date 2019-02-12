@@ -36,9 +36,13 @@ passport.use(new LocalStrategy(db.User.authenticate()));
 passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
 
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
+app.use(cors({credentials: true, origin: 'http://client:3000/'}))
 
-app.post('/signup', (req, res) => {
+app.get('/test', (req, res) => res.send('Hello Node on Divio!'))
+
+
+app.post('/api/signup', (req, res) => {
+    console.log('signup')
     User.register(new User({ username : req.body.username, firstname : req.body.firstname, lastname : req.body.lastname, roles : req.body.roles}), req.body.password, (err, user) => {
         if (err) {
             req.session.destroy();
@@ -57,8 +61,8 @@ app.post('/signup', (req, res) => {
     });
 });
 
-app.post('/signin', passport.authenticate('local'), (req, res) => {
-
+app.post('/api/signin', passport.authenticate('local'), (req, res) => {
+               console.log('signin')
                User.findOne({_id: req.user._id}, function (err, user) {
                         if(err) res.status(460).send(err.message);
                         else {
@@ -73,7 +77,8 @@ app.post('/signin', passport.authenticate('local'), (req, res) => {
         }
 );
 
-app.post('/settings', passport.authenticate('local'), (req, res) => {
+app.post('/api/settings', passport.authenticate('local'), (req, res) => {
+               console.log('settings')
                 var query = { _id:req.user._id};
                 var update = {
                     roles: req.body.roles
@@ -92,22 +97,20 @@ app.post('/settings', passport.authenticate('local'), (req, res) => {
 
 });
 
-app.get('/signout', (req, res) => {
+app.get('/api/signout', (req, res) => {
+  console.log('signout')
   req.logout();
   req.session.destroy();
   res.status(200).send({user : null});
 });
 
 
-app.use('/api', (req, res, next) => {
+app.use('/api/user', (req, res, next) => {
     if(req.session.user) next();
     else res.status(401).send('User is not signed in');
 });
-app.get('/api/user', (req, res, next) => {
-     res.status(200).send({user : req.session.user});
-});
 
-app.post('/api/createproject', (req, res, next) => {
+app.post('/api/user/createproject', (req, res, next) => {
 
      var createdProject = new Project({
           _id: new mongoose.Types.ObjectId(),
@@ -125,7 +128,7 @@ app.post('/api/createproject', (req, res, next) => {
       });
 });
 
-app.get('/api/listauthorizedproject', (req, res, next) => {
+app.get('/api/user/listauthorizedproject', (req, res, next) => {
      Project.find({ users: { "$in" : [req.session.user._id]}}, (err, projectList) => {
         if(err) {
         //console.log(err.message);
@@ -137,7 +140,7 @@ app.get('/api/listauthorizedproject', (req, res, next) => {
     })
 });
 
-app.get('/api/listunauthorizedproject', (req, res, next) => {
+app.get('/api/user/listunauthorizedproject', (req, res, next) => {
      Project.find({ users: { "$nin" : [req.session.user._id]}}, (err, unauthorizedprojectlist) => {
         if(err) {
         //console.log(err.message);
@@ -149,7 +152,7 @@ app.get('/api/listunauthorizedproject', (req, res, next) => {
     })
 });
 
-app.get('/api/project/:_id', (req, res, next) => {
+app.get('/api/user/project/:_id', (req, res, next) => {
      Project.findOne({ _id:req.params._id, users: { "$in" : [req.session.user._id]}}, (err, project) => {
         if(err) {
         //console.log(err.message);
@@ -161,7 +164,7 @@ app.get('/api/project/:_id', (req, res, next) => {
     })
 });
 
-app.post('/api/removeproject', (req, res, next) => {
+app.post('/api/user/removeproject', (req, res, next) => {
     var query = { _id:req.body._id};
     var update = {'$pull': {users: {'$in': [req.session.user._id]}}};
     var options = {};

@@ -27,7 +27,7 @@ class SignupForm extends Component {
   handleSubmit(event){
    event.preventDefault();
    this.setState({error : false, pending : false})
-   axios.post('http://localhost:3001/signup', {
+   axios.post('/api/signup', {
         username : this.refs.email.value,
         password : this.refs.password.value,
         firstname : this.refs.firstname.value,

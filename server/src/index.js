@@ -6,7 +6,7 @@ require('babel-register')({
 
 var server = require('./server');
 
-var port =  3001;
-server.listen(port, function() {
-    console.log(`api running on ${port}`);
+const PORT =  3001;
+server.listen(PORT, function() {
+    console.log(`api running on ${PORT}`);
 });

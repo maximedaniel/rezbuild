@@ -21,7 +21,7 @@ class SettingsForm extends Component {
   handleSubmit(event){
    event.preventDefault();
    this.setState({error : false, pending : true})
-   axios.post('http://localhost:3001/settings', {
+   axios.post('/api/settings', {
         roles : $("input[name='roles']:checked").map(function() {return $(this).val();}).get(),
    })
     .then(res => {

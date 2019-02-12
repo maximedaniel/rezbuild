@@ -1,19 +1,8 @@
-FROM node
-
-# Create app directory
-WORKDIR /usr/src/app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+FROM node:10.15.0
+WORKDIR /usr/src/client
 COPY package*.json ./
-
+ENV PATH /usr/src/client/node_modules/.bin:$PATH
 RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
-
-# Bundle app source
 COPY . .
-
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD npm start

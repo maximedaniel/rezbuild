@@ -24,13 +24,12 @@ class CreateProjectForm extends Component {
   handleCreateProject(event){
    event.preventDefault();
     this.setState({error : false, pending : true})
-    axios.post('http://localhost:3001/api/createproject', {
+    axios.post('/api/user/createproject', {
         name : this.refs.name.value
     })
     .then(res => {
         this.setState({error : false, pending : false})
         $('#modal_createproject').modal('close');
-        //M.Modal.getInstance($('#modal_createproject')).close()
         this.props.updateProjectList()
     })
     .catch(err => {

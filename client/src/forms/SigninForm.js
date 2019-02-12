@@ -23,7 +23,7 @@ class SigninForm extends Component {
    event.preventDefault();
    this.setState({error : false, pending : true});
    console.log(this.refs.email.value, this.refs.password.value)
-   axios.post('http://localhost:3001/signin', {
+   axios.post('/api/signin', {
        username: this.refs.email.value,
        password: this.refs.password.value
 

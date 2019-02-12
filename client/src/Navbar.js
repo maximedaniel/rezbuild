@@ -34,7 +34,7 @@ class Navbar extends Component {
    event.preventDefault();
    //M.Sidenav.getInstance($('#slide-out')).close()
    this.setState({error : false, pending : true})
-   axios.get('http://localhost:3001/signout')
+   axios.get('/api/signout')
        .then(res => {
                this.setState({error : false, pending : false})
                $('.button-collapse').sideNav('hide')

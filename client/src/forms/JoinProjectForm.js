@@ -15,9 +15,8 @@ class JoinProjectForm extends Component {
    this.state = {unauthorizedprojectlist: null, error : false, pending : false}
   }
   updateUnauthorizedProjectList(){
-      console.log('updateUnauthorizedProjectList')
       this.setState({unauthorizedprojectlist: null, error : false, pending : true})
-        axios.get('http://localhost:3001/api/listunauthorizedproject')
+        axios.get('/api/user/listunauthorizedproject')
         .then(res => {
             this.setState({unauthorizedprojectlist: res.data.unauthorizedprojectlist, error : false, pending : false})
             var data = {}
@@ -54,7 +53,7 @@ class JoinProjectForm extends Component {
    })
 
    if(_id){
-    axios.post('http://localhost:3001/api/joinproject', {_id:_id})
+    axios.post('/api/user/joinproject', {_id:_id})
     .then(res => {
         this.setState({unauthorizedprojectlist: this.state.unauthorizedprojectlist, error : false, pending : false})
         $('#modal_joinproject').modal('close');

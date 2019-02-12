@@ -16,7 +16,7 @@ class Project extends Component {
 
   componentDidMount(){
     this.setState({user: null, project: null, error : false, pending : false})
-     axios.get('http://localhost:3001/api/project/'+this.props.params._id)
+     axios.get('/api/user/project/'+this.props.params._id)
            .then(res => {
                    this.setState({user : res.data.user, project : res.data.project, error : false, pending : false})
            })

@@ -26,7 +26,7 @@ class RemoveProjectForm extends Component {
    event.preventDefault();
     console.log(this.props.project._id)
     this.setState({error : false, pending : true})
-    axios.post('http://localhost:3001/api/removeproject',
+    axios.post('/api/user/removeproject',
     { _id: this.props.project._id}
     )
     .then(res => {

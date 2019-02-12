@@ -18,7 +18,7 @@ class ProjectList extends Component {
   }
   updateProjectList(){
     this.setState({user : null, projectList : null, error : false, pending : true})
-    axios.get('http://localhost:3001/api/listauthorizedproject')
+    axios.get('/api/user/listauthorizedproject')
     .then(res => {
         this.setState({user: res.data.user, projectList : res.data.projectList, error : false, pending : false})
        // M.FloatingActionButton.init($('.fixed-action-btn'), {});
@@ -93,7 +93,7 @@ class ProjectList extends Component {
         return (
                 <div>
                  {navbarComponent}
-                 <div className='container white' style={{marginTop:'2rem'}}>
+                 <div className='container white ' style={{marginTop:'2rem'}}>
                     <div className='row'>
                       <div className='col s12'>
                           <table>
