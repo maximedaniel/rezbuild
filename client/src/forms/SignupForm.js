@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import logo from '../ressources/img/jpg/logo.jpg'
-import {Checkbox, Row, Input, Col, Preloader, Button} from 'react-materialize'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js";
 import axios from 'axios'
 import {browserHistory} from 'react-router'
+import SocketContext from '../SocketContext'
 
 axios.defaults.withCredentials = true
 
 var $ = window.$
 
-class SignupForm extends Component {
+class SignupFormCore extends Component {
 
   constructor(props){
    super(props);
@@ -26,27 +26,25 @@ class SignupForm extends Component {
 
   handleSubmit(event){
    event.preventDefault();
-   this.setState({error : false, pending : false})
-   axios.post('/api/signup', {
-        username : this.refs.email.value,
-        password : this.refs.password.value,
-        firstname : this.refs.firstname.value,
-        lastname : this.refs.lastname.value,
-        roles : $("input[name='roles']:checked").map(function() {return $(this).val();}).get(),
+   this.setState({error : false, pending : false}, () => {
+        this.props.socket.emit('/api/signup', {
+            email : this.refs.email.value,
+            password : this.refs.password.value,
+            firstname : this.refs.firstname.value,
+            lastname : this.refs.lastname.value,
+            roles : $("input[name='roles']:checked").map(function() {return $(this).val();}).get(),
+        });
+        this.props.socket.on('/api/signup', res => {
+            if (res.user) {
+                this.setState({error : false, pending : false}, () =>{
+                    browserHistory.push('/')
+                })
+            }
+            if(res.error){
+                this.setState({user : null, error : res.error, pending : false});
+            }
+        });
    })
-    .then(res => {
-        this.setState({error : false, pending : false})
-        browserHistory.push('/')
-    })
-    .catch(err => {
-        console.log(err)
-        if(err && err.response && err.response.data){
-            this.setState({error : err.response.data, pending : false});
-        } else {
-            this.setState({error : 'Network error', pending : false});
-        }
-    });
-
   };
 
   render() {
@@ -114,4 +112,10 @@ class SignupForm extends Component {
  }
 }
 
-export default SignupForm;
+const SignupForm = props => (
+  <SocketContext.Consumer>
+  {socket => <SignupFormCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
+
+export default SignupForm

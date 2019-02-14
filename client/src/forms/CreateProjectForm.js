@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 //import $ from 'jquery'
 //import M from "materialize-css";
 import axios from 'axios'
+import SocketContext from '../SocketContext'
 
 axios.defaults.withCredentials = true
 
 var $ = window.$
 
-class CreateProjectForm extends Component {
+class CreateProjectFormCore extends Component {
 
   constructor(props){
    super(props);
@@ -23,8 +24,27 @@ class CreateProjectForm extends Component {
 
   handleCreateProject(event){
    event.preventDefault();
-    this.setState({error : false, pending : true})
-    axios.post('/api/user/createproject', {
+    this.setState({error : false, pending : true}, () => {
+        this.props.socket.emit('/api/user/createproject', {
+             name : this.refs.name.value
+        });
+        this.props.socket.on('/api/user/createproject', res => {
+            if (res.createdProject) {
+                console.log(res.createdProject)
+                this.setState({error : false, pending : false}, () => {
+                    $('#modal_createproject').modal('close');
+                })
+            }
+            if (res.error) {
+                this.setState({error : res.error, pending : false});
+            }
+        });
+    })
+
+
+
+
+   /* axios.post('/api/user/createproject', {
         name : this.refs.name.value
     })
     .then(res => {
@@ -41,7 +61,7 @@ class CreateProjectForm extends Component {
             this.setState({error : 'Network error', pending : false});
             $('#modal_createproject').modal('close');
         }
-    });
+    });*/
   };
 
   render() {
@@ -168,5 +188,11 @@ class CreateProjectForm extends Component {
     );
   }
 }
+
+const CreateProjectForm = props => (
+  <SocketContext.Consumer>
+  {socket => <CreateProjectFormCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
 
 export default CreateProjectForm;

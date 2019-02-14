@@ -1,7 +1,19 @@
-.react-trello-lane {
+.node {
+    cursor: pointer;
 }
-.react-trello-card {
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
 }
-.react-trello-board {
-    color: #fff;
+
+.node text {
+  font: 12px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
 }

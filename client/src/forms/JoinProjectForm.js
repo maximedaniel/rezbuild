@@ -1,22 +1,37 @@
 import React, { Component } from 'react'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js";
+import SocketContext from '../SocketContext'
 import axios from 'axios'
 
 axios.defaults.withCredentials = true
 
 var $ = window.$
 
-class JoinProjectForm extends Component {
+class JoinProjectFormCore extends Component {
 
   constructor(props){
    super(props);
    this.handleJoinProject = this.handleJoinProject.bind(this);
-   this.state = {unauthorizedprojectlist: null, error : false, pending : false}
+   this.state = {unauthorizedProjects: null, error : false, pending : false}
   }
   updateUnauthorizedProjectList(){
-      this.setState({unauthorizedprojectlist: null, error : false, pending : true})
-        axios.get('/api/user/listunauthorizedproject')
+    this.setState({unauthorizedProjects: null, error : false, pending : true}, () =>{
+        this.props.socket.emit('/api/user/unauthorizedprojects', {});
+        this.props.socket.on('/api/user/unauthorizedprojects', res => {
+            if (res.unauthorizedProjects) {
+                this.setState({unauthorizedProjects : res.unauthorizedProjects, error : false, pending : false}, () =>{
+                        var data = {}
+                        this.state.unauthorizedProjects.map((project, index) => (data[String(project.name)] = null))
+                        $('#input_autocomplete_joinproject').autocomplete({data: data});
+                });
+            }
+            if(res.error){
+                this.setState({unauthorizedProjects : null, error : res.error, pending : false});
+            }
+        });
+    });
+        /*axios.get('/api/user/listunauthorizedproject')
         .then(res => {
             this.setState({unauthorizedprojectlist: res.data.unauthorizedprojectlist, error : false, pending : false})
             var data = {}
@@ -30,47 +45,42 @@ class JoinProjectForm extends Component {
             } else {
                 this.setState({unauthorizedprojectlist: null, error : 'Network error', pending : false});
             }
-        });
+        });*/
   }
   componentDidMount() {
     this.updateUnauthorizedProjectList()
+
      // $(document).ready(function() {
     //    M.Modal.init($('#modal_joinproject'), {onOpenStart: () => {this.updateUnauthorizedProjectList()}});
      //   M.Autocomplete.init($('#input_autocomplete_joinproject'), {});
     //    this.updateUnauthorizedProjectList();
      // });
-
+    this.props.socket.on('/api/user/removeproject', res =>{
+        this.updateUnauthorizedProjectList()
+    });
 
   }
 
   handleJoinProject(event){
    event.preventDefault();
-   this.setState({unauthorizedprojectlist: this.state.unauthorizedprojectlist, error : false, pending : true})
-
-   var _id = -1;
-   this.state.unauthorizedprojectlist.map((project, index) => {
-    if (project.name == this.refs.projectname.value) _id = project._id;
+   this.setState({unauthorizedProjects: this.state.unauthorizedProjects, error : false, pending : true}, () => {
+       var joinedProject = this.state.unauthorizedProjects.filter((project, index) => {
+            return project.name === this.refs.projectname.value;
+       })[0]
+       console.log(joinedProject)
+       this.props.socket.emit('/api/user/joinproject', { _id: joinedProject._id});
+       this.props.socket.on('/api/user/joinproject', res => {
+            if (res.updatedUser) {
+                console.log(res.updatedUser)
+                this.setState({error : false, pending : false}, () => {
+                    $('#modal_joinproject').modal('close');
+                })
+            }
+            if (res.error) {
+                this.setState({error : res.error, pending : false});
+            }
+       });
    })
-
-   if(_id){
-    axios.post('/api/user/joinproject', {_id:_id})
-    .then(res => {
-        this.setState({unauthorizedprojectlist: this.state.unauthorizedprojectlist, error : false, pending : false})
-        $('#modal_joinproject').modal('close');
-        this.props.updateProjectList()
-    })
-    .catch(err => {
-        console.log(err)
-        if(err && err.response && err.response.data){
-            this.setState({unauthorizedprojectlist: null, error : err.response.data, pending : false});
-            $('#modal_joinproject').modal('close');
-        } else {
-            this.setState({unauthorizedprojectlist: null, error : 'Network error', pending : false});
-            $('#modal_joinproject').modal('close');
-        }
-    });
-   }
-
   };
 
   render() {
@@ -130,4 +140,11 @@ class JoinProjectForm extends Component {
   }
 }
 
-export default JoinProjectForm;
+const JoinProjectForm = props => (
+  <SocketContext.Consumer>
+  {socket => <JoinProjectFormCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
+
+export default JoinProjectForm
+

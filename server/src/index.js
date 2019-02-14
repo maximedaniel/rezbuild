@@ -3,10 +3,11 @@
 require('babel-register')({
     presets: [ 'env' ]
 })
+var mongoose = require("mongoose");
+var {http} = require('./server');
 
-var server = require('./server');
 
 const PORT =  3001;
-server.listen(PORT, function() {
+http.listen(PORT, function() {
     console.log(`api running on ${PORT}`);
 });

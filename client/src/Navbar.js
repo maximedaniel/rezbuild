@@ -4,13 +4,14 @@ import SettingsForm from './forms/SettingsForm'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js"
 import {browserHistory} from 'react-router'
+import SocketContext from './SocketContext'
 import axios from 'axios'
 
 axios.defaults.withCredentials = true
 
 var $ = window.$
 
-class Navbar extends Component {
+class NavbarCore extends Component {
   // Initialize the state
 
   constructor(props){
@@ -21,30 +22,26 @@ class Navbar extends Component {
 
   componentDidMount() {
     $(".button-collapse").sideNav();
-     // $(document).ready(function() {
-     //       M.Sidenav.init($('#slide-out'), {});
-     //       M.Modal.init($("#modal_settings"), {});
-     // });
   }
 
   componentWillUnmount() {
   }
 
+
   handleSignout(event){
    event.preventDefault();
    //M.Sidenav.getInstance($('#slide-out')).close()
-   this.setState({error : false, pending : true})
-   axios.get('/api/signout')
-       .then(res => {
-               this.setState({error : false, pending : false})
-               $('.button-collapse').sideNav('hide')
-               browserHistory.push('/signin')
-       })
-       .catch(err => {
-               this.setState({error : false, pending : false})
-               $('.button-collapse').sideNav('hide')
-               browserHistory.push('/signin')
+   this.setState({error : false, pending : true}, () => {
+       this.props.socket.emit('/api/signout', {});
+       this.props.socket.on('/api/signout', res => {
+            if (res.signedOutUser) {
+                this.setState({error : null, pending : false}, () => {
+                    $('.button-collapse').sideNav('hide')
+                    browserHistory.push('/signin')
+                });
+            }
        });
+    });
   };
 
   render() {
@@ -82,4 +79,10 @@ class Navbar extends Component {
     }
 }
 // <li><a href="#modal_settings" className="modal-trigger"><i className="material-icons">settings</i>Settings</a></li>
+const Navbar = props => (
+  <SocketContext.Consumer>
+  {socket => <NavbarCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
+
 export default Navbar;

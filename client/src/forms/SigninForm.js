@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import logo from '../ressources/img/jpg/logo.jpg'
 import axios from 'axios'
 import {browserHistory} from 'react-router'
+import SocketContext from '../SocketContext'
 
 axios.defaults.withCredentials = true
 
-class SigninForm extends Component {
+
+class SigninFormCore extends Component {
 
   constructor(props){
    super(props);
@@ -21,9 +23,22 @@ class SigninForm extends Component {
 
   handleSubmit(event){
    event.preventDefault();
-   this.setState({error : false, pending : true});
-   console.log(this.refs.email.value, this.refs.password.value)
-   axios.post('/api/signin', {
+   this.setState({error : false, pending : true}, () =>{
+    this.props.socket.emit('/api/signin', {email: this.refs.email.value, password: this.refs.password.value});
+       this.props.socket.on('/api/signin', res => {
+            if (res.user) {
+                this.setState({user : res.user, error : null, pending : false}, () => {
+                    browserHistory.push('/')
+                });
+            }
+            if(res.error){
+                this.setState({user : null, error : res.error, pending : false});
+            }
+       });
+    });
+
+
+   /*axios.post('/api/signin', {
        username: this.refs.email.value,
        password: this.refs.password.value
 
@@ -38,7 +53,7 @@ class SigninForm extends Component {
         } else {
             this.setState({user : null, error : 'Network error', pending : false});
         }
-   });
+   });*/
   };
 
   render() {
@@ -93,4 +108,10 @@ class SigninForm extends Component {
     );
   }
 }
-export default SigninForm;
+const SigninForm = props => (
+  <SocketContext.Consumer>
+  {socket => <SigninFormCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
+
+export default SigninForm

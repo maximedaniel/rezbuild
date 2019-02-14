@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js";
 import axios from 'axios'
+import SocketContext from '../SocketContext'
 
 axios.defaults.withCredentials = true
 
 var $ = window.$
 
-class RemoveProjectForm extends Component {
+class RemoveProjectFormCore extends Component {
 
   constructor(props){
    super(props);
@@ -16,35 +17,25 @@ class RemoveProjectForm extends Component {
   }
 
   componentDidMount() {
-      //$(document).ready(function() {
-      //  M.Modal.init($("#modal_removeproject_"+this.props.project._id), {});
-      //});
-      $('.modal').modal();
+      $("#modal_removeproject_"+this.props.project._id).modal();
+  }
+
+  componentWillUnmount() {
+      $("#modal_removeproject_"+this.props.project._id).modal('close');
   }
 
   handleRemoveProject(event){
    event.preventDefault();
-    console.log(this.props.project._id)
-    this.setState({error : false, pending : true})
-    axios.post('/api/user/removeproject',
-    { _id: this.props.project._id}
-    )
-    .then(res => {
-        this.setState({error : false, pending : false})
-        $("#modal_removeproject_"+this.props.project._id).modal('close');
-        this.props.updateProjectList()
+    this.setState({error : false, pending : true}, () => {
+        this.props.socket.emit('/api/user/removeproject', { _id: this.props.project._id });
+        this.props.socket.on('/api/user/removeproject', res => {
+            if(res.error){
+                this.setState({error : res.error, pending : false}, () => {
+                    $("#modal_removeproject_"+this.props.project._id).modal('close');
+                });
+            }
+        });
     })
-    .catch(err => {
-        console.log(err)
-        if(err && err.response && err.response.data){
-            this.setState({error : err.response.data, pending : false});
-        $("#modal_removeproject_"+this.props.project._id).modal('close');
-        } else {
-            this.setState({error : 'Network error', pending : false});
-        $("#modal_removeproject_"+this.props.project._id).modal('close');
-        }
-    });
-
   };
 
   render() {
@@ -91,5 +82,11 @@ class RemoveProjectForm extends Component {
     );
   }
 }
+
+const RemoveProjectForm = props => (
+  <SocketContext.Consumer>
+  {socket => <RemoveProjectFormCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
 
 export default RemoveProjectForm;

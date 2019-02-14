@@ -6,23 +6,38 @@ import CreateProjectForm from './forms/CreateProjectForm'
 import JoinProjectForm from './forms/JoinProjectForm'
 import RemoveProjectForm from './forms/RemoveProjectForm'
 import {browserHistory} from 'react-router'
+import SocketContext from './SocketContext'
 import Navbar from './Navbar'
 
 var $ = window.$
 
 
-class ProjectList extends Component {
+class ProjectListCore extends Component {
   constructor(props){
     super(props);
-    this.state = {user: null, projectList : null, error : false, pending : false}
+    this.state = {user: null, authorizedProjects : null, error : false, pending : false}
   }
   updateProjectList(){
-    this.setState({user : null, projectList : null, error : false, pending : true})
-    axios.get('/api/user/listauthorizedproject')
+    this.setState({authorizedProjects : null, error : false, pending : true})
+    this.props.socket.emit('/api/user/authorizedprojects', {});
+    this.props.socket.on('/api/user/authorizedprojects', res => {
+        if (res.authorizedProjects) {
+            console.log(res.authorizedProjects)
+            this.setState({user: res.user, authorizedProjects : res.authorizedProjects, error : false, pending : false})
+        }
+        else {
+            if(res.error){
+                console.log(res.error)
+                this.setState({user: null, authorizedProjects : null, error : res.error, pending : false});
+                browserHistory.push('/signin')
+            } else {
+                this.setState({user: null, authorizedProjects : null, error : 'Network error', pending : false});
+            }
+        }
+    });
+    /*axios.get('/api/user/listauthorizedproject')
     .then(res => {
         this.setState({user: res.data.user, projectList : res.data.projectList, error : false, pending : false})
-       // M.FloatingActionButton.init($('.fixed-action-btn'), {});
-        //M.Tooltip.init($('.tooltipped'), {});
     })
     .catch(err => {
         console.log(err)
@@ -32,11 +47,20 @@ class ProjectList extends Component {
         } else {
             this.setState({user : null,  projectList : null, error : 'Network error', pending : false});
         }
-    });
+    });*/
   }
   componentDidMount() {
     this.updateProjectList()
     $('.modal').modal();
+    this.props.socket.on('/api/user/createproject', () => {
+        this.updateProjectList()
+    });
+    this.props.socket.on('/api/user/removeproject', () => {
+        this.updateProjectList()
+    });
+    this.props.socket.on('/api/user/joinproject', () => {
+        this.updateProjectList()
+    });
   }
 
 
@@ -74,8 +98,8 @@ class ProjectList extends Component {
 
         let projectListComponent;
 
-        if (this.state.projectList){
-            projectListComponent = this.state.projectList.map((project, index) =>
+        if (this.state.authorizedProjects){
+            projectListComponent = this.state.authorizedProjects.map((project, index) =>
                   <tr key={index}>
                     <td>{project.name}</td>
                     <td>{project.hasAuthorizedUsers}</td>
@@ -85,7 +109,7 @@ class ProjectList extends Component {
                         <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
                             <i className="material-icons rezbuild-text">close</i>
                         </a>
-                        <RemoveProjectForm project={project} updateProjectList={this.updateProjectList.bind(this)}/>
+                        <RemoveProjectForm project={project}/>
                     </td>
                   </tr>
             );
@@ -93,7 +117,7 @@ class ProjectList extends Component {
         return (
                 <div>
                  {navbarComponent}
-                 <div className='container white ' style={{marginTop:'2rem'}}>
+                 <div className='container transparent' style={{marginTop:'2rem'}}>
                     <div className='row'>
                       <div className='col s12'>
                           <table>
@@ -130,4 +154,10 @@ class ProjectList extends Component {
   }
 }
 
-export default ProjectList;
+const ProjectList = props => (
+  <SocketContext.Consumer>
+  {socket => <ProjectListCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
+
+export default ProjectList

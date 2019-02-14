@@ -2,101 +2,226 @@
 import express from 'express'
 import db from './models'
 import BimController from './controllers/BimController'
-import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
-import session from 'express-session'
-import passport from 'passport'
-import passportLocal from 'passport-local'
-import cors from 'cors'
-
 var mongoose = require("mongoose");
-
-var LocalStrategy = passportLocal.Strategy;
-// bim routes
-
-var app = express(),
-  router = express.Router();
-
 var User = db.User;
 var Project = db.Project;
-//to config API to use body body-parser and look for JSON in req.body
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
+var Revision = db.Revision;
+var Task = db.Task;
 
-app.use(cookieParser('estia'));
-app.use(session({secret : 'estia', resave:false, saveUninitialized:false, cookie: { secure: false }}));
+var handshake = require('socket.io-handshake');
 
-app.use(passport.initialize());
-app.use(passport.session({secret : 'estia'}));
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-//passport config
-passport.use(new LocalStrategy(db.User.authenticate()));
-passport.serializeUser(db.User.serializeUser());
-passport.deserializeUser(db.User.deserializeUser());
+var session = require('express-session')({
+    secret: "estia",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false }
+});
+var sharedsession = require("express-socket.io-session");
 
-app.use(cors({credentials: true, origin: 'http://client:3000/'}))
+app.use(session);
 
-app.get('/test', (req, res) => res.send('Hello Node on Divio!'))
+io.use(sharedsession(session));
 
 
-app.post('/api/signup', (req, res) => {
-    console.log('signup')
-    User.register(new User({ username : req.body.username, firstname : req.body.firstname, lastname : req.body.lastname, roles : req.body.roles}), req.body.password, (err, user) => {
-        if (err) {
-            req.session.destroy();
-            return  res.status(460).send(err.message);
-        }
+var router = require('socket.io-events')();
 
-        passport.authenticate('local')(req, res, function () {
-               User.findOne({_id: req.user._id}, function (err, user) {
-                        if(err) res.status(460).send(err.message);
-                        else {
-                            req.session.user = user;
-                            req.session.save( () => res.status(200).send({user : user}))
-                        }
-                });
-        });
+
+//io.use(function(socket, next) {
+//    sessionMiddleware(socket.request, socket.request.res, next);
+//});
+
+// handles events matching 'some*'
+//router.on(function (client, next) {
+//    sessionMiddleware(client.request, client.request.res, next);
+//});
+
+// handles events matching 'some*'
+router.on('/api/user', function (client, args, next) {
+    console.log('/api/user')
+    if(client.sock.handshake.session.user) return next();
+    else client.emit(args[0], {error: 'User not signed in'});
+});
+
+router.on('/api/signin', function (client, args, next) {
+    var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     User.findOne({email: params.email, password: params.password}, (error, user) => {
+                   if(error) {
+                    client.emit(topic, {error: error.message});
+                   }
+                   else {
+                    if(user) {
+                        client.sock.handshake.session.user = user
+                        client.sock.handshake.session.save()
+                        client.emit(topic, {user: user});
+                    }
+                    else {
+                        console.log('Wrong email/password')
+                        client.emit(topic, {error: 'Wrong email/password'});
+                    }
+                   }
+     });
+
+});
+
+router.on('/api/signup', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     var user = new User({
+     _id: new mongoose.Types.ObjectId(),
+     firstname : params.firstname,
+     lastname : params.lastname,
+     email : params.email,
+     password : params.password,
+     roles : params.roles,
+     });
+     user.save( (error) => {
+           if(error) {
+            //console.log(error)
+            client.emit(topic, {error: error.message})
+           }
+           else {
+           //console.log(user)
+           client.emit(topic, {user: user})
+           }
+     });
+
+});
+
+router.on('/api/signout', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     client.sock.handshake.session.user = null
+     client.sock.handshake.session.save()
+     client.emit(topic, {signedOutUser: true})
+});
+
+router.on('/api/user/createproject', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     var createdProject = new Project({
+          _id: new mongoose.Types.ObjectId(),
+          name: params.name,
+          owner: client.sock.handshake.session.user._id,
+          users: [client.sock.handshake.session.user._id],
+          revisions: []
+     }).save((error, createdProject) => {
+           if(error) {
+            client.emit(topic, {error: error.message})
+           }
+           else {
+           client.emit(topic, {user:client.sock.handshake.session.user, createdProject: createdProject})
+
+           }
+      });
+});
+
+router.on('/api/user/joinproject', function (client, args, next) {
+    var topic = args.shift(), params = args.shift();
+    console.log(topic, params)
+
+    Project.findOneAndUpdate({ _id:params._id}, {"$push": { "users": client.sock.handshake.session.user._id }}, {}, (error, updatedUser) => {
+           if(error) {
+               console.log(error)
+               client.emit(topic, {error: error.message})
+           }
+           else {
+               client.emit(topic, {user:client.sock.handshake.session.user, updatedUser: true})
+           }
     });
 });
 
-app.post('/api/signin', passport.authenticate('local'), (req, res) => {
-               console.log('signin')
-               User.findOne({_id: req.user._id}, function (err, user) {
-                        if(err) res.status(460).send(err.message);
-                        else {
-                            req.session.user = user;
-                            req.session.save( () => res.status(200).send({user : user}))
-                        }
-                });
-               //req.session.user = req.user;
-               //console.log(req.session);
-               //req.session.save( () => res.status(200).send({user : req.user}));
 
-        }
-);
+router.on('/api/user/authorizedprojects', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     Project.find({ users: { "$in" : [client.sock.handshake.session.user._id]}}, (error, authorizedProjects) => {
+       if(error) {
+        console.log(error)
+        client.emit(topic, {error: error.message})
+       }
+       else {
+       console.log(authorizedProjects)
+       client.emit(topic, {user:client.sock.handshake.session.user, authorizedProjects: authorizedProjects})
+       }
+    });
+});
 
-app.post('/api/settings', passport.authenticate('local'), (req, res) => {
-               console.log('settings')
-                var query = { _id:req.user._id};
-                var update = {
-                    roles: req.body.roles
-                };
-                var options = {};
-                User.findOneAndUpdate(query, update, options, (err, updatedUser) => {
-                    if(err) {
-                    console.log(err.message);
-                    return res.status(460).send(err.message);
-                    } else {
-                    console.log(updatedUser);
-                    req.session.user = updatedUser;
-                    res.status(200).send({user : req.session.user});
-                    }
-                });
+router.on('/api/user/unauthorizedprojects', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     Project.find({ users: { "$nin" : [client.sock.handshake.session.user._id]}}, (error, unauthorizedProjects) => {
+       if(error) {
+        //console.log(error)
+        client.emit(topic, {error: error.message})
+       }
+       else {
+       console.log(unauthorizedProjects)
+       client.emit(topic, {user:client.sock.handshake.session.user, unauthorizedProjects: unauthorizedProjects})
+       }
+    });
+});
+
+router.on('/api/user/project', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     Project.findOne({ _id:params._id, users: { "$in" : [client.sock.handshake.session.user._id]}}, (error, project) => {
+       if(error) {
+        //console.log(error)
+        client.emit(topic, {error: error.message})
+       }
+       else {
+       //console.log(user)
+       client.emit(topic, {user:client.sock.handshake.session.user, project: project})
+       }
+    })
+});
+
+router.on('/api/user/project/users', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     User.find({ projects: { "$in" : [params._id]}}, (error, users) => {
+       if(error) {
+        //console.log(error)
+        client.emit(topic, {error: error.message})
+       }
+       else {
+       //console.log(user)
+       client.emit(topic, {user:client.sock.handshake.session.user, project: project})
+       }
+    });
+});
+
+router.on('/api/user/removeproject', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+    var query = { _id:params._id};
+    var update = {'$pull': {users: {'$in': [client.sock.handshake.session.user._id]}}};
+    var options = {};
+    Project.findOneAndUpdate(query, update, options, (error, removedProject) => {
+       if(error) {
+        //console.log(error)
+        client.emit(topic, {error: error.message})
+       }
+       else {
+       //console.log(user)
+       client.emit(topic, {user:client.sock.handshake.session.user, removedProject: true})
+       }
+    });
+});
+
+io.use(router);
+
+
+io.on('connection', function(client){
 
 });
 
+/*
 app.get('/api/signout', (req, res) => {
   console.log('signout')
   req.logout();
@@ -163,7 +288,17 @@ app.get('/api/user/project/:_id', (req, res, next) => {
         }
     })
 });
-
+app.get('/api/user/project/:_id/users', (req, res, next) => {
+     User.find({ projects: { "$in" : [req.params._id]}}, (err, users) => {
+        if(err) {
+        console.log(err.message);
+        return res.status(460).send(err.message);
+        } else {
+        console.log(users);
+        res.status(200).send({user : req.session.user, users : users});
+        }
+    })
+});
 app.post('/api/user/removeproject', (req, res, next) => {
     var query = { _id:req.body._id};
     var update = {'$pull': {users: {'$in': [req.session.user._id]}}};
@@ -178,19 +313,7 @@ app.post('/api/user/removeproject', (req, res, next) => {
         }
     });
 });
-
-/*
-app.get('/api/projectlist', (req, res, next) => {
-    Project.find({ users: { "$in" : [req.session.user._id]}}, (err, projectList) => {
-        if(err) {
-        console.log(err.message)
-        return res.status(460).send(err.message);
-        } else {
-        console.log(projectList);
-        res.status(200).send({user : req.session.user, projectList : projectList}
-        }
-    })
-});
 */
 
-module.exports = app;
+
+module.exports = {http};

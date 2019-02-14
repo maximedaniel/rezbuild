@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "(cd server & npm start) | (cd client & npm start)",
+    "start": "concurrently --kill-others \"npm run start:server\" \"npm run start:client\"",
     "start:server": "cd server & npm start",
     "start:client": "cd client & npm start"
   },
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/maximedaniel/rezbuild/issues"
   },
-  "homepage": "https://github.com/maximedaniel/rezbuild#readme"
+  "homepage": "https://github.com/maximedaniel/rezbuild#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
 }

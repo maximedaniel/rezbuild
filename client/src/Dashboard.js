@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import Board from 'react-trello'
+import Tree from './Tree'
+import CollaboratorList from './CollaboratorList'
+import { ParentSize } from '@vx/responsive';
 
 
 const lanesStyle = {
@@ -20,6 +23,7 @@ class Dashboard extends Component {
   constructor(props){
     super(props);
     this.state = {data: null}
+    console.log(this.props.project)
   }
 
   componentDidMount(){
@@ -68,26 +72,40 @@ class Dashboard extends Component {
   render() {
         return  (
            <div>
-             <div className="section"  style={{marginLeft:'2%', marginRight:'2%'}}>
-                 <div className="row">
-                      <div className="col s3 white">
+             <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+                 <div className="row transparent"  style={{marginBottom:0}}>
+                      <div className="col s12 m3 l3 transparent">
                             <h5 className="rezbuild-text">Collaborators</h5>
                              <div className="divider rezbuild"></div>
-                             <div className="section">
-                                Test
+                             <div className="section" style={{height:'300px', paddingBottom:0}}>
+                                <CollaboratorList project={this.props.project}/>
                              </div>
                       </div>
-                      <div className="col s9 white">
+                      <div className="col s12 m9 l9 transparent">
                                 <h5 className="rezbuild-text">Board</h5>
                                  <div className="divider rezbuild"></div>
-                                 <div className="section">
+                                 <div className="section" style={{height:'300px', paddingBottom:0}}>
+                                  <ParentSize>
+                                    {parent => (
+                                      <Tree
+                                        parentWidth={parent.width}
+                                        parentHeight={parent.height}
+                                        parentTop={parent.top}
+                                        parentLeft={parent.left}
+                                        // this is the referer to the wrapper component
+                                        parentRef={parent.ref}
+                                        // this function can be called inside MySuperCoolVxChart to cause a resize of the wrapper component
+                                        resizeParent={parent.resize}
+                                      />
+                                     )}
+                                  </ParentSize>
                                  </div>
                       </div>
                  </div>
              </div>
-             <div className="section" style={{marginLeft:'2%', marginRight:'2%'}}>
-              <div className='row'>
-                 <div className="col s12 white">
+             <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+              <div className='row'   style={{marginBottom:0}}>
+                 <div className="col s12 transparent">
                                 <h5 className="rezbuild-text">Task</h5>
                                  <div className="divider rezbuild"></div>
                                  <div className="section">
