@@ -1,7 +1,7 @@
 // App.js
 
 import React, { Component } from 'react';
-import {Route, Router, browserHistory} from 'react-router'
+import {Switch, Route, Router, browserHistory} from 'react-router'
 import SigninForm from './forms/SigninForm'
 import SignupForm from './forms/SignupForm'
 import Project from './Project'
@@ -11,9 +11,13 @@ import openSocket from 'socket.io-client';
 //import GroceriesList from './groceriesList.component';
 import SocketContext from './SocketContext'
 
-const socket = openSocket('http://localhost:3001')
-
 class App extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {socket: openSocket('http://localhost:3001')}
+  }
+
   render() {
     return (
 
@@ -31,14 +35,14 @@ class App extends Component {
           opacity:0.2,
           backgroundSize:"cover"}}>
         </div>
-         <SocketContext.Provider value={socket}>
-        <Router history={browserHistory}>
-            <Route path ='/' component={ProjectList} />
-            <Route path='/signin' component={SigninForm} />
-            <Route path='/signup' component={SignupForm} />
-            <Route path='/project/:_id' component={Project} />
-        </Router>
-        </SocketContext.Provider>
+         <SocketContext.Provider value={this.state.socket}>
+            <Router history={browserHistory}>
+                    <Route path ='/' component={ProjectList} />
+                    <Route path='/signin' component={SigninForm} />
+                    <Route path='/signup' component={SignupForm} />
+                    <Route path='/project/:_id' component={Project} />
+            </Router>
+         </SocketContext.Provider>
        </div>
     );
   }

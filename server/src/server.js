@@ -184,16 +184,21 @@ router.on('/api/user/project', function (client, args, next) {
 router.on('/api/user/project/users', function (client, args, next) {
      var topic = args.shift(), params = args.shift();
      console.log(topic, params)
-     User.find({ projects: { "$in" : [params._id]}}, (error, users) => {
+     Project.findOne({ _id:params._id, users: { "$in" : [client.sock.handshake.session.user._id]}}, (error, project) => {
        if(error) {
-        //console.log(error)
         client.emit(topic, {error: error.message})
        }
        else {
-       //console.log(user)
-       client.emit(topic, {user:client.sock.handshake.session.user, project: project})
+           User.find( {_id: { "$in" : [project.users]}}, (error, users) => {
+               if(error) {
+                client.emit(topic, {error: error.message})
+               }
+               if (users) {
+                client.emit(topic, {user:client.sock.handshake.session.user, users: users})
+               }
+           })
        }
-    });
+    })
 });
 
 router.on('/api/user/removeproject', function (client, args, next) {
@@ -218,6 +223,7 @@ io.use(router);
 
 
 io.on('connection', function(client){
+    console.log(client.id, ' is connected.')
 
 });
 

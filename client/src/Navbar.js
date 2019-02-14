@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import logo from './ressources/img/jpg/logo.jpg'
+import {Link} from 'react-router'
 import SettingsForm from './forms/SettingsForm'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js"
@@ -48,7 +49,7 @@ class NavbarCore extends Component {
     let pathComponent;
     pathComponent = this.props.path.map((level, index) =>
 
-                <a href={ (index == 0) ? '/' : '#!'} className="breadcrumb" key={index}>{level}</a>
+                <Link to={ (index == 0) ? '/' : '#!'} className="breadcrumb" key={index}>{level}</Link>
     );
 
     return (

@@ -3,7 +3,8 @@
 require('babel-register')({
     presets: [ 'env' ]
 })
-var mongoose = require("mongoose");
+
+
 var {http} = require('./server');
 
 

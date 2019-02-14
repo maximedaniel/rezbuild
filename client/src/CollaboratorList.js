@@ -1,29 +1,29 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import SocketContext from './SocketContext'
 
 
-class CollaboratorList extends Component {
+class CollaboratorListCore extends Component {
+
   constructor(props){
     super(props);
-    this.state = {user: null, collaboratorList : null, error : false, pending : false}
+    this.state = {user: null, users : null, error : false, pending : false}
   }
+
   updateCollaboratorList(){
-    this.setState({user : null, collaboratorList : null, error : false, pending : true})
-    axios.get('/api/user/'+this.props.project._id+'/users')
-    .then(res => {
-        this.setState({user: res.data.user, collaboratorList : res.data.users, error : false, pending : false})
-       // M.FloatingActionButton.init($('.fixed-action-btn'), {});
-        //M.Tooltip.init($('.tooltipped'), {});
+    this.setState({user : null, users : null, error : false, pending : true}, () => {
+        this.props.socket.emit('/api/user/project/users', { _id: this.props.project._id });
+        this.props.socket.on('/api/user/project/users', res => {
+            if(res.project){
+                this.setState({user : res.user, users : res.users, error : false, pending : false})
+            }
+            if(res.error){
+                this.setState({user : null, users : null, error : false, pending : false});
+            }
+        });
     })
-    .catch(err => {
-        console.log(err)
-        if(err && err.response && err.response.data){
-            this.setState({user : null,  collaboratorList : null, error : err.response.data, pending : false});
-        } else {
-            this.setState({user : null,  collaboratorList : null, error : 'Network error', pending : false});
-        }
-    });
   }
+
   componentDidMount() {
     this.updateCollaboratorList()
   }
@@ -59,7 +59,7 @@ class CollaboratorList extends Component {
         let collaboratorListComponent;
 
         if (this.state.collaboratorListComponent){
-            collaboratorListComponent = this.state.collaboratorListComponent.map((collaborator, index) =>
+            collaboratorListComponent = this.state.users.map((collaborator, index) =>
                     <h5 key={index}>{collaborator.name}</h5>
             );
         }
@@ -72,5 +72,11 @@ class CollaboratorList extends Component {
         );
   }
 }
+
+const CollaboratorList = props => (
+  <SocketContext.Consumer>
+  {socket => <CollaboratorListCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
 
 export default CollaboratorList;
