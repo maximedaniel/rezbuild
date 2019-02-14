@@ -30,10 +30,6 @@ io.use(sharedsession(session));
 var router = require('socket.io-events')();
 
 
-//io.use(function(socket, next) {
-//    sessionMiddleware(socket.request, socket.request.res, next);
-//});
-
 // handles events matching 'some*'
 //router.on(function (client, next) {
 //    sessionMiddleware(client.request, client.request.res, next);

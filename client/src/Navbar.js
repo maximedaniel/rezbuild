@@ -49,7 +49,7 @@ class NavbarCore extends Component {
     let pathComponent;
     pathComponent = this.props.path.map((level, index) =>
 
-                <Link to={ (index == 0) ? '/' : '#!'} className="breadcrumb" key={index}>{level}</Link>
+                <Link to={ (index === 0) ? '/' : '#!'} className="breadcrumb" key={index}>{level}</Link>
     );
 
     return (

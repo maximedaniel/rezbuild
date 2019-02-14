@@ -47,13 +47,13 @@ class RemoveProjectFormCore extends Component {
           <form className="col s12">
           <div className="row">
               <div className="col s12 center">
-              <h5 className="rezbuild-text">Do you want to remove <strong>{this.props.project.name}</strong> ?</h5>
+              <h5 className="rezbuild-text">Do you want to remove {this.props.project.name} ?</h5>
               </div>
               <div className="input-field col s6 right-align">
-                  <button className="btn waves-effect waves-light" onClick={this.handleRemoveProject}>YES</button>
+                  <a className="btn waves-effect waves-light" onClick={this.handleRemoveProject}>YES</a>
               </div>
               <div className="input-field col s6 left-align">
-                  <button className="btn waves-effect waves-light white rezbuild-text modal-close" onClick={()=>{}}>NO</button>
+                  <a className="btn waves-effect waves-light white rezbuild-text" onClick={() => $("#modal_removeproject_"+this.props.project._id).modal('close')}>NO</a>
               </div>
                 { this.state.pending ?
                  <div className="preloader-wrapper small active">
