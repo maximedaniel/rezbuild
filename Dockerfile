@@ -1,23 +1,12 @@
-FROM debian:jessie-slim
+# Sample Dockerfile for installing MongoDB on an Ubuntu 14.04 server
+# https://github.com/atbaker/mongo-example
+#FROM ubuntu:14.04
+#RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+#RUN echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+#RUN apt-get update
+#RUN apt-get install -y mongodb-org
+#RUN mkdir -p /data/db
 
-RUN apt-get update && \
-apt-get install -y ca-certificates && \
-rm -rf /var/lib/apt/lists/*
-RUN gpg --keyserver ha.pool.sks-keyservers.net --recv-keys 0C49F3730359A14518585931BC711F9BA15703C6 && \
-gpg --export $GPG_KEYS > /etc/apt/trusted.gpg.d/mongodb.gpg
-ARG MONGO_PACKAGE=mongodb-org
-ARG MONGO_REPO=repo.mongodb.org
-ENV MONGO_PACKAGE=${MONGO_PACKAGE} MONGO_REPO=${MONGO_REPO}
-ENV MONGO_MAJOR 3.4
-ENV MONGO_VERSION 3.4.18
-RUN echo "deb http://$MONGO_REPO/apt/debian jessie/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR main" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list"
-RUN echo "/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list"
-RUN apt-get update
-RUN apt-get install -y ${MONGO_PACKAGE}=$MONGO_VERSION
-VOLUME ["/data/db"]
-WORKDIR /data
-# CMD ["mongod", "--smallfiles"]
-EXPOSE 27017
 
 
 FROM node:10.15.0
@@ -34,6 +23,10 @@ RUN npm install
 COPY server/ .
 EXPOSE 3001
 
-WORKDIR /usr/src
-COPY package.json ./
-CMD mongod && (cd server && npm start) & (cd client && npm start)
+FROM mongo
+
+WORKDIR /usr/src/
+VOLUME ['./data/db']
+EXPOSE 27017
+
+CMD ["mongod" "&", "(cd /usr/src/server && npm start)", "&", "(cd /usr/src/client && npm start)" ]
