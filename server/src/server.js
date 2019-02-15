@@ -24,6 +24,7 @@ var sharedsession = require("express-socket.io-session");
 
 app.use(session);
 
+io.set('origins', '*:*');
 io.use(sharedsession(session));
 
 

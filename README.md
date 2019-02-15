@@ -1,17 +1,26 @@
+# Account
+- [x] signup
+- [x] signin
+- [x] signout
+- [ ] settings
 
-# signup(name, email, roles, password1, password2)
+# Project
+- [x] listProjects
+- [x] createProject
+- [x] joinProject
+- [x] removeProject
+- [x] selectProject
 
-# signin(email, password)
+# Collaborator
+- [ ] listCollaborators
+- [ ] addCollaborator
+- [ ] selectCollaborator
 
-# signout(email)
+# Tree
+- [ ] listRevisions
+- [ ] createRevision
+- [ ] selectRevision
 
-# createProject(uoid, projectname)
-
-# joinProject(uoid, poid)
-
-# removeProject(uoid, poid)
-
-# Feb 7, 2019
-
-External pre-assessment tool => Revit, etc.
-User story -> marketplace techonology
+# Task
+- [ ] listTasks
+- [ ] selectTask

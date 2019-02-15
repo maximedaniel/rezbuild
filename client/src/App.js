@@ -15,7 +15,7 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    this.state = {socket: openSocket('http://localhost:3001')}
+    this.state = {socket: openSocket('http://0.0.0.0:3001')}
   }
 
   render() {
