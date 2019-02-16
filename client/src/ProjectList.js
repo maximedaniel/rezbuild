@@ -1,7 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
-//import $ from 'jquery'
-//import M from "materialize-css/dist/js/materialize.js";
 import CreateProjectForm from './forms/CreateProjectForm'
 import JoinProjectForm from './forms/JoinProjectForm'
 import RemoveProjectForm from './forms/RemoveProjectForm'
@@ -18,7 +15,7 @@ class ProjectListCore extends Component {
     this.state = {user: null, authorizedProjects : null, error : false, pending : false}
   }
   updateProjectList(){
-    this.setState({authorizedProjects : null, error : false, pending : true})
+    this.setState({user: null, authorizedProjects : null, error : false, pending : true})
     this.props.socket.emit('/api/user/authorizedprojects', {});
     this.props.socket.on('/api/user/authorizedprojects', res => {
         if (res.authorizedProjects) {
@@ -35,20 +32,8 @@ class ProjectListCore extends Component {
             }
         }
     });
-    /*axios.get('/api/user/listauthorizedproject')
-    .then(res => {
-        this.setState({user: res.data.user, projectList : res.data.projectList, error : false, pending : false})
-    })
-    .catch(err => {
-        console.log(err)
-        if(err && err.response && err.response.data){
-            this.setState({user : null,  projectList : null, error : err.response.data, pending : false});
-            browserHistory.push('/signin')
-        } else {
-            this.setState({user : null,  projectList : null, error : 'Network error', pending : false});
-        }
-    });*/
   }
+
   componentDidMount() {
     this.updateProjectList()
     $('.modal').modal();
@@ -105,7 +90,7 @@ class ProjectListCore extends Component {
                     <td>{project.hasAuthorizedUsers}</td>
                     <td>{new Date(project.date).toString().split('GMT')[0]}</td>
                     <td>
-                        <a className="btn-floating waves-effect waves-light" onClick={() => browserHistory.push('/project/'+project._id) }><i className="material-icons">folder_open</i></a>
+                        <a className="btn-floating waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/project/'+project._id) }><i className="material-icons">folder_open</i></a>
                         <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
                             <i className="material-icons rezbuild-text">close</i>
                         </a>
@@ -138,7 +123,7 @@ class ProjectListCore extends Component {
                     {preloaderComponent}
                     {errorComponent}
                     <div className="fixed-action-btn">
-                      <a className="btn-floating btn-large">
+                      <a className="btn-floating btn-large" href="#!">
                         <i className="large material-icons">mode_edit</i>
                       </a>
                       <ul>

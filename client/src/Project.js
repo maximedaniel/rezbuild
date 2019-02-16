@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar'
-import axios from 'axios'
 import Dashboard from './Dashboard'
 import {browserHistory} from 'react-router'
 import SocketContext from './SocketContext'

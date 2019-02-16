@@ -38,7 +38,7 @@ var router = require('socket.io-events')();
 
 // handles events matching 'some*'
 router.on('/api/user', function (client, args, next) {
-    console.log('/api/user')
+    console.log(args)
     if(client.sock.handshake.session.user) return next();
     else client.emit(args[0], {error: 'User not signed in'});
 });
@@ -78,11 +78,9 @@ router.on('/api/signup', function (client, args, next) {
      });
      user.save( (error) => {
            if(error) {
-            //console.log(error)
             client.emit(topic, {error: error.message})
            }
            else {
-           //console.log(user)
            client.emit(topic, {user: user})
            }
      });
@@ -123,7 +121,6 @@ router.on('/api/user/joinproject', function (client, args, next) {
 
     Project.findOneAndUpdate({ _id:params._id}, {"$push": { "users": client.sock.handshake.session.user._id }}, {}, (error, updatedUser) => {
            if(error) {
-               console.log(error)
                client.emit(topic, {error: error.message})
            }
            else {
@@ -138,11 +135,9 @@ router.on('/api/user/authorizedprojects', function (client, args, next) {
      console.log(topic, params)
      Project.find({ users: { "$in" : [client.sock.handshake.session.user._id]}}, (error, authorizedProjects) => {
        if(error) {
-        console.log(error)
         client.emit(topic, {error: error.message})
        }
        else {
-       console.log(authorizedProjects)
        client.emit(topic, {user:client.sock.handshake.session.user, authorizedProjects: authorizedProjects})
        }
     });
@@ -153,11 +148,9 @@ router.on('/api/user/unauthorizedprojects', function (client, args, next) {
      console.log(topic, params)
      Project.find({ users: { "$nin" : [client.sock.handshake.session.user._id]}}, (error, unauthorizedProjects) => {
        if(error) {
-        //console.log(error)
         client.emit(topic, {error: error.message})
        }
        else {
-       console.log(unauthorizedProjects)
        client.emit(topic, {user:client.sock.handshake.session.user, unauthorizedProjects: unauthorizedProjects})
        }
     });
@@ -168,11 +161,9 @@ router.on('/api/user/project', function (client, args, next) {
      console.log(topic, params)
      Project.findOne({ _id:params._id, users: { "$in" : [client.sock.handshake.session.user._id]}}, (error, project) => {
        if(error) {
-        //console.log(error)
         client.emit(topic, {error: error.message})
        }
        else {
-       //console.log(user)
        client.emit(topic, {user:client.sock.handshake.session.user, project: project})
        }
     })
@@ -206,11 +197,9 @@ router.on('/api/user/removeproject', function (client, args, next) {
     var options = {};
     Project.findOneAndUpdate(query, update, options, (error, removedProject) => {
        if(error) {
-        //console.log(error)
         client.emit(topic, {error: error.message})
        }
        else {
-       //console.log(user)
        client.emit(topic, {user:client.sock.handshake.session.user, removedProject: true})
        }
     });

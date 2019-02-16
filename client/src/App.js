@@ -1,12 +1,12 @@
 // App.js
 
 import React, { Component } from 'react';
-import {Switch, Route, Router, browserHistory} from 'react-router'
+import {Route, Router, browserHistory} from 'react-router'
 import SigninForm from './forms/SigninForm'
 import SignupForm from './forms/SignupForm'
 import Project from './Project'
 import ProjectList from './ProjectList'
-import openSocket from 'socket.io-client';
+import io from 'socket.io-client';
 //import Add from './add.component';
 //import GroceriesList from './groceriesList.component';
 import SocketContext from './SocketContext'
@@ -15,7 +15,11 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    this.state = {socket: openSocket('http://0.0.0.0:3001')}
+    let {host} = window.location
+    console.log("before : ", host)
+    host = host.replace('3000','3001')
+    console.log("after : ", host)
+    this.state = {socket: io(host)}
   }
 
   render() {
