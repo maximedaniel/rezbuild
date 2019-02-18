@@ -25,15 +25,15 @@ VOLUME ["/usr/src/data/db"]
 RUN npm config set strict-ssl false
 RUN npm cache clean --force
 
-WORKDIR /usr/src/client
-COPY client/package.json .
+WORKDIR /usr/src/app
+COPY app/package.json .
 RUN npm install
-COPY client/ .
+COPY app/ .
 
-WORKDIR /usr/src/server
-COPY server/package.json .
+WORKDIR /usr/src/api
+COPY api/package.json .
 RUN npm install
-COPY server/ .
+COPY api/ .
 
 EXPOSE 3000
 EXPOSE 3001
@@ -41,4 +41,4 @@ EXPOSE 27017
 
 WORKDIR /usr/src/
 
-CMD mongod --dbpath=/usr/src/data/db & (cd server && npm start) & (cd client && npm start)
+CMD mongod --dbpath=/usr/src/data/db & (cd api && npm start) & (cd app && npm start)

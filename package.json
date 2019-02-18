@@ -7,9 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "start": "concurrently --kill-others \"npm run start:server\" \"npm run start:client\"",
-    "start:server": "cd server & npm start",
-    "start:client": "cd client & npm start"
+    "start": "concurrently --kill-others \"npm run start:api\" \"npm run start:app\"",
+    "start:api": "cd api & npm start",
+    "start:app": "cd app & npm start"
   },
   "repository": {
     "type": "git",
