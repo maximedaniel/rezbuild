@@ -5,17 +5,16 @@
 
 # server BIM
 /.BIMserver
-maquette
-diagram
+/other
 
 # dependencies
 
 /node_modules
 package-lock.json
-client/node_modules
-client/package-lock.json
-server/node_modules
-server/package-lock.json
+app/node_modules
+app/package-lock.json
+api/node_modules
+api/package-lock.json
 
 # testing
 /coverage
