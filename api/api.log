@@ -2,14 +2,89 @@
 [33m[nodemon] to restart at any time, enter `rs`[39m
 [33m[nodemon] watching: *.*[39m
 [32m[nodemon] starting `node src`[39m
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+api running on 0.0.0.0:3001
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+api running on 0.0.0.0:3001
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node src`[39m
 api running on 0.0.0.0:3001
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node src`[39m
+Connecting to db...
 api running on 0.0.0.0:3001
+{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
+    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
+    at Pool.emit (events.js:182:13)
+    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
+    at Object.onceWrapper (events.js:273:13)
+    at Connection.emit (events.js:182:13)
+    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
+    at Object.onceWrapper (events.js:273:13)
+    at Socket.emit (events.js:182:13)
+    at emitErrorNT (internal/streams/destroy.js:82:8)
+    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+  name: 'MongoNetworkError',
+  errorLabels: [ 'TransientTransactionError' ],
+  [Symbol(mongoErrorContextSymbol)]: {} }
+Connecting to db...
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
-[32m[nodemon] restarting child process[39m
+[32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node src`[39m
+Connecting to db...
 api running on 0.0.0.0:3001
+{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
+    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
+    at Pool.emit (events.js:182:13)
+    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
+    at Object.onceWrapper (events.js:273:13)
+    at Connection.emit (events.js:182:13)
+    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
+    at Object.onceWrapper (events.js:273:13)
+    at Socket.emit (events.js:182:13)
+    at emitErrorNT (internal/streams/destroy.js:82:8)
+    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+  name: 'MongoNetworkError',
+  errorLabels: [ 'TransientTransactionError' ],
+  [Symbol(mongoErrorContextSymbol)]: {} }
+Connecting to db...
+{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
+    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
+    at Pool.emit (events.js:182:13)
+    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
+    at Object.onceWrapper (events.js:273:13)
+    at Connection.emit (events.js:182:13)
+    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
+    at Object.onceWrapper (events.js:273:13)
+    at Socket.emit (events.js:182:13)
+    at emitErrorNT (internal/streams/destroy.js:82:8)
+    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+  name: 'MongoNetworkError',
+  errorLabels: [ 'TransientTransactionError' ],
+  [Symbol(mongoErrorContextSymbol)]: {} }
+Connecting to db...
+{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
+    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
+    at Pool.emit (events.js:182:13)
+    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
+    at Object.onceWrapper (events.js:273:13)
+    at Connection.emit (events.js:182:13)
+    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
+    at Object.onceWrapper (events.js:273:13)
+    at Socket.emit (events.js:182:13)
+    at emitErrorNT (internal/streams/destroy.js:82:8)
+    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
+    at process._tickCallback (internal/process/next_tick.js:63:19)
+  name: 'MongoNetworkError',
+  errorLabels: [ 'TransientTransactionError' ],
+  [Symbol(mongoErrorContextSymbol)]: {} }
+Connecting to db...
+Connected to db.
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.

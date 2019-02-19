@@ -26,6 +26,9 @@ class Dashboard extends Component {
     console.log(this.props.project)
   }
 
+  handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails){
+     console.log(cardId, sourceLaneId, targetLaneId, position, cardDetails)
+  }
   componentDidMount(){
   const data = {
           lanes: [
@@ -114,7 +117,9 @@ class Dashboard extends Component {
                                             {padding: '0',
                                             backgroundColor:'transparent',
                                             fontFamily: 'Exo 2'}
-                                        } draggable/>
+                                        }
+                                        draggable
+                                        handleDragEnd={this.handleDragEnd}/>
                                      : '' }
                                  </div>
                  </div>

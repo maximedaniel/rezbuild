@@ -8,7 +8,7 @@ require('babel-register')({
 var {http} = require('./server');
 
 const PORT =  3001;
-const HOST =  'localhost';
+const HOST =  '0.0.0.0';
 
 http.listen(PORT, HOST, function() {
     console.log(`api running on ${HOST}:${PORT}`);
