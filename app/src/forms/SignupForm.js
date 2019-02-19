@@ -26,7 +26,7 @@ class SignupFormCore extends Component {
 
   handleSubmit(event){
    event.preventDefault();
-   this.setState({error : false, pending : false}, () => {
+   this.setState({error : false, pending : true}, () => {
         this.props.socket.emit('/api/signup', {
             email : this.refs.email.value,
             password : this.refs.password.value,

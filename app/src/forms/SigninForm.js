@@ -26,6 +26,7 @@ class SigninFormCore extends Component {
    this.setState({error : false, pending : true}, () =>{
     this.props.socket.emit('/api/signin', {email: this.refs.email.value, password: this.refs.password.value});
        this.props.socket.on('/api/signin', res => {
+            console.log(res)
             if (res.user) {
                 this.setState({user : res.user, error : null, pending : false}, () => {
                     browserHistory.push('/')
