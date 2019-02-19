@@ -1,30 +1,34 @@
 import React, { Component } from 'react'
 import SocketContext from './SocketContext'
-
+import AddUserForm from './forms/AddUserForm'
 
 class CollaboratorListCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {user: null, users : null, error : false, pending : false}
+    this.state = {authorizedUsers : null,  error : false, pending : false}
   }
 
-  updateCollaboratorList(){
-    this.setState({user : null, users : null, error : false, pending : true}, () => {
-        this.props.socket.emit('/api/user/project/users', { _id: this.props.project._id });
-        this.props.socket.on('/api/user/project/users', res => {
-            if(res.project){
-                this.setState({user : res.user, users : res.users, error : false, pending : false})
+  updateAuthorizedUsers(){
+    this.setState({authorizedUsers : null, error : false, pending : true}, () => {
+        this.props.socket.emit('/api/user/authorizedusersproject', { pid: this.props.project._id });
+        this.props.socket.on('/api/user/authorizedusersproject', res => {
+            console.log(res)
+            if(res.authorizedUsers){
+                this.setState({authorizedUsers : res.authorizedUsers, error : false, pending : false})
             }
             if(res.error){
-                this.setState({user : null, users : null, error : false, pending : false});
+                this.setState({authorizedUsers : null, error : false, pending : false});
             }
         });
     })
   }
 
   componentDidMount() {
-    this.updateCollaboratorList()
+    this.updateAuthorizedUsers()
+    this.props.socket.on('/api/user/adduserproject', res => {
+        this.updateAuthorizedUsers()
+     });
   }
 
 
@@ -55,18 +59,22 @@ class CollaboratorListCore extends Component {
                             </div>
         }
 
-        let collaboratorListComponent;
+        let authorizedUsersComponent;
 
-        if (this.state.collaboratorListComponent){
-            collaboratorListComponent = this.state.users.map((collaborator, index) =>
-                    <h5 key={index}>{collaborator.name}</h5>
-            );
+        if (this.state.authorizedUsers){
+
+            authorizedUsersComponent =
+                    this.state.authorizedUsers.map((collaborator, index) => <div className="col s12 rezbuild-text" key={index}> {collaborator.firstname} {collaborator.lastname} ({collaborator.roles})</div>)
         }
         return (
                 <div>
-                    {collaboratorListComponent}
+                    {authorizedUsersComponent}
                     {preloaderComponent}
                     {errorComponent}
+                    <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
+                    <i className="material-icons">add</i>
+                    </a>
+                    <AddUserForm project={this.props.project}/>
                </div>
         );
   }

@@ -180,24 +180,61 @@ router.on('/api/user/project', function (client, args, next) {
     })
 });
 
-router.on('/api/user/project/users', function (client, args, next) {
+router.on('/api/user/authorizedusersproject', function (client, args, next) {
      var topic = args.shift(), params = args.shift();
      console.log(topic, params)
-     Project.findOne({ _id:params._id, users: { "$in" : [client.sock.handshake.session.user._id]}}, (error, project) => {
+     Project.findById(params.pid, (error, project) => {
        if(error) {
         client.emit(topic, {error: error.message})
        }
        else {
-           User.find( {_id: { "$in" : [project.users]}}, (error, users) => {
+           User.find( {_id: { "$in" : project.users}}, (error, users) => {
                if(error) {
                 client.emit(topic, {error: error.message})
                }
                if (users) {
-                client.emit(topic, {user:client.sock.handshake.session.user, users: users})
+                client.emit(topic, {user:client.sock.handshake.session.user, authorizedUsers: users})
                }
            })
        }
     })
+});
+
+router.on('/api/user/unauthorizedusersproject', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     Project.findById(params.pid, (error, project) => {
+       if(error) {
+        client.emit(topic, {error: error.message})
+       }
+       else {
+           User.find( {_id: { "$nin" : project.users}}, (error, users) => {
+               if(error) {
+                client.emit(topic, {error: error.message})
+               }
+               if (users) {
+                client.emit(topic, {user:client.sock.handshake.session.user, unauthorizedUsers: users})
+               }
+           })
+       }
+    })
+});
+
+router.on('/api/user/adduserproject', function (client, args, next) {
+     var topic = args.shift(), params = args.shift();
+     console.log(topic, params)
+     User.findById(params.uid, (err, user) => {
+        var update = {'$push': {users: user._id}};
+        var options = {};
+        Project.findByIdAndUpdate(params.pid, update, options, (error, addedUser) => {
+           if(error) {
+            client.emit(topic, {error: error.message})
+           }
+           else {
+           client.emit(topic, {user:client.sock.handshake.session.user, addedUser: true})
+           }
+        });
+     })
 });
 
 router.on('/api/user/removeproject', function (client, args, next) {

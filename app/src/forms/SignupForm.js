@@ -30,8 +30,8 @@ class SignupFormCore extends Component {
         this.props.socket.emit('/api/signup', {
             email : this.refs.email.value,
             password : this.refs.password.value,
-            firstname : this.refs.firstname.value,
-            lastname : this.refs.lastname.value,
+            firstname : this.refs.firstname.value.charAt(0).toUpperCase() + this.refs.firstname.value.toLowerCase().slice(1),
+            lastname : this.refs.lastname.value.toUpperCase(),
             roles : $("input[name='roles']:checked").map(function() {return $(this).val();}).get(),
         });
         this.props.socket.on('/api/signup', res => {

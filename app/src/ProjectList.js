@@ -74,6 +74,7 @@ class ProjectListCore extends Component {
                                     <h6 className='rezbuild-text'>{this.state.error}</h6>
                                 </div>
                             </div>
+
         }
         let navbarComponent;
 
