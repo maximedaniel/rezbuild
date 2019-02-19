@@ -16,9 +16,17 @@ class App extends Component {
   constructor(props){
     super(props);
     let {host} = window.location
-    console.log("before : ", host)
-    host = host.replace('3000','3001')
-    console.log("after : ", host)
+    if(host.indexOf(':') !== -1){
+        console.log("running on localhost...")
+        console.log("before : ", host)
+        host = host.replace('3000','3001')
+        console.log("after : ", host)
+    } else {
+        console.log("running on distanthost...")
+        console.log("before : ", host)
+        host = host.replace('app','api')
+        console.log("after : ", host)
+    }
     this.state = {socket: io(host)}
   }
 
