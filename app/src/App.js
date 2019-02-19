@@ -27,7 +27,7 @@ class App extends Component {
         host = host.replace('app','api')
         console.log("after : ", host)
     }
-    this.state = {socket: io('https://rezbuildapi.estia.fr/')}
+    this.state = {socket: io(host)}
   }
 
   render() {

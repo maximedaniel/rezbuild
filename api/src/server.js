@@ -2,6 +2,8 @@
 import express from 'express'
 import db from './models'
 import BimController from './controllers/BimController'
+import cors from 'cors'
+
 var mongoose = require("mongoose");
 var User = db.User;
 var Project = db.Project;
@@ -13,6 +15,7 @@ var fs = require('fs');
 
 
 var app = express();
+app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 app.use('/', (req,res, next) => {
     fs.readFile('api.log', 'utf8', function(err, data) {
     if (err) res.send(err);
@@ -212,6 +215,8 @@ router.on('/api/user/removeproject', function (client, args, next) {
        }
     });
 });
+
+
 
 io.use(router);
 
