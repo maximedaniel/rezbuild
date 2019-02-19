@@ -9,9 +9,16 @@ var Revision = db.Revision;
 var Task = db.Task;
 
 var handshake = require('socket.io-handshake');
+var fs = require('fs');
+
 
 var app = express();
-app.use('/', (req,res, next) => {res.send('Rezbuild API is running...')})
+app.use('/', (req,res, next) => {
+    fs.readFile('api.log', 'utf8', function(err, data) {
+    if (err) res.send(err);
+    else res.send(data);
+    });
+})
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
