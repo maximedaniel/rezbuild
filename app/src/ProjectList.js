@@ -91,7 +91,7 @@ class ProjectListCore extends Component {
                     <td>{project.hasAuthorizedUsers}</td>
                     <td>{new Date(project.date).toString().split('GMT')[0]}</td>
                     <td>
-                        <a className="btn-floating waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/project/'+project._id) }><i className="material-icons">folder_open</i></a>
+                        <a className="btn-floating waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }><i className="material-icons">folder_open</i></a>
                         <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
                             <i className="material-icons rezbuild-text">close</i>
                         </a>

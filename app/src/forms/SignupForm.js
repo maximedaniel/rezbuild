@@ -37,7 +37,7 @@ class SignupFormCore extends Component {
         this.props.socket.on('/api/signup', res => {
             if (res.user) {
                 this.setState({error : false, pending : false}, () =>{
-                    browserHistory.push('/')
+                    browserHistory.push(((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')
                 })
             }
             if(res.error){

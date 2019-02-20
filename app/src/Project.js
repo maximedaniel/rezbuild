@@ -39,7 +39,7 @@ class ProjectCore extends Component {
         return  (
         <div>
             {navbarComponent}
-            { (this.state.project) ? <Dashboard project={this.state.project}/> : ''}
+            { (this.state.project) ? <Dashboard project={this.state.project} params={this.props.params} />  : ''}
          </div>
         );
     }

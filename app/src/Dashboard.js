@@ -81,7 +81,7 @@ class Dashboard extends Component {
                             <h5 className="rezbuild-text">Collaborators</h5>
                              <div className="divider rezbuild"></div>
                              <div className="section" style={{height:'300px', paddingBottom:0}}>
-                                <CollaboratorList project={this.props.project}/>
+                                <CollaboratorList project={this.props.project} params={this.props.params}/>
                              </div>
                       </div>
                       <div className="col s12 m9 l9 transparent">

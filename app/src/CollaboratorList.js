@@ -74,7 +74,7 @@ class CollaboratorListCore extends Component {
                     <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
                     <i className="material-icons">add</i>
                     </a>
-                    <AddUserForm project={this.props.project}/>
+                    <AddUserForm project={this.props.project} params={this.props.params}/>
                </div>
         );
   }

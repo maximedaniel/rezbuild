@@ -52,7 +52,9 @@ class App extends Component {
                     <Route path ='/' component={ProjectList} />
                     <Route path='/signin' component={SigninForm} />
                     <Route path='/signup' component={SignupForm} />
-                    <Route path='/project/:_id' component={Project} />
+                    <Route path='/:_id' component={Project} />
+                    <Route path='/:_id/signin' component={SigninForm} />
+                    <Route path='/:_id/signup' component={SignupForm} />
             </Router>
          </SocketContext.Provider>
        </div>

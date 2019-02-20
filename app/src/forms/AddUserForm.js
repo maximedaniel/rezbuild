@@ -11,6 +11,7 @@ class AddUserFormCore extends Component {
   constructor(props){
    super(props);
    this.handleAddUser = this.handleAddUser.bind(this);
+   this.handleCopyUrl = this.handleCopyUrl.bind(this);
    this.state = {unauthorizedUsers: null, error : false, pending : false}
   }
   updateUnauthorizedUsers(){
@@ -58,6 +59,14 @@ class AddUserFormCore extends Component {
     this.props.socket.on('/api/user/adduserproject', res => {
         this.updateUnauthorizedUsers()
     });
+
+  }
+
+  handleCopyUrl(event){
+   event.preventDefault();
+   console.log("handleCopyUrl")
+   $('#input_projecturl').select();
+   document.execCommand('copy');
 
   }
 
@@ -137,14 +146,14 @@ class AddUserFormCore extends Component {
               {preloaderComponent}
               {errorComponent}
           </form>
-          <form className="col s12"  onSubmit={ () => {}} autoComplete="off">
+          <form className="col s12"   onSubmit={this.handleCopyUrl} autoComplete="off">
           <div className="row">
             <div className="input-field col l10 m9 s12">
-              <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  value="SDFSfdfdsd" disabled/>
+              <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  value={window.location.href.replace('#!','')  + '/signin'} />
               <label  class="active" htmlFor="input_projecturl">Or share this url...</label>
             </div>
-              <div className="input-field col l2 m3  s12 center">
-                  <button className="btn waves-effect waves-light">COPY</button>
+              <div className="input-field col l2 m3 s12 center">
+                  <button className="btn waves-effect waves-light" type="submit">COPY</button>
               </div>
           </div>
           </form>

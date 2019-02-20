@@ -26,14 +26,28 @@ class SigninFormCore extends Component {
    this.setState({error : false, pending : true}, () =>{
     this.props.socket.emit('/api/signin', {email: this.refs.email.value, password: this.refs.password.value});
        this.props.socket.on('/api/signin', res => {
-            console.log(res)
             if (res.user) {
-                this.setState({user : res.user, error : null, pending : false}, () => {
-                    browserHistory.push('/')
-                });
+                if (this.props.params._id){
+                    this.props.socket.emit('/api/user/joinproject', { _id: this.props.params._id});
+                   this.props.socket.on('/api/user/joinproject', res => {
+                        if (res.updatedUser) {
+                            this.setState({error : false, pending : false}, () => {
+                                browserHistory.push('/')
+                            })
+                        }
+                        if (res.error) {
+                            this.setState({error : res.error, pending : false});
+                        }
+                   });
+                }
+                else {
+                    this.setState({error : null, pending : false}, () => {
+                        browserHistory.push('/')
+                    });
+                }
             }
             if(res.error){
-                this.setState({user : null, error : res.error, pending : false});
+                this.setState({error : res.error, pending : false});
             }
        });
     });
@@ -100,7 +114,7 @@ class SigninFormCore extends Component {
                           <button className="btn waves-effect waves-light" type="submit">SIGN IN</button>
                     </div>
                     <div className="col s6">
-                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push('/signup')}>SIGN UP</button>
+                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signup')}>SIGN UP</button>
                           </div>
                 </div>
           </form >
