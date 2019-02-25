@@ -23,39 +23,35 @@ class SigninFormCore extends Component {
 
   handleSubmit(event){
    event.preventDefault();
-   this.setState({error : false, pending : true}, () =>{
-    this.props.socket.emit('/api/signin', {email: this.refs.email.value, password: this.refs.password.value});
-       this.props.socket.on('/api/signin', res => {
-            console.log(res)
+   this.setState({error : false, pending : true}, () => {
+    this.props.socket.emit('/api/signin', this.refs.email.value, this.refs.password.value, res => {
             if (res.user) {
-                this.setState({user : res.user, error : null, pending : false}, () => {
-                    browserHistory.push('/')
-                });
+                if (this.props.params._id){
+                    var filter = {_id: this.props.params._id}
+                    var update = {"$push" : {users : res.user._id}}
+                    this.props.socket.emit('/api/project/update', filter, update, res => {
+                        if (res.projects) {
+                            this.setState({error : false, pending : false}, () => {
+                                browserHistory.push('/')
+                            })
+                        }
+                        if (res.error) {
+                            this.setState({error : res.error, pending : false});
+                        }
+                    });
+                }
+                else {
+                    this.setState({error : null, pending : false}, () => {
+                        browserHistory.push('/')
+                    });
+                }
             }
             if(res.error){
-                this.setState({user : null, error : res.error, pending : false});
+                this.setState({error : res.error, pending : false});
             }
-       });
     });
-
-
-   /*axios.post('/api/signin', {
-       username: this.refs.email.value,
-       password: this.refs.password.value
-
-   })
-   .then(res => {
-           this.setState({error : false, pending : false});
-           browserHistory.push('/')
-   })
-   .catch(err => {
-        if(err && err.response && err.response.data){
-            this.setState({user : null, error : err.response.data, pending : false});
-        } else {
-            this.setState({user : null, error : 'Network error', pending : false});
-        }
-   });*/
-  };
+  });
+  }
 
   render() {
      return (
@@ -100,7 +96,7 @@ class SigninFormCore extends Component {
                           <button className="btn waves-effect waves-light" type="submit">SIGN IN</button>
                     </div>
                     <div className="col s6">
-                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push('/signup')}>SIGN UP</button>
+                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signup')}>SIGN UP</button>
                           </div>
                 </div>
           </form >

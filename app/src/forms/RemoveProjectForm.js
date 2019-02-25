@@ -27,14 +27,18 @@ class RemoveProjectFormCore extends Component {
   handleRemoveProject(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {
-        this.props.socket.emit('/api/user/removeproject', { _id: this.props.project._id });
-        this.props.socket.on('/api/user/removeproject', res => {
-            if(res.error){
-                this.setState({error : res.error, pending : false}, () => {
+       var filter = {_id: this.props.project._id}
+       var update = {"$pull" : {users : "token"}}
+       this.props.socket.emit('/api/project/update', filter, update, res => {
+            if (res.projects) {
+                this.setState({error : false, pending : false}, () => {
                     $("#modal_removeproject_"+this.props.project._id).modal('close');
-                });
+                })
             }
-        });
+            if (res.error) {
+                this.setState({error : res.error, pending : false});
+            }
+       });
     })
   };
 

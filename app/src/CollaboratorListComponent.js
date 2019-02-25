@@ -1,30 +1,41 @@
 import React, { Component } from 'react'
 import SocketContext from './SocketContext'
-
+import AddUserForm from './forms/AddUserForm'
 
 class CollaboratorListCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {user: null, users : null, error : false, pending : false}
+    this.state = {users : null,  error : false, pending : false}
   }
 
-  updateCollaboratorList(){
-    this.setState({user : null, users : null, error : false, pending : true}, () => {
-        this.props.socket.emit('/api/user/project/users', { _id: this.props.project._id });
-        this.props.socket.on('/api/user/project/users', res => {
-            if(res.project){
-                this.setState({user : res.user, users : res.users, error : false, pending : false})
+  update(){
+    this.setState({users : null, error : false, pending : true}, () => {
+        var filter = {_id: this.props.project._id }
+        this.props.socket.emit('/api/project/get', filter, res => {
+            if(res.projects){
+                var filter = {_id: { "$in" : res.projects[0].users}}
+                this.props.socket.emit('/api/user/get', filter, res => {
+                    if(res.users){
+                        this.setState({users : res.users, error : false, pending : false})
+                    }
+                    if(res.error){
+                        this.setState({users : null, error : false, pending : false});
+                    }
+                });
             }
             if(res.error){
-                this.setState({user : null, users : null, error : false, pending : false});
+                this.setState({users : null, error : false, pending : false});
             }
         });
     })
   }
 
   componentDidMount() {
-    this.updateCollaboratorList()
+    this.update()
+    this.props.socket.on('/api/project/done', res => {
+        this.update()
+     });
   }
 
 
@@ -55,27 +66,31 @@ class CollaboratorListCore extends Component {
                             </div>
         }
 
-        let collaboratorListComponent;
+        let usersComponent;
 
-        if (this.state.collaboratorListComponent){
-            collaboratorListComponent = this.state.users.map((collaborator, index) =>
-                    <h5 key={index}>{collaborator.name}</h5>
-            );
+        if (this.state.users){
+
+            usersComponent =
+                    this.state.users.map((collaborator, index) => <div className="col s12 rezbuild-text" key={index}> {collaborator.firstname} {collaborator.lastname} ({collaborator.roles})</div>)
         }
         return (
                 <div>
-                    {collaboratorListComponent}
+                    {usersComponent}
                     {preloaderComponent}
                     {errorComponent}
+                    <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
+                    <i className="material-icons">add</i>
+                    </a>
+                    <AddUserForm project={this.props.project} params={this.props.params}/>
                </div>
         );
   }
 }
 
-const CollaboratorList = props => (
+const CollaboratorListComponent = props => (
   <SocketContext.Consumer>
   {socket => <CollaboratorListCore {...props} socket={socket} />}
   </SocketContext.Consumer>
 )
 
-export default CollaboratorList;
+export default CollaboratorListComponent;

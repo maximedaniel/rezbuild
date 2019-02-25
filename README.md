@@ -1,4 +1,6 @@
 
+# User story 1
+
 # Technical
 
 Network architecture
@@ -29,9 +31,9 @@ Realisation
 - [x] selectProject
 
 # Collaborator
-- [ ] listCollaborators
-- [ ] addCollaborator
-- [ ] selectCollaborator
+- [X] listCollaborators
+- [X] addCollaboratorWithAccount
+- [X] addCollaboratorWithUrl
 
 # Tree
 - [ ] listRevisions

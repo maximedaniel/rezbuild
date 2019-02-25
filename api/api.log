@@ -2,89 +2,84 @@
 [33m[nodemon] to restart at any time, enter `rs`[39m
 [33m[nodemon] watching: *.*[39m
 [32m[nodemon] starting `node src`[39m
-api running on 0.0.0.0:3001
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src`[39m
-api running on 0.0.0.0:3001
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src`[39m
-api running on 0.0.0.0:3001
-[32m[nodemon] restarting due to changes...[39m
-[32m[nodemon] starting `node src`[39m
 Connecting to db...
 api running on 0.0.0.0:3001
-{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
-    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
-    at Pool.emit (events.js:182:13)
-    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
-    at Object.onceWrapper (events.js:273:13)
-    at Connection.emit (events.js:182:13)
-    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
-    at Object.onceWrapper (events.js:273:13)
-    at Socket.emit (events.js:182:13)
-    at emitErrorNT (internal/streams/destroy.js:82:8)
-    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
-    at process._tickCallback (internal/process/next_tick.js:63:19)
-  name: 'MongoNetworkError',
-  errorLabels: [ 'TransientTransactionError' ],
-  [Symbol(mongoErrorContextSymbol)]: {} }
-Connecting to db...
+PMAzN31s5_g2LKpxAAAA  is connected.
+Connected to db.
+/api/user/authorizedprojects {}
 [31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node src`[39m
 Connecting to db...
 api running on 0.0.0.0:3001
-{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
-    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
-    at Pool.emit (events.js:182:13)
-    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
-    at Object.onceWrapper (events.js:273:13)
-    at Connection.emit (events.js:182:13)
-    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
-    at Object.onceWrapper (events.js:273:13)
-    at Socket.emit (events.js:182:13)
-    at emitErrorNT (internal/streams/destroy.js:82:8)
-    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
-    at process._tickCallback (internal/process/next_tick.js:63:19)
-  name: 'MongoNetworkError',
-  errorLabels: [ 'TransientTransactionError' ],
-  [Symbol(mongoErrorContextSymbol)]: {} }
-Connecting to db...
-{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
-    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
-    at Pool.emit (events.js:182:13)
-    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
-    at Object.onceWrapper (events.js:273:13)
-    at Connection.emit (events.js:182:13)
-    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
-    at Object.onceWrapper (events.js:273:13)
-    at Socket.emit (events.js:182:13)
-    at emitErrorNT (internal/streams/destroy.js:82:8)
-    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
-    at process._tickCallback (internal/process/next_tick.js:63:19)
-  name: 'MongoNetworkError',
-  errorLabels: [ 'TransientTransactionError' ],
-  [Symbol(mongoErrorContextSymbol)]: {} }
-Connecting to db...
-{ MongoNetworkError: failed to connect to server [127.0.0.1:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]
-    at Pool.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\topologies\server.js:564:11)
-    at Pool.emit (events.js:182:13)
-    at Connection.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\pool.js:317:12)
-    at Object.onceWrapper (events.js:273:13)
-    at Connection.emit (events.js:182:13)
-    at Socket.<anonymous> (C:\Users\m.daniel\workspace\rezbuild\api\node_modules\mongodb-core\lib\connection\connection.js:246:50)
-    at Object.onceWrapper (events.js:273:13)
-    at Socket.emit (events.js:182:13)
-    at emitErrorNT (internal/streams/destroy.js:82:8)
-    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)
-    at process._tickCallback (internal/process/next_tick.js:63:19)
-  name: 'MongoNetworkError',
-  errorLabels: [ 'TransientTransactionError' ],
-  [Symbol(mongoErrorContextSymbol)]: {} }
-Connecting to db...
 Connected to db.
+HBT6CaLUnyg9JT0eAAAA  is connected.
+LTI5Y4yB6bC78eGMAAAB  is connected.
+/api/user/authorizedprojects {}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
 [32m[nodemon] restarting due to changes...[39m
 [32m[nodemon] starting `node src`[39m
 Connecting to db...
 api running on 0.0.0.0:3001
 Connected to db.
+El8pGCcbITP0ZVz4AAAA  is connected.
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+rwhy8GlT2g2TEOcKAAAA  is connected.
+vguDD4vBl-H6hb19AAAB  is connected.
+[ '/api/user/authorizedprojects', {} ]
+[ '/api/user/unauthorizedprojects', {} ]
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+aK2Wr90CDAspMSKWAAAA  is connected.
+2z83bkvnYYl7gMjkAAAB  is connected.
+/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
+Wrong email/password
+/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
+Wrong email/password
+/api/signup { email: 'maxaxeldaniel@gmail.fr',
+  password: 'Avatar56.',
+  firstname: 'Maxime',
+  lastname: 'DANIEL',
+  roles: [ 'Customer' ] }
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+o-fGS2MAgKceqrSoAAAA  is connected.
+/api/signup { email: 'maxaxeldaniel@gmail.fr',
+  password: 'Avatar56.',
+  firstname: 'Maxime',
+  lastname: 'DANIEL',
+  roles: [ 'Designer' ] }
+/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar6.' }
+Wrong email/password
+/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
+[ '/api/project/get',
+  '{ users: { \'$in\' : [client.sock.handshake.session.user._id]}}' ]
+/api/project/get { users: { '$in' : [client.sock.handshake.session.user._id]}}
+[ '/api/user/unauthorizedprojects', {} ]
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+RGR2Nsp_wfdcLJQ9AAAA  is connected.
+[ '/api/project/get',
+  { select:
+     '{ users: { \'$in\' : [client.sock.handshake.session.user._id]}}' } ]
+[ '/api/user/unauthorizedprojects', {} ]
+tjeoPM5_t0_kaz-kAAAB  is connected.
+[ '/api/project/get',
+  { select:
+     '{ users: { \'$in\' : [client.sock.handshake.session.user._id]}}' } ]
+[ '/api/user/unauthorizedprojects', {} ]
+[32m[nodemon] restarting due to changes...[39m

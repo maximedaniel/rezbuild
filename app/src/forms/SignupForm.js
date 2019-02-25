@@ -27,17 +27,18 @@ class SignupFormCore extends Component {
   handleSubmit(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {
-        this.props.socket.emit('/api/signup', {
+        var create = {
             email : this.refs.email.value,
             password : this.refs.password.value,
-            firstname : this.refs.firstname.value,
-            lastname : this.refs.lastname.value,
+            firstname : this.refs.firstname.value.charAt(0).toUpperCase() + this.refs.firstname.value.toLowerCase().slice(1),
+            lastname : this.refs.lastname.value.toUpperCase(),
             roles : $("input[name='roles']:checked").map(function() {return $(this).val();}).get(),
-        });
-        this.props.socket.on('/api/signup', res => {
+        }
+        this.props.socket.emit('/api/signup', create, res => {
+            console.log(res)
             if (res.user) {
                 this.setState({error : false, pending : false}, () =>{
-                    browserHistory.push('/')
+                    browserHistory.push(((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')
                 })
             }
             if(res.error){
@@ -86,9 +87,9 @@ class SignupFormCore extends Component {
                     <div className="spinner-layer">
                       <div className="circle-clipper left">
                         <div className="circle"></div>
-                      </div><div class="gap-patch">
+                      </div><div className="gap-patch">
                         <div className="circle"></div>
-                      </div><div class="circle-clipper right">
+                      </div><div className="circle-clipper right">
                         <div className="circle"></div>
                       </div>
                     </div>
