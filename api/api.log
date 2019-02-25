@@ -4,354 +4,82 @@
 [32m[nodemon] starting `node src`[39m
 Connecting to db...
 api running on 0.0.0.0:3001
+PMAzN31s5_g2LKpxAAAA  is connected.
 Connected to db.
-nZL7OJc1fvajoD4zAAAA  is connected.
+/api/user/authorizedprojects {}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+HBT6CaLUnyg9JT0eAAAA  is connected.
+LTI5Y4yB6bC78eGMAAAB  is connected.
+/api/user/authorizedprojects {}
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+El8pGCcbITP0ZVz4AAAA  is connected.
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+rwhy8GlT2g2TEOcKAAAA  is connected.
+vguDD4vBl-H6hb19AAAB  is connected.
 [ '/api/user/authorizedprojects', {} ]
 [ '/api/user/unauthorizedprojects', {} ]
-mf1xOVGD_at9cIOcAAAB  is connected.
-EO3h4rXC1sr3V6-ZAAAC  is connected.
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar' }
-Wrong email/password
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar' }
-Wrong email/password
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar' }
-Wrong email/password
-/api/signin { email: 'maxaxeldaniel@gmail.com', password: 'Avatar56.' }
-Wrong email/password
-/api/signin { email: 'maxaxeldaniel@gmail.com', password: 'Avatar56.' }
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+aK2Wr90CDAspMSKWAAAA  is connected.
+2z83bkvnYYl7gMjkAAAB  is connected.
+/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
 Wrong email/password
 /api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/joinproject', { _id: 'sdfdsfsdf' } ]
-/api/user/joinproject { _id: 'sdfdsfsdf' }
-[ '/api/user/joinproject', { _id: 'sdfdsfsdf' } ]
-/api/user/joinproject { _id: 'sdfdsfsdf' }
-[ '/api/user/joinproject', { _id: 'sdfdsfsdf' } ]
-/api/user/joinproject { _id: 'sdfdsfsdf' }
-[ '/api/user/joinproject', { _id: 'sdfdsfsdf' } ]
-/api/user/joinproject { _id: 'sdfdsfsdf' }
-[ '/api/user/joinproject', { _id: 'sdfdsfsdf' } ]
-/api/user/joinproject { _id: 'sdfdsfsdf' }
-[ '/api/user/joinproject', { _id: 'sdfdsfsdf' } ]
-/api/user/joinproject { _id: 'sdfdsfsdf' }
-yw4hANjQms_dXxOHAAAD  is connected.
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/joinproject', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/joinproject { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-Gv7kn_mVohUy6i3qAAAE  is connected.
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-mSL6v7RyX1iAKjESAAAF  is connected.
-oGRz-DKvGwGeRRpkAAAG  is connected.
-VNX3F65rOhUF-Z3WAAAH  is connected.
-ub_gZzhUksZxoknLAAAI  is connected.
-2fxWEEIcFEVUKaJfAAAJ  is connected.
-PJHX8TSu1SBLuAyPAAAK  is connected.
-Qv8RZAswJCuQN2dpAAAL  is connected.
-/api/signup { email: 'p.berard@estia.fr',
-  password: 'azertyui',
-  firstname: 'Patxi',
-  lastname: 'BERARD',
-  roles: [ 'Analyst' ] }
-_oTnX--lR_RZBTg1AAAM  is connected.
-xh5GNs1P9HFyviKMAAAN  is connected.
-r8quAoRv24JvNaOGAAAO  is connected.
-vFySdXYMnO5_-U06AAAP  is connected.
-4Ap2RyH37jyBZGiuAAAQ  is connected.
-Mdw0dOuhY9gLoMNBAAAR  is connected.
-wNOPzoFoXzlQqb2DAAAS  is connected.
-ILSvJCBrNckcqtuNAAAT  is connected.
-YxcyIGpcAu94IJuiAAAU  is connected.
-Nu0LDbpvLdCI_xIbAAAV  is connected.
-/api/signup { email: 'sg@mail.com',
-  password: 'sd',
-  firstname: 'Sandrine',
-  lastname: 'GIQUEL',
+Wrong email/password
+/api/signup { email: 'maxaxeldaniel@gmail.fr',
+  password: 'Avatar56.',
+  firstname: 'Maxime',
+  lastname: 'DANIEL',
+  roles: [ 'Customer' ] }
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+o-fGS2MAgKceqrSoAAAA  is connected.
+/api/signup { email: 'maxaxeldaniel@gmail.fr',
+  password: 'Avatar56.',
+  firstname: 'Maxime',
+  lastname: 'DANIEL',
   roles: [ 'Designer' ] }
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/joinproject', { _id: 'sdf' } ]
-/api/user/joinproject { _id: 'sdf' }
-7zEXxlhiUHj9ntgrAAAW  is connected.
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-dTZl7bmVxqwFrIkQAAAX  is connected.
-NlFKOoMruJMicV3VAAAY  is connected.
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/adduserproject',
-  { uid: '5c6d6e5c1ebcc02e48453909',
-    pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/adduserproject { uid: '5c6d6e5c1ebcc02e48453909',
-  pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-qENwpfvMNjLjFmfwAAAZ  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-MWPKm4mJN6PLp2nnAAAa  is connected.
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-BZxFQtsIUhhJn9N2AAAb  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-LpZrOT3mOTQTbmc-AAAc  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-OWSMRUHoygq1X44iAAAd  is connected.
-3uccgwYRL8S2rzIMAAAe  is connected.
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-KuFN3NY8TICUf_p1AAAf  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-PQVrSuilvO1lvgX_AAAg  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-PL3BX-NLliYTk9wfAAAh  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-KK8vt4p64YbtsHKyAAAi  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-bgKmp-laE0dgbGckAAAj  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Aavatar56.' }
+/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar6.' }
 Wrong email/password
 /api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
+[ '/api/project/get',
+  '{ users: { \'$in\' : [client.sock.handshake.session.user._id]}}' ]
+/api/project/get { users: { '$in' : [client.sock.handshake.session.user._id]}}
 [ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c6a833f6d96291cacab6b89' } ]
-/api/user/project { _id: '5c6a833f6d96291cacab6b89' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c6a833f6d96291cacab6b89' } ]
-/api/user/unauthorizedusersproject { pid: '5c6a833f6d96291cacab6b89' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c6a833f6d96291cacab6b89' } ]
-/api/user/authorizedusersproject { pid: '5c6a833f6d96291cacab6b89' }
-SjzdIHkPmEW0GcPCAAAk  is connected.
-[ '/api/user/project', { _id: '5c6a833f6d96291cacab6b89' } ]
-[ '/api/user/authorizedprojects', {} ]
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src`[39m
+Connecting to db...
+api running on 0.0.0.0:3001
+Connected to db.
+RGR2Nsp_wfdcLJQ9AAAA  is connected.
+[ '/api/project/get',
+  { select:
+     '{ users: { \'$in\' : [client.sock.handshake.session.user._id]}}' } ]
 [ '/api/user/unauthorizedprojects', {} ]
-iYYAhzVngLpIP7d2AAAl  is connected.
-f-oNzbWkLu7b32mWAAAm  is connected.
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
+tjeoPM5_t0_kaz-kAAAB  is connected.
+[ '/api/project/get',
+  { select:
+     '{ users: { \'$in\' : [client.sock.handshake.session.user._id]}}' } ]
 [ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-PwBx-vNOQHxA3FQzAAAn  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-jjQ7zHZbkwdOdmlGAAAo  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-qzjCUbzb3iWx61UUAAAp  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/project { _id: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/unauthorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c657aaac3ba822cd85b81ba' } ]
-/api/user/authorizedusersproject { pid: '5c657aaac3ba822cd85b81ba' }
-LZShWKczWqWyXgCEAAAq  is connected.
-[ '/api/user/project', { _id: '5c657aaac3ba822cd85b81ba' } ]
-[ '/api/user/authorizedprojects', {} ]
-[ '/api/user/unauthorizedprojects', {} ]
-/api/signin { email: 'maxaxeldaniel@gmail.fr', password: 'Avatar56.' }
-[ '/api/user/authorizedprojects', {} ]
-/api/user/authorizedprojects {}
-[ '/api/user/unauthorizedprojects', {} ]
-/api/user/unauthorizedprojects {}
-[ '/api/user/project', { _id: '5c6a833f6d96291cacab6b89' } ]
-/api/user/project { _id: '5c6a833f6d96291cacab6b89' }
-[ '/api/user/unauthorizedusersproject',
-  { pid: '5c6a833f6d96291cacab6b89' } ]
-/api/user/unauthorizedusersproject { pid: '5c6a833f6d96291cacab6b89' }
-[ '/api/user/authorizedusersproject',
-  { pid: '5c6a833f6d96291cacab6b89' } ]
-/api/user/authorizedusersproject { pid: '5c6a833f6d96291cacab6b89' }
-1tCWe03bjkHFD9xFAAAr  is connected.
+[32m[nodemon] restarting due to changes...[39m

@@ -13,65 +13,40 @@ class JoinProjectFormCore extends Component {
   constructor(props){
    super(props);
    this.handleJoinProject = this.handleJoinProject.bind(this);
-   this.state = {unauthorizedProjects: null, error : false, pending : false}
+   this.state = {projects: null, error : false, pending : false}
   }
-  updateUnauthorizedProjectList(){
-    this.setState({unauthorizedProjects: null, error : false, pending : true}, () =>{
-        this.props.socket.emit('/api/user/unauthorizedprojects', {});
-        this.props.socket.on('/api/user/unauthorizedprojects', res => {
-            if (res.unauthorizedProjects) {
-                this.setState({unauthorizedProjects : res.unauthorizedProjects, error : false, pending : false}, () =>{
+  update(){
+    this.setState({projects: null, error : false, pending : true}, () => {
+        var get = {users: { "$nin" : ["token"] }}
+        this.props.socket.emit('/api/project/get', get, res => {
+            if (res.projects) {
+                this.setState({projects : res.projects, error : false, pending : false}, () =>{
                         var data = {}
-                        this.state.unauthorizedProjects.map((project, index) => (data[String(project.name)] = null))
+                        this.state.projects.map((project, index) => (data[String(project.name)] = null))
                         $('#input_autocomplete_joinproject').autocomplete({data: data});
                 });
             }
             if(res.error){
-                this.setState({unauthorizedProjects : null, error : res.error, pending : false});
+                this.setState({projects : null, error : res.error, pending : false});
             }
         });
     });
-        /*axios.get('/api/user/listunauthorizedproject')
-        .then(res => {
-            this.setState({unauthorizedprojectlist: res.data.unauthorizedprojectlist, error : false, pending : false})
-            var data = {}
-            this.state.unauthorizedprojectlist.map((project, index) => (data[String(project.name)] = null))
-            $('#input_autocomplete_joinproject').autocomplete({data: data});
-        })
-        .catch(err => {
-            console.log(err)
-            if(err && err.response && err.response.data){
-                this.setState({unauthorizedprojectlist: null, error : err.response.data, pending : false});
-            } else {
-                this.setState({unauthorizedprojectlist: null, error : 'Network error', pending : false});
-            }
-        });*/
   }
   componentDidMount() {
-    this.updateUnauthorizedProjectList()
-
-     // $(document).ready(function() {
-    //    M.Modal.init($('#modal_joinproject'), {onOpenStart: () => {this.updateUnauthorizedProjectList()}});
-     //   M.Autocomplete.init($('#input_autocomplete_joinproject'), {});
-    //    this.updateUnauthorizedProjectList();
-     // });
-    this.props.socket.on('/api/user/removeproject', res =>{
-        this.updateUnauthorizedProjectList()
-    });
-
+    this.update()
+    this.props.socket.on('/api/project/done', () => {this.update()})
   }
 
   handleJoinProject(event){
    event.preventDefault();
-   this.setState({unauthorizedProjects: this.state.unauthorizedProjects, error : false, pending : true}, () => {
-       var joinedProject = this.state.unauthorizedProjects.filter((project, index) => {
+   this.setState({projects: this.state.projects, error : false, pending : true}, () => {
+       var project = this.state.projects.filter((project, index) => {
             return project.name === this.refs.projectname.value;
        })[0]
-       console.log(joinedProject)
-       this.props.socket.emit('/api/user/joinproject', { _id: joinedProject._id});
-       this.props.socket.on('/api/user/joinproject', res => {
-            if (res.updatedUser) {
-                console.log(res.updatedUser)
+       var filter = {_id: project._id}
+       var update = {"$push" : {users : "token"}}
+       this.props.socket.emit('/api/project/update', filter, update, res => {
+            if (res.projects) {
                 this.setState({error : false, pending : false}, () => {
                     $('#modal_joinproject').modal('close');
                 })

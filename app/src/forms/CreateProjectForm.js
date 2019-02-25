@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-//import $ from 'jquery'
-//import M from "materialize-css";
 import axios from 'axios'
 import SocketContext from '../SocketContext'
 
@@ -12,25 +10,17 @@ class CreateProjectFormCore extends Component {
 
   constructor(props){
    super(props);
-   this.handleCreateProject = this.handleCreateProject.bind(this);
+   this.submit = this.submit.bind(this);
    this.state = {error : false, pending : false}
   }
 
-  componentDidMount() {
-      /*$(document).ready(function() {
-        M.Modal.init($('#modal_createproject'), {});
-      });*/
-  }
-
-  handleCreateProject(event){
+  submit(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {
-        this.props.socket.emit('/api/user/createproject', {
-             name : this.refs.name.value
-        });
-        this.props.socket.on('/api/user/createproject', res => {
-            if (res.createdProject) {
-                console.log(res.createdProject)
+        var create = {name : this.refs.name.value, owner: "token", users: ["token"]}
+        this.props.socket.emit('/api/project/create', create, res => {
+            if (res.projects){
+                console.log(res.projects)
                 this.setState({error : false, pending : false}, () => {
                     $('#modal_createproject').modal('close');
                 })
@@ -71,7 +61,7 @@ class CreateProjectFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>Create project</h4>
         </div>
         <div className="modal-content">
-          <form className="col s12" onSubmit={this.handleCreateProject}>
+          <form className="col s12" onSubmit={this.submit}>
              <div className="row">
                 <div className="col s12 m12 l4 center">
                     <h5 className="rezbuild-text">Construction</h5>

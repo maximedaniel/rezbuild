@@ -6,28 +6,35 @@ class CollaboratorListCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {authorizedUsers : null,  error : false, pending : false}
+    this.state = {users : null,  error : false, pending : false}
   }
 
-  updateAuthorizedUsers(){
-    this.setState({authorizedUsers : null, error : false, pending : true}, () => {
-        this.props.socket.emit('/api/user/authorizedusersproject', { pid: this.props.project._id });
-        this.props.socket.on('/api/user/authorizedusersproject', res => {
-            console.log(res)
-            if(res.authorizedUsers){
-                this.setState({authorizedUsers : res.authorizedUsers, error : false, pending : false})
+  update(){
+    this.setState({users : null, error : false, pending : true}, () => {
+        var filter = {_id: this.props.project._id }
+        this.props.socket.emit('/api/project/get', filter, res => {
+            if(res.projects){
+                var filter = {_id: { "$in" : res.projects[0].users}}
+                this.props.socket.emit('/api/user/get', filter, res => {
+                    if(res.users){
+                        this.setState({users : res.users, error : false, pending : false})
+                    }
+                    if(res.error){
+                        this.setState({users : null, error : false, pending : false});
+                    }
+                });
             }
             if(res.error){
-                this.setState({authorizedUsers : null, error : false, pending : false});
+                this.setState({users : null, error : false, pending : false});
             }
         });
     })
   }
 
   componentDidMount() {
-    this.updateAuthorizedUsers()
-    this.props.socket.on('/api/user/adduserproject', res => {
-        this.updateAuthorizedUsers()
+    this.update()
+    this.props.socket.on('/api/project/done', res => {
+        this.update()
      });
   }
 
@@ -59,16 +66,16 @@ class CollaboratorListCore extends Component {
                             </div>
         }
 
-        let authorizedUsersComponent;
+        let usersComponent;
 
-        if (this.state.authorizedUsers){
+        if (this.state.users){
 
-            authorizedUsersComponent =
-                    this.state.authorizedUsers.map((collaborator, index) => <div className="col s12 rezbuild-text" key={index}> {collaborator.firstname} {collaborator.lastname} ({collaborator.roles})</div>)
+            usersComponent =
+                    this.state.users.map((collaborator, index) => <div className="col s12 rezbuild-text" key={index}> {collaborator.firstname} {collaborator.lastname} ({collaborator.roles})</div>)
         }
         return (
                 <div>
-                    {authorizedUsersComponent}
+                    {usersComponent}
                     {preloaderComponent}
                     {errorComponent}
                     <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
@@ -80,10 +87,10 @@ class CollaboratorListCore extends Component {
   }
 }
 
-const CollaboratorList = props => (
+const CollaboratorListComponent = props => (
   <SocketContext.Consumer>
   {socket => <CollaboratorListCore {...props} socket={socket} />}
   </SocketContext.Consumer>
 )
 
-export default CollaboratorList;
+export default CollaboratorListComponent;

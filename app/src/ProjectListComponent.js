@@ -4,50 +4,45 @@ import JoinProjectForm from './forms/JoinProjectForm'
 import RemoveProjectForm from './forms/RemoveProjectForm'
 import {browserHistory} from 'react-router'
 import SocketContext from './SocketContext'
-import Navbar from './Navbar'
 
 var $ = window.$
 
 
 class ProjectListCore extends Component {
+
   constructor(props){
     super(props);
-    this.state = {user: null, authorizedProjects : null, error : false, pending : false}
+    this.state = {projects : null, error : false, pending : false}
   }
-  updateProjectList(){
-    this.setState({user: null, authorizedProjects : null, error : false, pending : true})
-    this.props.socket.emit('/api/user/authorizedprojects', {});
-    this.props.socket.on('/api/user/authorizedprojects', res => {
-        if (res.authorizedProjects) {
-            console.log(res.authorizedProjects)
-            this.setState({user: res.user, authorizedProjects : res.authorizedProjects, error : false, pending : false})
-        }
-        else {
-            if(res.error){
-                console.log(res.error)
-                this.setState({user: null, authorizedProjects : null, error : res.error, pending : false});
-                browserHistory.push('/signin')
-            } else {
-                this.setState({user: null, authorizedProjects : null, error : 'Network error', pending : false});
+
+  update(){
+    this.setState({projects : null, error : false, pending : true}, () => {
+        var filter = {users: { "$in" : ["token"] } }
+        this.props.socket.emit('/api/project/get', filter, (res) => {
+            if (res.projects) {
+                this.setState({projects : res.projects, error : false, pending : false})
             }
-        }
-    });
+            else {
+                if(res.error){
+                    this.setState({projects : null, error : res.error, pending : false})
+                } else {
+                    this.setState({projects : null, error : 'Network error', pending : false})
+                }
+            }
+        });
+    })
   }
 
   componentDidMount() {
-    this.updateProjectList()
-    $('.modal').modal();
-    this.props.socket.on('/api/user/createproject', () => {
-        this.updateProjectList()
-    });
-    this.props.socket.on('/api/user/removeproject', () => {
-        this.updateProjectList()
-    });
-    this.props.socket.on('/api/user/joinproject', () => {
-        this.updateProjectList()
-    });
+    this.update()
+    this.props.socket.on('/api/project/done', () => {this.update()})
   }
 
+  componentDidUpdate(prevProps, prevState) {
+      if (prevState.projects !== this.state.projects) {
+            $('.modal').modal();
+      }
+  }
 
   render() {
         let preloaderComponent;
@@ -76,16 +71,11 @@ class ProjectListCore extends Component {
                             </div>
 
         }
-        let navbarComponent;
-
-        if (this.state.user){
-            navbarComponent =  <Navbar user={this.state.user} path={['Projects']}/>
-        }
 
         let projectListComponent;
 
-        if (this.state.authorizedProjects){
-            projectListComponent = this.state.authorizedProjects.map((project, index) =>
+        if (this.state.projects){
+            projectListComponent = this.state.projects.map((project, index) =>
                   <tr key={index}>
                     <td>{project.name}</td>
                     <td>{project.hasAuthorizedUsers}</td>
@@ -101,8 +91,6 @@ class ProjectListCore extends Component {
             );
         }
         return (
-                <div>
-                 {navbarComponent}
                  <div className='container transparent' style={{marginTop:'2rem'}}>
                     <div className='row'>
                       <div className='col s12'>
@@ -132,18 +120,17 @@ class ProjectListCore extends Component {
                         <li><a className="btn-floating tooltipped modal-trigger" href="#modal_createproject" data-position="left" data-tooltip="Create a project"><i className="material-icons">add</i></a></li>
                       </ul>
                     </div>
-                    <CreateProjectForm updateProjectList={this.updateProjectList.bind(this)}/>
-                    <JoinProjectForm updateProjectList={this.updateProjectList.bind(this)}/>
+                    <CreateProjectForm/>
+                    <JoinProjectForm/>
                 </div>
-               </div>
         );
   }
 }
 
-const ProjectList = props => (
+const ProjectListComponent = props => (
   <SocketContext.Consumer>
   {socket => <ProjectListCore {...props} socket={socket} />}
   </SocketContext.Consumer>
 )
 
-export default ProjectList
+export default ProjectListComponent

@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ProjectSchema = new Schema({
-  _id: Schema.Types.ObjectId,
+  //_id: {type: Schema.Types.ObjectId, index:true, required:true, auto:true},
   date: {type: Date, default: Date.now},
   name: String,
   owner: { type: Schema.Types.ObjectId, ref: 'User' },

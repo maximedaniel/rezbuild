@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Board from 'react-trello'
 import Tree from './Tree'
-import CollaboratorList from './CollaboratorList'
-import { ParentSize } from '@vx/responsive';
+import CollaboratorListComponent from './CollaboratorListComponent'
+import { ParentSize } from '@vx/responsive'
+import SocketContext from './SocketContext'
 
 
 const lanesStyle = {
@@ -18,7 +19,7 @@ const cardStyle = {
     fontFamily: 'Exo 2'
 }
 
-class Dashboard extends Component {
+class DashboardCore extends Component {
 
   constructor(props){
     super(props);
@@ -81,7 +82,7 @@ class Dashboard extends Component {
                             <h5 className="rezbuild-text">Collaborators</h5>
                              <div className="divider rezbuild"></div>
                              <div className="section" style={{height:'300px', paddingBottom:0}}>
-                                <CollaboratorList project={this.props.project} params={this.props.params}/>
+                                <CollaboratorListComponent project={this.props.project} params={this.props.params}/>
                              </div>
                       </div>
                       <div className="col s12 m9 l9 transparent">
@@ -129,4 +130,11 @@ class Dashboard extends Component {
         );
     }
 }
-export default Dashboard;
+
+const DashboardComponent = props => (
+  <SocketContext.Consumer>
+  {socket => <DashboardCore {...props} socket={socket} />}
+  </SocketContext.Consumer>
+)
+
+export default DashboardComponent;

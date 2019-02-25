@@ -4,11 +4,9 @@ import React, { Component } from 'react';
 import {Route, Router, browserHistory} from 'react-router'
 import SigninForm from './forms/SigninForm'
 import SignupForm from './forms/SignupForm'
-import Project from './Project'
-import ProjectList from './ProjectList'
+import RezbuildComponent from './RezbuildComponent'
+import ProjectComponent from './ProjectComponent'
 import io from 'socket.io-client';
-//import Add from './add.component';
-//import GroceriesList from './groceriesList.component';
 import SocketContext from './SocketContext'
 
 class App extends Component {
@@ -49,10 +47,10 @@ class App extends Component {
         </div>
          <SocketContext.Provider value={this.state.socket}>
             <Router history={browserHistory}>
-                    <Route path ='/' component={ProjectList} />
+                    <Route path ='/' component={RezbuildComponent} />
                     <Route path='/signin' component={SigninForm} />
                     <Route path='/signup' component={SignupForm} />
-                    <Route path='/:_id' component={Project} />
+                    <Route path='/:_id' component={ProjectComponent} />
                     <Route path='/:_id/signin' component={SigninForm} />
                     <Route path='/:_id/signup' component={SignupForm} />
             </Router>

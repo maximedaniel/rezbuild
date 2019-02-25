@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import SocketContext from '../SocketContext'
-import axios from 'axios'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -12,54 +9,40 @@ class AddUserFormCore extends Component {
    super(props);
    this.handleAddUser = this.handleAddUser.bind(this);
    this.handleCopyUrl = this.handleCopyUrl.bind(this);
-   this.state = {unauthorizedUsers: null, error : false, pending : false}
+   this.state = {users: null, error : false, pending : false}
   }
-  updateUnauthorizedUsers(){
-    this.setState({unauthorizedUsers: null, error : false, pending : true}, () =>{
-        this.props.socket.emit('/api/user/unauthorizedusersproject',  { pid: this.props.project._id });
-        this.props.socket.on('/api/user/unauthorizedusersproject', res => {
-            if (res.unauthorizedUsers) {
-                console.log(res.unauthorizedUsers)
-                this.setState({unauthorizedUsers : res.unauthorizedUsers, error : false, pending : false}, () =>{
-                        var data = {}
-                        this.state.unauthorizedUsers.map((user, index) => (data[String(user.firstname+" "+user.lastname + " (" + user.roles + ") - " + user._id)] = null))
-                        $('#input_autocomplete_adduser').autocomplete({data: data});
+
+  update(){
+    this.setState({users : null, error : false, pending : true}, () => {
+        var filter = {_id: this.props.project._id }
+        this.props.socket.emit('/api/project/get', filter, res => {
+            console.log(res.projects)
+            if(res.projects){
+                var filter = {_id: { "$nin" : res.projects[0].users}}
+                this.props.socket.emit('/api/user/get', filter, res => {
+                    if(res.users){
+                        this.setState({users : res.users, error : false, pending : false}, () =>{
+                            var data = {}
+                            this.state.users.map((user, index) => (data[String(user.firstname+" "+user.lastname + " (" + user.roles + ") - " + user._id)] = null))
+                            $('#input_autocomplete_adduser').autocomplete({data: data});
+                        });
+                    }
+                    if(res.error){
+                        this.setState({users : null, error : false, pending : false});
+                    }
                 });
             }
             if(res.error){
-                this.setState({unauthorizedUsers : null, error : res.error, pending : false});
+                this.setState({users : null, error : false, pending : false});
             }
         });
-    });
-        /*axios.get('/api/user/listunauthorizedproject')
-        .then(res => {
-            this.setState({unauthorizedprojectlist: res.data.unauthorizedprojectlist, error : false, pending : false})
-            var data = {}
-            this.state.unauthorizedprojectlist.map((project, index) => (data[String(project.name)] = null))
-            $('#input_autocomplete_joinproject').autocomplete({data: data});
-        })
-        .catch(err => {
-            console.log(err)
-            if(err && err.response && err.response.data){
-                this.setState({unauthorizedprojectlist: null, error : err.response.data, pending : false});
-            } else {
-                this.setState({unauthorizedprojectlist: null, error : 'Network error', pending : false});
-            }
-        });*/
+    })
   }
+
   componentDidMount() {
     $('#modal_adduser').modal();
-    this.updateUnauthorizedUsers()
-
-     // $(document).ready(function() {
-    //    M.Modal.init($('#modal_joinproject'), {onOpenStart: () => {this.updateUnauthorizedProjectList()}});
-     //   M.Autocomplete.init($('#input_autocomplete_joinproject'), {});
-    //    this.updateUnauthorizedProjectList();
-     // });
-    this.props.socket.on('/api/user/adduserproject', res => {
-        this.updateUnauthorizedUsers()
-    });
-
+    this.update()
+    this.props.socket.on('/api/project/done', () => {this.update()})
   }
 
   handleCopyUrl(event){
@@ -75,15 +58,15 @@ class AddUserFormCore extends Component {
    console.log("handleAddUser")
    this.setState({error : false, pending : true}, () => {
        var id = this.refs.username.value.split('-')[1].trim();
-       var addedUser = this.state.unauthorizedUsers.filter((user, index) => {
+       var user = this.state.users.filter((user, index) => {
             console.log(user._id, id)
             return user._id === id;
        })[0]
-       console.log(addedUser)
-       this.props.socket.emit('/api/user/adduserproject', { uid: addedUser._id,  pid: this.props.project._id});
-       this.props.socket.on('/api/user/adduserproject', res => {
-            if (res.addedUser) {
-                console.log(res.addedUser)
+       var filter = {_id: this.props.params._id}
+       var update = {"$push" : {users : user._id}}
+       this.props.socket.emit('/api/project/update', filter, update, res => {
+            console.log(res)
+            if (res.projects) {
                 this.setState({error : false, pending : false}, () => {
                     $('#modal_adduser').modal('close');
                 })
@@ -124,7 +107,7 @@ class AddUserFormCore extends Component {
                         </div>
     }
 
-    let unauthorizedUsersComponent =
+    let usersComponent =
           <div className="row">
               <div className="input-field col l10 m9 s12">
                   <input id="input_autocomplete_adduser" type="text"  ref="username"  className="autocomplete" required />
@@ -142,7 +125,7 @@ class AddUserFormCore extends Component {
         </div>
        <div className="modal-content">
           <form className="col s12" onSubmit={this.handleAddUser} autoComplete="off">
-              {unauthorizedUsersComponent}
+              {usersComponent}
               {preloaderComponent}
               {errorComponent}
           </form>

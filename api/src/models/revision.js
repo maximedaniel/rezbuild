@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var RevisionSchema = new Schema({
-  _id: Schema.Types.ObjectId,
+ // _id: {type: Schema.Types.ObjectId, index:true, required:true, auto:true},
   prev: Schema.Types.ObjectId,
   date: {type: Date, default: Date.now},
   project: {type: Schema.Types.ObjectId, ref: 'Project'},
