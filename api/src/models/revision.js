@@ -3,10 +3,12 @@ var mongoose = require('mongoose'),
 
 var RevisionSchema = new Schema({
  // _id: {type: Schema.Types.ObjectId, index:true, required:true, auto:true},
-  prev: Schema.Types.ObjectId,
   date: {type: Date, default: Date.now},
-  project: {type: Schema.Types.ObjectId, ref: 'Project'},
-  tasks: [{ type: Schema.Types.ObjectId, ref: 'Task' }]
+  file: {type: String, required: [true, "can't be blank"]},
+  project: {type: Schema.Types.ObjectId, ref: 'Project', required: [true, "can't be blank"]},
+  prev: [{ type: Schema.Types.ObjectId, ref: 'Revision' }],
+  next: [{ type: Schema.Types.ObjectId, ref: 'Revision' }],
+  tasks: [{ type: Schema.Types.ObjectId, ref: 'Task'}]
 });
 
 var Revision = mongoose.model('Revision', RevisionSchema);

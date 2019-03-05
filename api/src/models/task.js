@@ -2,10 +2,14 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var TaskSchema = new Schema({
-  //_id: {type: Schema.Types.ObjectId, index:true, required:true, auto:true},
+  title: String,
   date: {type: Date, default: Date.now},
-  name: String,
-  owner: { type: Schema.Types.ObjectId, ref: 'User' }
+  lane:  String,
+  revision:  { type: Schema.Types.ObjectId, ref: 'Revision' },
+  assignements: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  assessments: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  inputs:[String],
+  outputs: [String]
 });
 
 var Task = mongoose.model('Task', TaskSchema);

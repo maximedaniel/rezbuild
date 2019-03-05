@@ -55,27 +55,31 @@ class AddUserFormCore extends Component {
 
   handleAddUser(event){
    event.preventDefault();
-   console.log("handleAddUser")
-   this.setState({error : false, pending : true}, () => {
-       var id = this.refs.username.value.split('-')[1].trim();
-       var user = this.state.users.filter((user, index) => {
-            console.log(user._id, id)
-            return user._id === id;
-       })[0]
-       var filter = {_id: this.props.params._id}
-       var update = {"$push" : {users : user._id}}
-       this.props.socket.emit('/api/project/update', filter, update, res => {
-            console.log(res)
-            if (res.projects) {
-                this.setState({error : false, pending : false}, () => {
-                    $('#modal_adduser').modal('close');
-                })
-            }
-            if (res.error) {
-                this.setState({error : res.error, pending : false});
-            }
-       });
-   })
+   if (this.refs.username.value.split('-').length < 2) {
+        this.setState({error : 'unknown user', pending : false});
+
+   } else {
+       this.setState({error : false, pending : true}, () => {
+            var id = this.refs.username.value.split('-').trim();
+           var user = this.state.users.filter((user, index) => {
+                console.log(user._id, id)
+                return user._id === id;
+           })[0]
+           var filter = {_id: this.props.params._id}
+           var update = {"$push" : {users : user._id}}
+           this.props.socket.emit('/api/project/update', filter, update, res => {
+                console.log(res)
+                if (res.projects) {
+                    this.setState({error : false, pending : false}, () => {
+                        $('#modal_adduser').modal('close');
+                    })
+                }
+                if (res.error) {
+                    this.setState({error : res.error, pending : false});
+                }
+           });
+       })
+   }
   };
 
   render() {

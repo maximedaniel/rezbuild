@@ -16,7 +16,9 @@ RUN \
   curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && \
   echo exit 0 > /usr/sbin/policy-rc.d && \
   apt-get install -y mongodb-org git nodejs && \
-  rm -rf /var/lib/apt/lists/*
+  rm -rf /var/lib/apt/lists/* \
+  rm -rf /usr/src/data/db/*
+
 
 # Define mountable directories.
 
