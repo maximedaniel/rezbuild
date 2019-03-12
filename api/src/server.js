@@ -36,15 +36,15 @@ app.use(session);
 io.set('origins', '*:*');
 io.use(sharedsession(session));
 
-var bim = new BimController()
-bim.login('m.daniel@estia.fr', 'admin').catch(error => {console.log(error)})
+//var bim = new BimController()
+//bim.login('m.daniel@estia.fr', 'admin').catch(error => {console.log(error)})
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
-    require('./routes/project')(io, client, bim)
-    require('./routes/revision')(io, client, bim)
-    require('./routes/task')(io, client, bim)
+    require('./routes/project')(io, client)
+    require('./routes/revision')(io, client)
+    require('./routes/task')(io, client)
 });
 
 
