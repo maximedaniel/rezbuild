@@ -1,9 +1,9 @@
-import BimServerClient from '../bimserver/bimserverclient.js'
+import BimServerClient from './bimserver/bimserverclient.js'
 
 export default class BimController {
 	constructor() {
 		this.client = null;
-		this.api = new BimServerClient("http://localhost:8082/");
+		this.api = new BimServerClient("http://127.0.0.1:8082/");
 	}
 
 	login(username, password){

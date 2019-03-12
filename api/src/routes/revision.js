@@ -1,23 +1,18 @@
 module.exports = function(io, client, bim){
 
-   var Project = require('../models').Project
+   var Revision = require('../models').Revision
 
-   client.on('/api/project/create', function (create, res) {
-        console.log('/api/project/create', create)
+   client.on('/api/revision/create', function (create, res) {
+        console.log('/api/project/revision', create)
         if(client.handshake.session.user) {
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
-            var createdProject = new Project(create).save((error, projects) => {
+            var createdRevision = new Revision(create).save((error, revisions) => {
                    if(error) {
                     res({error: error.message})
                    }
                    else {
-                    bim.addProject(projects._id, 'ifc2x3tc1').then(bim_project => {
-                        res({projects: projects})
-                        io.emit('/api/project/done', {})
-                    })
-                    .catch(error => {
-                        res({error: error.message})
-                    })
+                    res({revisions: revisions})
+                    io.emit('/api/revision/done', {})
                    }
             });
         } else {
@@ -25,16 +20,16 @@ module.exports = function(io, client, bim){
         }
     });
 
-   client.on('/api/project/get', function (filter, res) {
-        console.log('/api/project/get', filter)
+   client.on('/api/revision/get', function (filter, res) {
+        console.log('/api/revision/get', filter)
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
-            Project.find(filter, (error, projects) => {
+            Revision.find(filter, (error, revisions) => {
                    if(error) {
                        res({error: error.message})
                    }
                    else {
-                       res({projects: projects})
+                       res({revisions: revisions})
                    }
             });
         } else {
@@ -42,18 +37,18 @@ module.exports = function(io, client, bim){
         }
     });
 
-   client.on('/api/project/update', function (filter, update, res) {
-        console.log('/api/project/update', filter, update)
+   client.on('/api/revision/update', function (filter, update, res) {
+        console.log('/api/revision/update', filter, update)
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             update = JSON.parse(JSON.stringify(update).split('token').join(client.handshake.session.user._id))
-            Project.updateMany(filter, update, {}, (error, projects) => {
+            Revision.updateMany(filter, update, {}, (error, revisions) => {
                    if(error) {
                        res({error: error.message})
                    }
                    else {
-                       res({projects: projects})
-                       io.emit('/api/project/done', {})
+                       res({revisions: revisions})
+                       io.emit('/api/revision/done', {})
                    }
             });
         } else {
@@ -62,17 +57,17 @@ module.exports = function(io, client, bim){
     });
 
 
-   client.on('/api/project/delete', function (filter, res) {
-        console.log('/api/project/delete', filter)
+   client.on('/api/revision/delete', function (filter, res) {
+        console.log('/api/revision/delete', filter)
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
-            Project.deleteMany(filter, (error, projects) => {
+            Revision.deleteMany(filter, (error, revisions) => {
                    if(error) {
                        res({error: error.message})
                    }
                    else {
-                       res({projects: projects})
-                       io.emit('/api/project/done', {})
+                       res({revisions: revisions})
+                       io.emit('/api/revision/done', {})
                    }
             });
         } else {

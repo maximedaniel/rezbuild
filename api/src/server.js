@@ -2,6 +2,7 @@
 import express from 'express'
 import db from './models'
 import cors from 'cors'
+import BimController from './BimController'
 
 var mongoose = require("mongoose");
 var User = db.User;
@@ -31,16 +32,20 @@ var session = require('express-session')({
     cookie: { secure: false }
 });
 var sharedsession = require("express-socket.io-session");
-
 app.use(session);
 io.set('origins', '*:*');
 io.use(sharedsession(session));
 
+//var bim = new BimController()
+//bim.login('m.daniel@estia.fr', 'admin').catch(error => {console.log(error)})
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
     require('./routes/project')(io, client)
+    require('./routes/revision')(io, client)
+    require('./routes/task')(io, client)
 });
+
 
 module.exports = {http};

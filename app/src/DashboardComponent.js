@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Board from 'react-trello'
-import Tree from './Tree'
+import TrelloComponent from './TrelloComponent'
+import GraphComponent from './GraphComponent'
 import CollaboratorListComponent from './CollaboratorListComponent'
 import { ParentSize } from '@vx/responsive'
 import SocketContext from './SocketContext'
@@ -23,55 +23,35 @@ class DashboardCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {data: null}
-    console.log(this.props.project)
+    this.state = {revision: null, revisions: [], error: false, pending: false}
+    this.setRevision = this.setRevision.bind(this)
   }
 
-  handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails){
-     console.log(cardId, sourceLaneId, targetLaneId, position, cardDetails)
+  update(){
+        var filter = {project: this.props.project._id}
+        this.setState({error : false, pending : true}, () => {
+                this.props.socket.emit('/api/revision/get', filter, res => {
+                    if(res.revisions) {
+                        console.log(res.revisions)
+                        this.setState({revisions: res.revisions, error : false, pending : false})
+                    }
+                    if (res.error) {
+                        this.setState({revisions: [], error : res.error, pending : false});
+                    }
+                });
+        });
   }
+
+  setRevision(revision){
+    this.setState({revision: revision}, () => {
+        this.update()
+    })
+  }
+
   componentDidMount(){
-  const data = {
-          lanes: [
-            {
-              id: 'lane1',
-              title: 'BACKLOG',
-              label: '2/2',
-              cards: [
-                {id: 'Card1', title: 'Manual preassessment',  description:'XXX',  cardStyle:cardStyle},
-                {id: 'Card2', title: 'Auto preassessment', description:'XXX', cardStyle:cardStyle},
-                {id: 'Card3', title: 'Update needs', description:'XXX', cardStyle:cardStyle},
-                {id: 'Card4', title: 'Upload IS model', description:'XXX', cardStyle:cardStyle},
-                {id: 'Card5', title: 'Upload TO-BE model', description:'XXX', cardStyle:cardStyle}
-              ],
-              style: lanesStyle
-            },
-            {
-              id: 'lane2',
-              title: 'TO DO',
-              label: '0/0',
-              cards: [],
-              style: lanesStyle
-            },
-            {
-              id: 'lane3',
-              title: 'IN PROGRESS',
-              label: '0/0',
-              cards: [],
-              style: lanesStyle
-            },
-            {
-              id: 'lane4',
-              title: 'DONE',
-              label: '0/0',
-              cards: [],
-              style: lanesStyle
-            }
-          ]
-        }
-   this.setState({data:data});
-  }
+   this.update()
 
+  }
 
   render() {
         return  (
@@ -91,7 +71,7 @@ class DashboardCore extends Component {
                                  <div className="section" style={{height:'300px', paddingBottom:0}}>
                                   <ParentSize>
                                     {parent => (
-                                      <Tree
+                                      <GraphComponent
                                         parentWidth={parent.width}
                                         parentHeight={parent.height}
                                         parentTop={parent.top}
@@ -100,6 +80,9 @@ class DashboardCore extends Component {
                                         parentRef={parent.ref}
                                         // this function can be called inside MySuperCoolVxChart to cause a resize of the wrapper component
                                         resizeParent={parent.resize}
+                                        nodes={this.state.revisions}
+                                        node={this.state.revision}
+                                        setNode={this.setRevision}
                                       />
                                      )}
                                   </ParentSize>
@@ -112,17 +95,13 @@ class DashboardCore extends Component {
                  <div className="col s12 transparent">
                                 <h5 className="rezbuild-text">Task</h5>
                                  <div className="divider rezbuild"></div>
-                                 <div className="section">
-                                    { (this.state.data) ?
-                                        <Board data={this.state.data} style={
-                                            {padding: '0',
-                                            backgroundColor:'transparent',
-                                            fontFamily: 'Exo 2'}
-                                        }
-                                        draggable
-                                        handleDragEnd={this.handleDragEnd}/>
-                                     : '' }
-                                 </div>
+                                 { (this.state.revision) ?
+                                     <TrelloComponent
+                                       project = {this.props.project}
+                                       revision = {this.state.revision}
+                                       setRevision = {this.setRevision}
+                                      />
+                                  : ''}
                  </div>
               </div>
              </div>

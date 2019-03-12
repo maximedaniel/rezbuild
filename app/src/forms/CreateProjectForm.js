@@ -21,9 +21,18 @@ class CreateProjectFormCore extends Component {
         this.props.socket.emit('/api/project/create', create, res => {
             if (res.projects){
                 console.log(res.projects)
-                this.setState({error : false, pending : false}, () => {
-                    $('#modal_createproject').modal('close');
-                })
+                var create = {file : 'model.ifc', project: res.projects._id}
+                this.props.socket.emit('/api/revision/create', create, res => {
+                    if(res.revisions) {
+                        console.log(res.revisions)
+                        this.setState({error : false, pending : false}, () => {
+                            $('#modal_createproject').modal('close');
+                        })
+                    }
+                    if (res.error) {
+                        this.setState({error : res.error, pending : false});
+                    }
+                });
             }
             if (res.error) {
                 this.setState({error : res.error, pending : false});

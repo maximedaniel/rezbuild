@@ -1,23 +1,18 @@
 module.exports = function(io, client, bim){
 
-   var Project = require('../models').Project
+   var Task = require('../models').Task
 
-   client.on('/api/project/create', function (create, res) {
-        console.log('/api/project/create', create)
+   client.on('/api/task/create', function (create, res) {
+        console.log('/api/task/revision', create)
         if(client.handshake.session.user) {
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
-            var createdProject = new Project(create).save((error, projects) => {
+            var createdTask = new Task(create).save((error, tasks) => {
                    if(error) {
                     res({error: error.message})
                    }
                    else {
-                    bim.addProject(projects._id, 'ifc2x3tc1').then(bim_project => {
-                        res({projects: projects})
-                        io.emit('/api/project/done', {})
-                    })
-                    .catch(error => {
-                        res({error: error.message})
-                    })
+                    res({tasks: tasks})
+                    io.emit('/api/task/done', {})
                    }
             });
         } else {
@@ -25,16 +20,16 @@ module.exports = function(io, client, bim){
         }
     });
 
-   client.on('/api/project/get', function (filter, res) {
-        console.log('/api/project/get', filter)
+   client.on('/api/task/get', function (filter, res) {
+        console.log('/api/task/get', filter)
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
-            Project.find(filter, (error, projects) => {
+            Task.find(filter, (error, tasks) => {
                    if(error) {
                        res({error: error.message})
                    }
                    else {
-                       res({projects: projects})
+                       res({tasks: tasks})
                    }
             });
         } else {
@@ -42,18 +37,18 @@ module.exports = function(io, client, bim){
         }
     });
 
-   client.on('/api/project/update', function (filter, update, res) {
-        console.log('/api/project/update', filter, update)
+   client.on('/api/task/update', function (filter, update, res) {
+        console.log('/api/task/update', filter, update)
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             update = JSON.parse(JSON.stringify(update).split('token').join(client.handshake.session.user._id))
-            Project.updateMany(filter, update, {}, (error, projects) => {
+            Task.updateMany(filter, update, {}, (error, tasks) => {
                    if(error) {
                        res({error: error.message})
                    }
                    else {
-                       res({projects: projects})
-                       io.emit('/api/project/done', {})
+                       res({tasks: tasks})
+                       io.emit('/api/task/done', {})
                    }
             });
         } else {
@@ -62,17 +57,17 @@ module.exports = function(io, client, bim){
     });
 
 
-   client.on('/api/project/delete', function (filter, res) {
-        console.log('/api/project/delete', filter)
+   client.on('/api/task/delete', function (filter, res) {
+        console.log('/api/task/delete', filter)
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
-            Project.deleteMany(filter, (error, projects) => {
+            Task.deleteMany(filter, (error, tasks) => {
                    if(error) {
                        res({error: error.message})
                    }
                    else {
-                       res({projects: projects})
-                       io.emit('/api/project/done', {})
+                       res({tasks: tasks})
+                       io.emit('/api/task/done', {})
                    }
             });
         } else {
