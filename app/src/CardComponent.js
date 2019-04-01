@@ -34,9 +34,9 @@ class CardComponent extends Component {
               backgroundColor:'#fff',
             }}>
             <div style={{fontSize: 14, fontWeight: 'bold'}}>{this.props.title}</div>
-            <div style={{fontSize: 14, fontWeight: 'normal'}}>{this.props.date}</div>
+            {/*<div style={{fontSize: 14, fontWeight: 'normal'}}>{this.props.date}</div>*/}
           </header>
-          <div style={{fontSize: 12, color: '#BD3B36'}}>
+          {/*<div style={{fontSize: 12, color: '#BD3B36'}}>
              <div style={{padding: '5px 0px'}}>
               <i>{this.props.revision}</i>
               <i>{this.props.assignements}</i>
@@ -44,7 +44,7 @@ class CardComponent extends Component {
               <i>{this.props.inputs}</i>
               <i>{this.props.outputs}</i>
             </div>
-          </div>
+          </div>*/}
         </div>
       )
   }

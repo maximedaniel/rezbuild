@@ -60,7 +60,7 @@ class AddUserFormCore extends Component {
 
    } else {
        this.setState({error : false, pending : true}, () => {
-            var id = this.refs.username.value.split('-').trim();
+            var id = this.refs.username.value.split('-')[1].trim();
            var user = this.state.users.filter((user, index) => {
                 console.log(user._id, id)
                 return user._id === id;

@@ -18,6 +18,7 @@ class GraphCore extends Component {
 
    update(){
         /* PARSING */
+        console.log('update : ', this.props.nodes)
         var root = this.props.nodes.filter((node) => (node.prev.length ===0))[0]
 
         var nodes = {}

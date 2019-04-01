@@ -40,7 +40,19 @@ class CollaboratorListCore extends Component {
 
 
   render() {
+        let errorComponent;
         let preloaderComponent;
+        let usersComponent;
+        let addUserFormComponent;
+        let addUserButtonComponent;
+
+        if (this.state.error){
+            errorComponent = <div className="row">
+                                <div className="col s12">
+                                    <h6 className='rezbuild-text'>{this.state.error}</h6>
+                                </div>
+                            </div>
+        }
 
         if (this.state.pending){
             preloaderComponent = <div className="preloader-wrapper small active">
@@ -54,34 +66,31 @@ class CollaboratorListCore extends Component {
                                       </div>
                                     </div>
                                   </div>
-        }
+        } else {
 
-        let errorComponent;
+            if (this.state.users){
 
-        if (this.state.error){
-            errorComponent = <div className="row">
-                                <div className="col s12">
-                                    <h6 className='rezbuild-text'>{this.state.error}</h6>
-                                </div>
-                            </div>
-        }
+                usersComponent =
+                        this.state.users.map((collaborator, index) => <div className="col s12 rezbuild-text" key={index}> {collaborator.firstname} {collaborator.lastname} ({collaborator.roles})</div>)
+            }
 
-        let usersComponent;
-
-        if (this.state.users){
-
-            usersComponent =
-                    this.state.users.map((collaborator, index) => <div className="col s12 rezbuild-text" key={index}> {collaborator.firstname} {collaborator.lastname} ({collaborator.roles})</div>)
-        }
-        return (
-                <div>
-                    {usersComponent}
-                    {preloaderComponent}
-                    {errorComponent}
-                    <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
+            addUserButtonComponent = <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
                     <i className="material-icons">add</i>
                     </a>
-                    <AddUserForm project={this.props.project} params={this.props.params}/>
+            addUserFormComponent =  <AddUserForm project={this.props.project} params={this.props.params}/>
+        }
+
+
+
+
+
+        return (
+                <div>
+                    {errorComponent}
+                    {preloaderComponent}
+                    {addUserButtonComponent}
+                    {addUserFormComponent}
+                    {usersComponent}
                </div>
         );
   }
