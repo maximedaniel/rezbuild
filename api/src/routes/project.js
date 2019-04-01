@@ -11,13 +11,13 @@ module.exports = function(io, client, bim){
                     res({error: error.message})
                    }
                    else {
-                    bim.addProject(projects._id, 'ifc2x3tc1').then(bim_project => {
+                   // bim.addProject(projects._id, 'ifc2x3tc1').then(bim_project => {
                         res({projects: projects})
                         io.emit('/api/project/done', {})
-                    })
-                    .catch(error => {
-                        res({error: error.message})
-                    })
+                    //})
+                    //.catch(error => {
+                     //   res({error: error.message})
+                    //})
                    }
             });
         } else {

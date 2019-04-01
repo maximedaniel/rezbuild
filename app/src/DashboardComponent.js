@@ -61,14 +61,15 @@ class DashboardCore extends Component {
                       <div className="col s12 m3 l3 transparent">
                             <h5 className="rezbuild-text">Collaborators</h5>
                              <div className="divider rezbuild"></div>
-                             <div className="section" style={{height:'300px', paddingBottom:0}}>
+                             <div className="section" style={{height:'250px', paddingBottom:0}}>
                                 <CollaboratorListComponent project={this.props.project} params={this.props.params}/>
                              </div>
                       </div>
                       <div className="col s12 m9 l9 transparent">
                                 <h5 className="rezbuild-text">Board</h5>
                                  <div className="divider rezbuild"></div>
-                                 <div className="section" style={{height:'300px', paddingBottom:0}}>
+                                 <div className="section" style={{height:'250px', paddingBottom:0}}>
+                                  {(this.state.revisions.length > 0) ?
                                   <ParentSize>
                                     {parent => (
                                       <GraphComponent
@@ -86,13 +87,34 @@ class DashboardCore extends Component {
                                       />
                                      )}
                                   </ParentSize>
+                                  : <div className="preloader-wrapper small active">
+                                    <div className="spinner-layer">
+                                      <div className="circle-clipper left">
+                                        <div className="circle"></div>
+                                      </div><div className="gap-patch">
+                                        <div className="circle"></div>
+                                      </div><div className="circle-clipper right">
+                                        <div className="circle"></div>
+                                      </div>
+                                    </div>
+                                  </div>}
                                  </div>
                       </div>
                  </div>
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
               <div className='row'   style={{marginBottom:0}}>
-                 <div className="col s12 transparent">
+                <div className="col s3 transparent">
+                                <h5 className="rezbuild-text">BIM Viewer</h5>
+                                 <div className="divider rezbuild"></div>
+                                 <div className="section" style={{height:'150px', paddingBottom:0}}>
+                                 </div>
+                                <h5 className="rezbuild-text">File Explorer</h5>
+                                 <div className="divider rezbuild"></div>
+                                 <div className="section" style={{height:'150px', paddingBottom:0}}>
+                                 </div>
+                 </div>
+                 <div className="col s9 transparent">
                                 <h5 className="rezbuild-text">Task</h5>
                                  <div className="divider rezbuild"></div>
                                  { (this.state.revision) ?
