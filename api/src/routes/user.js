@@ -11,6 +11,9 @@ module.exports = function(io, client){
                     res({error: error.message})
                    }
                    else {
+                    for(var i=0; i <users.length; i++){
+                        delete users[i]['password'];
+                    }
                     res({users: users})
                     io.emit('/api/user/done', {})
                    }
@@ -29,6 +32,9 @@ module.exports = function(io, client){
                        res({error: error.message})
                    }
                    else {
+                        for(var i=0; i <users.length; i++){
+                            delete users[i]['password'];
+                        }
                        res({users: users})
                    }
             });
@@ -47,6 +53,9 @@ module.exports = function(io, client){
                        res({error: error.message})
                    }
                    else {
+                        for(var i=0; i <users.length; i++){
+                            delete users[i]['password'];
+                        }
                        res({users: users})
                        io.emit('/api/user/done', {})
                    }
@@ -66,6 +75,9 @@ module.exports = function(io, client){
                        res({error: error.message})
                    }
                    else {
+                        for(var i=0; i <users.length; i++){
+                            delete users[i]['password'];
+                        }
                        res({users: users})
                        io.emit('/api/user/done', {})
                    }

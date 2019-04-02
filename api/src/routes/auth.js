@@ -15,6 +15,7 @@ module.exports = function(io, client){
                        }
                        else {
                             if(user) {
+                                delete user['password']
                                 client.handshake.session.user = user
                                 client.handshake.session.save()
                                 res({user: user});
@@ -33,6 +34,7 @@ module.exports = function(io, client){
                 res({error: error.message})
                }
                else {
+                delete user['password']
                 res({user: user})
                }
          });
