@@ -4,6 +4,7 @@ import {Link} from 'react-router'
 import {browserHistory} from 'react-router'
 import SocketContext from './SocketContext'
 import axios from 'axios'
+import SettingsForm from './forms/SettingsForm'
 
 axios.defaults.withCredentials = true
 
@@ -43,6 +44,7 @@ class NavbarCore extends Component {
   componentDidUpdate(prevProps, prevState) {
       if (prevState.user !== this.state.user) {
         $(".button-collapse").sideNav();
+        $('#modal_settings').modal();
       }
   }
 
@@ -89,9 +91,11 @@ class NavbarCore extends Component {
                 <li><a href="#!">Technologiesssss</a></li>
                 <li><a href="#!"><img  className="brand-logo right" src={logo} alt='logo' style={{maxHeight:'4rem'}} /></a></li>
               </ul>
-                <div className="col s12 left">
+              <div className="col s12 left">
                 {pathComponent}
+                <SettingsForm user={this.state.user}/>
               </div>
+
             </div>
            </div>
           </nav>

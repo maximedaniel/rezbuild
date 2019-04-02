@@ -99,7 +99,7 @@ class ProjectListCore extends Component {
                               <tr style={{borderBottom: '2px solid #f7931e'}}>
                                   <th>Name</th>
                                   <th>Owner</th>
-                                  <th>Last update</th>
+                                  <th>Creation date</th>
                                   <th>Actions</th>
                               </tr>
                             </thead>

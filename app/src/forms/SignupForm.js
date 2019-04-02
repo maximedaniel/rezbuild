@@ -59,14 +59,14 @@ class SignupFormCore extends Component {
           <form className="col s12" onSubmit={this.handleSubmit}>
                     <div className="input-field col s12">
                         <input  id="input_firstname" ref="firstname" name="firstname" type="text" required/>
-                        <label htmlFor="input_name">First name</label>
+                        <label htmlFor="input_firstname">First name</label>
                     </div>
                     <div className="input-field col s12">
                         <input  id="input_lastname" ref="lastname" name="lastname" type="text" required/>
-                        <label htmlFor="input_name">Last name</label>
+                        <label htmlFor="input_lastname">Last name</label>
                     </div>
                     <div className="input-field col s4">
-                    <input type="checkbox"  name="roles" value="Customer" id="role_customer"/><label htmlFor="role_customer">Customer</label>
+                    <input type="checkbox"  name="roles" value="Customer" id="role_customer"  defaultChecked={true}/><label htmlFor="role_customer">Customer</label>
                     </div>
                     <div className="input-field col s4">
                     <input type="checkbox"  name="roles" value="Designer" id="role_designer"/><label htmlFor="role_designer">Designer</label>
@@ -103,9 +103,15 @@ class SignupFormCore extends Component {
                     </div>
                 </div> : ''
                 }
-                    <div className="row">
+
+                <div className="row">
+                    <div className="col s6">
                           <button className="btn waves-effect waves-light" type="submit">SIGN UP</button>
                     </div>
+                    <div className="col s6">
+                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')}>SIGN IN</button>
+                          </div>
+                </div>
               </form>
           </div>
     </div>
