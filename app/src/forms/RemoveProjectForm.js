@@ -51,7 +51,7 @@ class RemoveProjectFormCore extends Component {
           <form className="col s12">
           <div className="row">
               <div className="col s12 center">
-              <h5 className="rezbuild-text">Do you want to remove {this.props.project.name} ?</h5>
+              <h5 className="rezbuild-text">Do you want to remove <strong style={{fontWeight:'900'}}>{this.props.project.name}</strong> ?</h5>
               </div>
               <div className="input-field col s6 right-align">
                   <a className="btn waves-effect waves-light" href="#!" onClick={this.handleRemoveProject}>YES</a>
@@ -89,7 +89,7 @@ class RemoveProjectFormCore extends Component {
 
 const RemoveProjectForm = props => (
   <SocketContext.Consumer>
-  {socket => <RemoveProjectFormCore {...props} socket={socket} />}
+  { (context) => <RemoveProjectFormCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

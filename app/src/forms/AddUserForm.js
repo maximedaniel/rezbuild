@@ -136,8 +136,8 @@ class AddUserFormCore extends Component {
           <form className="col s12"   onSubmit={this.handleCopyUrl} autoComplete="off">
           <div className="row">
             <div className="input-field col l10 m9 s12">
-              <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  value={window.location.href.replace('#!','')  + '/signin'} />
-              <label  class="active" htmlFor="input_projecturl">Or share this url...</label>
+              <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  defaultValue={window.location.href.replace('#!','')  + '/signin'} />
+              <label  className="active" htmlFor="input_projecturl">Or share this url...</label>
             </div>
               <div className="input-field col l2 m3 s12 center">
                   <button className="btn waves-effect waves-light" type="submit">COPY</button>
@@ -154,7 +154,7 @@ class AddUserFormCore extends Component {
 
 const AddUserForm = props => (
   <SocketContext.Consumer>
-  {socket => <AddUserFormCore {...props} socket={socket} />}
+  { (context) => <AddUserFormCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

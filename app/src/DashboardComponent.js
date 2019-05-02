@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import TrelloComponent from './TrelloComponent'
 import GraphComponent from './GraphComponent'
-import CollaboratorListComponent from './CollaboratorListComponent'
+import TeamComponent from './TeamComponent'
 import { ParentSize } from '@vx/responsive'
 import SocketContext from './SocketContext'
 
+var $ = window.$
 
 const lanesStyle = {
     color:'#fff',
@@ -49,6 +50,9 @@ class DashboardCore extends Component {
   }
 
   componentDidMount(){
+  $(document).ready(function(){
+    $('.tabs').tabs();
+  });
    this.update()
 
   }
@@ -56,37 +60,27 @@ class DashboardCore extends Component {
   render() {
         return  (
            <div>
+           <div className="row">
+                    <div className="col s12">
+                      <ul className="tabs">
+                        <li className="tab col s3"><a className="active" href="#tab_board">Workspace</a></li>
+                        <li className="tab col s3"><a href="#tab_project">Tools</a></li>
+                        <li className="tab col s3"><a href="#tab_team">Settings</a></li>
+                      </ul>
+                    </div>
+           </div>
+           <div id="tab_board" className="col s12">
              <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
                  <div className="row transparent"  style={{marginBottom:0}}>
-                      <div className="col s12 m3 l3 transparent">
-                            <h5 className="rezbuild-text">Collaborators</h5>
-                             <div className="divider rezbuild"></div>
-                             <div className="section" style={{height:'250px', paddingBottom:0}}>
-                                <CollaboratorListComponent project={this.props.project} params={this.props.params}/>
-                             </div>
-                      </div>
-                      <div className="col s12 m9 l9 transparent">
-                                <h5 className="rezbuild-text">Board</h5>
-                                 <div className="divider rezbuild"></div>
+                      <div className="col s12 transparent">
+                                <h5 className="rezbuild-text">Revisions</h5>
                                  <div className="section" style={{height:'250px', paddingBottom:0}}>
                                   {(this.state.revisions.length > 0) ?
-                                  <ParentSize>
-                                    {parent => (
-                                      <GraphComponent
-                                        parentWidth={parent.width}
-                                        parentHeight={parent.height}
-                                        parentTop={parent.top}
-                                        parentLeft={parent.left}
-                                        // this is the referer to the wrapper component
-                                        parentRef={parent.ref}
-                                        // this function can be called inside MySuperCoolVxChart to cause a resize of the wrapper component
-                                        resizeParent={parent.resize}
-                                        nodes={this.state.revisions}
-                                        node={this.state.revision}
-                                        setNode={this.setRevision}
-                                      />
-                                     )}
-                                  </ParentSize>
+                                  <GraphComponent
+                                        revisions={this.state.revisions}
+                                        revision={this.state.revision}
+                                        setRevision={this.setRevision}
+                                  />
                                   : <div className="preloader-wrapper small active">
                                     <div className="spinner-layer">
                                       <div className="circle-clipper left">
@@ -104,19 +98,8 @@ class DashboardCore extends Component {
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
               <div className='row'   style={{marginBottom:0}}>
-                <div className="col s3 transparent">
-                                <h5 className="rezbuild-text">BIM Viewer</h5>
-                                 <div className="divider rezbuild"></div>
-                                 <div className="section" style={{height:'150px', paddingBottom:0}}>
-                                 </div>
-                                <h5 className="rezbuild-text">File Explorer</h5>
-                                 <div className="divider rezbuild"></div>
-                                 <div className="section" style={{height:'150px', paddingBottom:0}}>
-                                 </div>
-                 </div>
-                 <div className="col s9 transparent">
-                                <h5 className="rezbuild-text">Task</h5>
-                                 <div className="divider rezbuild"></div>
+                 <div className="col s12 transparent">
+                                <h5 className="rezbuild-text">Tasks</h5>
                                  { (this.state.revision) ?
                                      <TrelloComponent
                                        project = {this.props.project}
@@ -127,6 +110,34 @@ class DashboardCore extends Component {
                  </div>
               </div>
              </div>
+             <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+              <div className='row'   style={{marginBottom:0}}>
+                 <div className="col s12 transparent">
+                 <h5 className="rezbuild-text">3D model</h5>
+                     <div className="section" style={{height:'250px', paddingBottom:0}}>
+                     </div>
+                 </div>
+              </div>
+             </div>
+           </div>
+
+           <div id="tab_team" className="col s12">
+             <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+                 <div className="row transparent"  style={{marginBottom:0}}>
+                      <div className="col l6 s12 transparent">
+                            <h5 className="rezbuild-text">Team</h5>
+                             <div className="section" style={{height:'250px', paddingBottom:0}}>
+                                <TeamComponent project={this.props.project} params={this.props.params}/>
+                             </div>
+                      </div>
+                      <div className="col l6 s12 transparent">
+                            <h5 className="rezbuild-text">Project</h5>
+                             <div className="section" style={{height:'250px', paddingBottom:0}}>
+                             </div>
+                      </div>
+                 </div>
+              </div>
+           </div>
          </div>
         );
     }
@@ -134,7 +145,7 @@ class DashboardCore extends Component {
 
 const DashboardComponent = props => (
   <SocketContext.Consumer>
-  {socket => <DashboardCore {...props} socket={socket} />}
+  { (context) => <DashboardCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

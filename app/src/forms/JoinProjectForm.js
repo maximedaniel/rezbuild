@@ -22,7 +22,7 @@ class JoinProjectFormCore extends Component {
             if (res.projects) {
                 this.setState({projects : res.projects, error : false, pending : false}, () =>{
                         var data = {}
-                        this.state.projects.map((project, index) => (data[String(project.name)] = null))
+                        this.state.projects.map((project, index) => (data[String(project.name+"|"+project._id)] = null))
                         $('#input_autocomplete_joinproject').autocomplete({data: data});
                 });
             }
@@ -41,20 +41,26 @@ class JoinProjectFormCore extends Component {
    event.preventDefault();
    this.setState({projects: this.state.projects, error : false, pending : true}, () => {
        var project = this.state.projects.filter((project, index) => {
-            return project.name === this.refs.projectname.value;
+            return project._id === this.refs.projectname.value.split('|')[1];
        })[0]
-       var filter = {_id: project._id}
-       var update = {"$push" : {users : "token"}}
-       this.props.socket.emit('/api/project/update', filter, update, res => {
-            if (res.projects) {
-                this.setState({error : false, pending : false}, () => {
-                    $('#modal_joinproject').modal('close');
-                })
-            }
-            if (res.error) {
-                this.setState({error : res.error, pending : false});
-            }
-       });
+       if(!project){
+            this.setState({error : 'Unknown project', pending : false});
+       } else {
+           var filter = {_id: project._id}
+           var update = {"$push" : {users : "token"}}
+           this.props.socket.emit('/api/project/update', filter, update, res => {
+                if (res.projects) {
+                    this.setState({error : false, pending : false}, () => {
+                        $('#modal_joinproject').modal('close');
+                    })
+                }
+                if (res.error) {
+                    this.setState({error : res.error, pending : false});
+                }
+           });
+       }
+
+
    })
   };
 
@@ -117,7 +123,7 @@ class JoinProjectFormCore extends Component {
 
 const JoinProjectForm = props => (
   <SocketContext.Consumer>
-  {socket => <JoinProjectFormCore {...props} socket={socket} />}
+  { (context) => <JoinProjectFormCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

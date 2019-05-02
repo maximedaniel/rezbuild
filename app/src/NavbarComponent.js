@@ -15,10 +15,12 @@ class NavbarCore extends Component {
   constructor(props){
     super(props);
     this.handleSignout = this.handleSignout.bind(this);
+    this.update = this.update.bind(this)
     this.state = {user: null, error : false, pending : false}
   }
 
   update(){
+    $('.button-collapse').sideNav('hide')
     this.setState({user : null, error : false, pending : true}, () => {
         var filter = { _id : "token" }
         this.props.socket.emit('/api/user/get', filter, res => {
@@ -75,8 +77,8 @@ class NavbarCore extends Component {
               <ul id="slide-out" className="side-nav">
                 <li className="row rezbuild center" style={{lineHeight:'30px'}}>
                     <div className="col s12"> <i className="material-icons" style={{fontSize:'4rem'}}>account_circle</i></div>
-                    <div className="col s12"><strong>{this.state.user.firstname} {this.state.user.lastname} ({this.state.user.roles.join()})</strong></div>
-                    <div className="col s12">{this.state.user.email}</div>
+                    <div className="col s12" style={{fontWeight:'bold'}}> {this.state.user.firstname} {this.state.user.lastname}</div>
+                    <div className="col s12">{this.state.user.roles.join()}</div>
                 </li>
 
                 <li><a className="modal-trigger" href="#modal_settings" ><i className="material-icons">settings</i>Settings</a></li>
@@ -86,14 +88,12 @@ class NavbarCore extends Component {
             <div className="nav-wrapper">
               <a href="#!" data-activates="slide-out" className="button-collapse" style={{padding:'0', display:'inline-flex'}} onClick={() => $('.button-collapse').sideNav('show')}> <i className="material-icons">menu</i></a>
 
-              <ul class="right">
-                <li><a href="#!">Technologies</a></li>
-                <li><a href="#!">Technologiesssss</a></li>
+              <ul className="right">
                 <li><a href="#!"><img  className="brand-logo right" src={logo} alt='logo' style={{maxHeight:'4rem'}} /></a></li>
               </ul>
               <div className="col s12 left">
                 {pathComponent}
-                <SettingsForm user={this.state.user}/>
+                <SettingsForm user={this.state.user} update={this.update}/>
               </div>
 
             </div>
@@ -106,7 +106,7 @@ class NavbarCore extends Component {
 
 const NavbarComponent = props => (
   <SocketContext.Consumer>
-  {socket => <NavbarCore {...props} socket={socket} />}
+  { (context) => <NavbarCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

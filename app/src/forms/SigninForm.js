@@ -107,7 +107,7 @@ class SigninFormCore extends Component {
 }
 const SigninForm = props => (
   <SocketContext.Consumer>
-  {socket => <SigninFormCore {...props} socket={socket} />}
+  { (context) => <SigninFormCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

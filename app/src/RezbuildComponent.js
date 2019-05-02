@@ -18,7 +18,7 @@ class RezbuildCore extends Component {
 
 const RezbuildComponent = props => (
   <SocketContext.Consumer>
-  {socket => <RezbuildCore {...props} socket={socket} />}
+  { (context) => <RezbuildCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

@@ -22,6 +22,7 @@ app.use('/', (req,res, next) => {
     else res.send(data);
     });
 })
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -36,16 +37,30 @@ app.use(session);
 io.set('origins', '*:*');
 io.use(sharedsession(session));
 
-//var bim = new BimController()
-//bim.login('m.daniel@estia.fr', 'admin').catch(error => {console.log(error)})
+
+var siofu = require("socketio-file-upload");
+app.use(siofu.router)
+
+var filesDir = "./files/"
+
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
+    var uploader = new siofu()
+    uploader.dir = filesDir
+    uploader.listen(client)
+
+    uploader.on("saved", (event) => {
+        console.log(event.file.meta.revision);
+    });
+
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
     require('./routes/project')(io, client)
     require('./routes/revision')(io, client)
     require('./routes/task')(io, client)
 });
+
+import './test/test.js'
 
 
 module.exports = {http};

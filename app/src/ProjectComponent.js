@@ -39,7 +39,7 @@ class ProjectCore extends Component {
 
 const ProjectComponent = props => (
   <SocketContext.Consumer>
-  {socket => <ProjectCore {...props} socket={socket} />}
+  { (context) => <ProjectCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

@@ -8,3 +8,6 @@ Add File and BIM visualization
 Ajouter boutton pour liste des technologies.
 Ajouter boutton pour creation de tâches.
 Ajouter surlignement à la tâche.
+
+# TODO
+AJOUTER IMAGE BIM FILE / INTEGRATION

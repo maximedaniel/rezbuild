@@ -3,7 +3,8 @@ import Board from 'react-trello'
 import SocketContext from './SocketContext'
 import _ from 'lodash'
 import CardComponent from './CardComponent'
-import TaskForm from './forms/TaskForm'
+import TodoTaskForm from './forms/TodoTaskForm'
+import DoneTaskForm from './forms/DoneTaskForm'
 import CreateTaskForm from './forms/CreateTaskForm'
 
 var $ = window.$
@@ -32,7 +33,6 @@ class TrelloCore extends Component {
     this.onTaskChange = this.onTaskChange.bind(this)
     this.setEventBus = this.setEventBus.bind(this)
     this.eventBus = null
-    this.submit = this.submit.bind(this)
     this.cancel = this.cancel.bind(this)
   }
 
@@ -40,36 +40,42 @@ class TrelloCore extends Component {
     this.setState({eventBus: handle})
   }
 
-  submit(){
+  /*submit(){
     if(this.state.cancel.fromLaneId == 'lane_done'){
-        var create = {file : 'model.ifc',  project: this.props.project._id, prev:[this.props.revision._id]}
+        var create = {
+        date: new Date(),
+        name: 'Revision',
+        files: [],
+        project: this.props.project._id,
+        prevLinks: [{revision:this.props.revision._id, task:this.state.task.id}],
+        nextLinks: []
+        };
         this.props.socket.emit('/api/revision/create', create, res => {
             if(res.revisions) {
                 var next_revision = res.revisions
                 var filter = {_id: this.props.revision._id}
-                var update = {"$push" : {next : next_revision._id}}
+                var update = {"$push" : {nextLinks : {revision:next_revision._id, task:this.state.task.id}}}
                 this.props.socket.emit('/api/revision/update', filter, update, res => {
-                    if(res.revisions) {
+                    if(res.revisions){
                         for(var lane of this.state.data.lanes){
-                            if(lane.id != "lane_backlog"){
                                 for(var card of lane.cards){
                                    var create = {
-                                      title: card.title,
-                                      lane: lane.id,
                                       revision:  next_revision._id,
-                                      assignements: [],
-                                      assessments: [],
-                                      inputs: [],
-                                      outputs: []
+                                      lane: lane.id,
+                                      name: card.name,
+                                      content: card.content,
+                                      //startDate: new Date(),
+                                      //endDate: new Date(),
+                                      //roles: [],
+                                      //actions: []
                                    }
                                    this.props.socket.emit('/api/task/create', create, res => {});
                                 }
-                            }
                         }
                         this.props.setRevision(next_revision)
                     }
                     if (res.error) {
-
+                        console.log(res.error)
                     }
                 });
             }
@@ -86,26 +92,26 @@ class TrelloCore extends Component {
        }
        else { // non existing task
            var create = {
-              title: this.state.task.title,
-              lane: this.state.cancel.fromLaneId,
               revision:  this.props.revision._id,
-              assignements: [],
-              assessments: [],
-              inputs: [],
-              outputs: []
+              lane: this.state.cancel.fromLaneId,
+              name: this.state.task.name,
+              content: this.state.task.content,
+              //startDate: new Date(),
+              //endDate: new Date(),
+              //roles: [],
+              //actions: []
            }
            this.props.socket.emit('/api/task/create', create, res => {});
             }
         }
-  }
+  }*/
 
   onTaskChange(nextData){
     this.setState({data:  nextData})
   }
 
   handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails){
-        if(sourceLaneId !== targetLaneId){
-            this.setState(
+         this.setState(
                 {
                 cancel:
                     {
@@ -117,18 +123,31 @@ class TrelloCore extends Component {
                     },
                 task: cardDetails
                 }, () => {
-                $('#modal_task').modal('open');
+                if(sourceLaneId === 'lane_done'){
+                    this.cancel()
+                }
+                else if(sourceLaneId !== targetLaneId){
+                    if(targetLaneId === 'lane_todo'){
+                        $('#modal_todotask').modal('open');
+                    }
+                    if(targetLaneId === 'lane_done'){
+                        $('#modal_donetask').modal('open');
+                    }
+                }
+
             })
-       }
   }
 
   cancel(){
-   this.state.eventBus.publish(this.state.cancel)
+    this.state.eventBus.publish(this.state.cancel)
   }
 
 
   componentDidMount(){
     this.getTasks()
+    this.props.socket.on('/api/task/done', (data) => {
+     this.getTasks();
+    });
   }
 
   getTasks(){
@@ -153,58 +172,7 @@ class TrelloCore extends Component {
           id: 'lane_backlog',
           title: 'BACKLOG',
           label: '?/?',
-          cards: [
-            {id: '0',
-            title: 'Manual preassessment',
-            date: '',
-            lane:  '',
-            revision:  '',
-            assignements: [],
-            assessments: [],
-            inputs:[],
-            outputs: []
-            },
-            {id: '1',
-            title: 'Update needs',
-            date: '',
-            lane:  '',
-            revision: '',
-            assignements: [],
-            assessments: [],
-            inputs:[],
-            outputs: []
-            },
-            {id: '2',
-            title: 'Upload IS model',
-            date: '',
-            lane:  '',
-            revision:  '',
-            assignements: [],
-            assessments: [],
-            inputs:[],
-            outputs: []
-            },
-            {id: '3',
-            title: 'Upload TO-BE model',
-            date: '',
-            lane:  '',
-            revision:  '',
-            assignements: [],
-            assessments: [],
-            inputs:[],
-            outputs: []
-            },
-            {id: '4',
-            title: 'LCA Indicator',
-            date: '',
-            lane:  '',
-            revision:  '',
-            assignements: [],
-            assessments: [],
-            inputs:[],
-            outputs: []
-            }
-          ],
+          cards: [],
           style: lanesStyle
         },
         {
@@ -214,13 +182,13 @@ class TrelloCore extends Component {
           cards: [],
           style: lanesStyle
         },
-        {
+        /*{
           id: 'lane_inprogress',
           title: 'IN PROGRESS',
           label: '?/?',
           cards: [],
           style: lanesStyle
-        },
+        },*/
         {
           id: 'lane_done',
           title: 'DONE',
@@ -233,6 +201,7 @@ class TrelloCore extends Component {
     for (var task of this.state.tasks){
         for (var lane of lanes){
             if(lane.id === task.lane){
+                task.id = task._id
                 lane.cards.push(task)
             }
         }
@@ -260,7 +229,8 @@ class TrelloCore extends Component {
         let errorComponent;
         let preloaderComponent;
         let trelloComponent;
-        let taskFormComponent;
+        let todoTaskFormComponent;
+        let doneTaskFormComponent;
         let createTaskFormComponent;
         let createTaskButtonComponent;
 
@@ -289,8 +259,7 @@ class TrelloCore extends Component {
         } else {
             if (this.state.tasks && this.state.data){
                 trelloComponent = <Board data={this.state.data} style= {
-                        {padding: '0',
-                        backgroundColor:'transparent',
+                        { backgroundColor:'transparent',
                         fontFamily: 'Exo 2'}
                     }
                     onDataChange={this.onTaskChange}
@@ -304,12 +273,13 @@ class TrelloCore extends Component {
 
             }
             if (this.state.task && this.state.cancel){
-                taskFormComponent =  <TaskForm submit={this.submit} cancel={this.cancel} event={this.state.cancel} task={this.state.task}/>
+                todoTaskFormComponent =  <TodoTaskForm task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
+                doneTaskFormComponent =  <DoneTaskForm task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
             }
             createTaskButtonComponent = <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_createtask">
                                             <i className="material-icons">add</i>
                                         </a>
-            createTaskFormComponent =  <CreateTaskForm/>
+            createTaskFormComponent =  <CreateTaskForm revision= {this.props.revision} />
 
         }
         return  (
@@ -319,7 +289,8 @@ class TrelloCore extends Component {
                 {createTaskFormComponent}
                 {errorComponent}
                 {trelloComponent}
-                {taskFormComponent}
+                {todoTaskFormComponent}
+                {doneTaskFormComponent}
          </div>
         );
     }
@@ -327,7 +298,7 @@ class TrelloCore extends Component {
 
 const TrelloComponent = props => (
   <SocketContext.Consumer>
-  {socket => <TrelloCore {...props} socket={socket} />}
+  { (context) => <TrelloCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

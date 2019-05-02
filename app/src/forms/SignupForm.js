@@ -2,11 +2,8 @@ import React, { Component } from 'react'
 import logo from '../ressources/img/jpg/logo.jpg'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js";
-import axios from 'axios'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -19,9 +16,10 @@ class SignupFormCore extends Component {
   }
 
   componentDidMount() {
-      /*$(document).ready(function() {
-        M.FormSelect.init($('#roles'), {});
-      });*/
+      $(document).ready(function() {
+        //M.FormSelect.init($('#roles'), {});
+        $('select').material_select();
+      });
   }
 
   handleSubmit(event){
@@ -32,8 +30,9 @@ class SignupFormCore extends Component {
             password : this.refs.password.value,
             firstname : this.refs.firstname.value.charAt(0).toUpperCase() + this.refs.firstname.value.toLowerCase().slice(1),
             lastname : this.refs.lastname.value.toUpperCase(),
-            roles : $("input[name='roles']:checked").map(function() {return $(this).val();}).get(),
+            roles : $("select option:selected").map(function() {return $(this).val();}).get(),
         }
+        console.log(create)
         this.props.socket.emit('/api/signup', create, res => {
             console.log(res)
             if (res.user) {
@@ -65,15 +64,15 @@ class SignupFormCore extends Component {
                         <input  id="input_lastname" ref="lastname" name="lastname" type="text" required/>
                         <label htmlFor="input_lastname">Last name</label>
                     </div>
-                    <div className="input-field col s4">
-                    <input type="checkbox"  name="roles" value="Customer" id="role_customer"  defaultChecked={true}/><label htmlFor="role_customer">Customer</label>
-                    </div>
-                    <div className="input-field col s4">
-                    <input type="checkbox"  name="roles" value="Designer" id="role_designer"/><label htmlFor="role_designer">Designer</label>
-                    </div>
-                    <div className="input-field col s4">
-                    <input type="checkbox"  name="roles" value="Analyst" id="role_analyst"/><label htmlFor="role_analyst">Analyst</label>
-                    </div>
+                      <div className="input-field col s12">
+                        <select multiple required defaultValue={["Customer"]}>
+                          <option value="" disabled>Choose your role(s)</option>
+                          <option name="roles" value="Customer" id="role_customer">Customer</option>
+                          <option name="roles" value="Designer" id="role_designer">Designer</option>
+                          <option name="roles" value="Analyst" id="role_analyst">Analyst</option>
+                        </select>
+                        <label>Role(s)</label>
+                      </div>
                     <div className="input-field col s12">
                           <input id="input_email" ref="email" name="email" type="email"  required/>
                           <label htmlFor="input_email">Email</label>
@@ -121,7 +120,7 @@ class SignupFormCore extends Component {
 
 const SignupForm = props => (
   <SocketContext.Consumer>
-  {socket => <SignupFormCore {...props} socket={socket} />}
+  { (context) => <SignupFormCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 

@@ -3,7 +3,7 @@ module.exports = function(io, client, bim){
    var Revision = require('../models').Revision
 
    client.on('/api/revision/create', function (create, res) {
-        console.log('/api/project/revision', create)
+        console.log('/api/revision/create', create)
         if(client.handshake.session.user) {
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
             var createdRevision = new Revision(create).save((error, revisions) => {

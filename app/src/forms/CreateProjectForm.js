@@ -21,10 +21,24 @@ class CreateProjectFormCore extends Component {
         this.props.socket.emit('/api/project/create', create, res => {
             if (res.projects){
                 console.log(res.projects)
-                var create = {file : 'model.ifc', project: res.projects._id}
+                var create = {
+                  name: 'Revision',
+                  files: ['revision.ifc'],
+                  project: res.projects._id,
+                  prevLinks: [],
+                  nextLinks: []
+                }
                 this.props.socket.emit('/api/revision/create', create, res => {
                     if(res.revisions) {
                         console.log(res.revisions)
+                        var create = {
+                          revision: res.revisions._id,
+                          name: 'Update Needs',
+                          lane:  'lane_backlog',
+                          content:  'Test',
+                        }
+                        this.props.socket.emit('/api/task/create', create, res => {});
+
                         this.setState({error : false, pending : false}, () => {
                             $('#modal_createproject').modal('close');
                         })
@@ -143,21 +157,21 @@ class CreateProjectFormCore extends Component {
                     <h5 className="rezbuild-text">Criteria</h5>
 
                     <div className="input-field col s12">
-                            <p class="range-field">
+                            <p className="range-field">
                               <input type="range" id="input_social_name" ref="social" min="0" max="100"  defaultValue="50"/>
                               <label htmlFor="input_social_name">Social</label>
                             </p>
                     </div>
 
                     <div className="input-field col s12">
-                            <p class="range-field">
+                            <p className="range-field">
                               <input type="range" id="input_ecological_name" ref="ecological" min="0" max="100"  defaultValue="50"/>
                               <label htmlFor="input_ecological_name">Ecological</label>
                             </p>
                     </div>
 
                     <div className="input-field col s12">
-                            <p class="range-field">
+                            <p className="range-field">
                               <input type="range" id="input_economical_name" ref="economical" min="0" max="100" defaultValue="50" />
                               <label htmlFor="input_economical_name">Economical</label>
                             </p>
@@ -204,7 +218,7 @@ class CreateProjectFormCore extends Component {
 
 const CreateProjectForm = props => (
   <SocketContext.Consumer>
-  {socket => <CreateProjectFormCore {...props} socket={socket} />}
+  { (context) => <CreateProjectFormCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 
