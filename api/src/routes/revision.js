@@ -2,6 +2,8 @@ module.exports = function(io, client, bim){
 
    var Revision = require('../models').Revision
 
+   client.on('/api/revision/done',  () => io.emit('/api/revision/done', {}))
+
    client.on('/api/revision/create', function (create, res) {
         console.log('/api/revision/create', create)
         if(client.handshake.session.user) {
@@ -12,7 +14,6 @@ module.exports = function(io, client, bim){
                    }
                    else {
                     res({revisions: revisions})
-                    io.emit('/api/revision/done', {})
                    }
             });
         } else {
@@ -48,7 +49,6 @@ module.exports = function(io, client, bim){
                    }
                    else {
                        res({revisions: revisions})
-                       io.emit('/api/revision/done', {})
                    }
             });
         } else {
@@ -67,7 +67,6 @@ module.exports = function(io, client, bim){
                    }
                    else {
                        res({revisions: revisions})
-                       io.emit('/api/revision/done', {})
                    }
             });
         } else {

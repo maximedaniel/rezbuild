@@ -13,15 +13,36 @@ var Task = db.Task;
 var handshake = require('socket.io-handshake');
 var fs = require('fs');
 
+var fileDir = "./files/"
 
 var app = express();
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
-app.use('/', (req,res, next) => {
-    fs.readFile('api.log', 'utf8', function(err, data) {
+
+app.use('/file/:name', (req, res, next) => {
+    fs.readFile(fileDir+'/'+ req.params.name, 'utf8', function(err, data) {
     if (err) res.send(err);
     else res.send(data);
     });
 })
+
+/*app.use('/file/:name', (req, res, next) => {
+    var options = {
+        root: fileDir,
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+      };
+    var fileName = req.params.name;
+      res.sendFile(fileName, options, function (err) {
+        if (err) {
+          next(err);
+        } else {
+          console.log('Sent:', fileName);
+        }
+      });
+});*/
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -41,26 +62,17 @@ io.use(sharedsession(session));
 var siofu = require("socketio-file-upload");
 app.use(siofu.router)
 
-var filesDir = "./files/"
-
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
     var uploader = new siofu()
-    uploader.dir = filesDir
+    uploader.dir =  fileDir
     uploader.listen(client)
-
-    uploader.on("saved", (event) => {
-        console.log(event.file.meta.revision);
-    });
-
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
     require('./routes/project')(io, client)
     require('./routes/revision')(io, client)
     require('./routes/task')(io, client)
+    require('./routes/file')(io, client, uploader)
 });
-
-import './test/test.js'
-
 
 module.exports = {http};

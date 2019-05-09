@@ -1,11 +1,12 @@
-module.exports = function(io, client){
-   var ss = require('socket.io-stream')
+module.exports = function(io, client, uploader){
    var File = require('../models').File
-   var path = require('path')
-   var fs = require('fs')
-
-   ss(client).on('api/upload', function(stream, data) {
-    var filename = path.basename(data.name);
-    stream.pipe(fs.createWriteStream(filename));
-  });
+   var fs = require('fs');
+   uploader.on("saved", (event) => {
+        console.log(event.file.meta.revision, client.handshake.session.user._id, event.file.name);
+        var oldFileName = event.file.name
+        var newFileName = event.file.meta.revision+'_'+event.file.name
+        fs.rename(uploader.dir+'/'+oldFileName, uploader.dir+'/'+newFileName, function(err) {
+            if ( err ) console.log('ERROR: ' + err);
+        });
+   });
 }

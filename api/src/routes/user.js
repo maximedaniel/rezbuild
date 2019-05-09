@@ -2,6 +2,8 @@ module.exports = function(io, client){
 
     var User = require('../models').User
 
+    client.on('/api/user/done',  () => io.emit('/api/user/done', {}))
+
     client.on('/api/user/create', function (create, res) {
         console.log('/api/user/create', create)
         if(client.handshake.session.user) {
@@ -15,7 +17,6 @@ module.exports = function(io, client){
                         delete users[i]['password'];
                     }
                     res({users: users})
-                    io.emit('/api/user/done', {})
                    }
             });
         } else {
@@ -57,7 +58,6 @@ module.exports = function(io, client){
                             delete users[i]['password'];
                         }
                        res({users: users})
-                       io.emit('/api/user/done', {})
                    }
             });
         } else {
@@ -79,7 +79,6 @@ module.exports = function(io, client){
                             delete users[i]['password'];
                         }
                        res({users: users})
-                       io.emit('/api/user/done', {})
                    }
             });
         } else {

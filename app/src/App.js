@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react';
 import {Route, Router, browserHistory} from 'react-router'
-import SigninForm from './forms/SigninForm'
-import SignupForm from './forms/SignupForm'
-import RezbuildComponent from './RezbuildComponent'
-import ProjectComponent from './ProjectComponent'
+import SigninForm from './signin'
+import SignupForm from './signup'
+import RezbuildComponent from './home'
+import ProjectComponent from './project'
 import io from 'socket.io-client';
 import SocketIOFileUpload  from 'socketio-file-upload';
 import SocketContext from './SocketContext'

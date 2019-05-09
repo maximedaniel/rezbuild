@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import SocketContext from '../SocketContext'
 import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css";
+import "../project/dashboard/trello/card/createTask/node_modules/react-datepicker/dist/react-datepicker.css";
 
 axios.defaults.withCredentials = true
 

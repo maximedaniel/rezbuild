@@ -2,8 +2,10 @@ module.exports = function(io, client, bim){
 
    var Task = require('../models').Task
 
+   client.on('/api/task/done',  () => io.emit('/api/task/done', {}))
+
    client.on('/api/task/create', function (create, res) {
-        console.log('/api/task/revision', create)
+        console.log('/api/task/create', create)
         if(client.handshake.session.user) {
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
             var createdTask = new Task(create).save((error, tasks) => {
@@ -12,7 +14,6 @@ module.exports = function(io, client, bim){
                    }
                    else {
                     res({tasks: tasks})
-                    io.emit('/api/task/done', {})
                    }
             });
         } else {
@@ -48,7 +49,6 @@ module.exports = function(io, client, bim){
                    }
                    else {
                        res({tasks: tasks})
-                       io.emit('/api/task/done', {})
                    }
             });
         } else {
@@ -67,7 +67,6 @@ module.exports = function(io, client, bim){
                    }
                    else {
                        res({tasks: tasks})
-                       io.emit('/api/task/done', {})
                    }
             });
         } else {

@@ -9,19 +9,20 @@
   },
   "author": "",
   "babel": {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "node": "current"
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
         }
-      }
+      ]
     ]
-  ]
-},
+  },
   "license": "ISC",
   "dependencies": {
-    "babel-preset-env": "^1.7.0"
+    "babel-preset-env": "^1.7.0",
+    "mongoose": "^5.5.6"
   }
 }
