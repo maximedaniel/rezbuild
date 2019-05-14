@@ -15,7 +15,7 @@ RUN \
   apt-get -y install curl &&\
   curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && \
   echo exit 0 > /usr/sbin/policy-rc.d && \
-  apt-get install -y mongodb-org git nodejs && \
+  apt-get install -y mongodb-org=4.0.5 mongodb-org-server=4.0.5 mongodb-org-shell=4.0.5 mongodb-org-mongos=4.0.5 mongodb-org-tools=4.0.5 git nodejs && \
   rm -rf /var/lib/apt/lists/* \
   rm -rf /usr/src/data/db/*
 
