@@ -61,30 +61,35 @@ class TrelloComponent extends Component {
     
   }
   handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails){
-         this.setState(
-                {
-                cancel:
-                    {
-                    type: 'MOVE_CARD',
-                    fromLaneId: targetLaneId,
-                    toLaneId: sourceLaneId,
-                    cardId: cardId,
-                    index: 0
-                    },
-                task: cardDetails
-                }, () => {
-                if(sourceLaneId === 'lane_done'){
-                    this.cancel()
-                }
-                else if(sourceLaneId !== targetLaneId){
-                    if(targetLaneId === 'lane_todo'){
-                        $('#modal_todotask').modal('open');
-                    }
-                    if(targetLaneId === 'lane_done'){
-                        $('#modal_donetask').modal('open');
-                    }
-                }
-            })
+    let cancel = {
+      type: 'MOVE_CARD',
+      fromLaneId: targetLaneId,
+      toLaneId: sourceLaneId,
+      cardId: cardId,
+      index: 0
+    }
+    if(sourceLaneId === targetLaneId) {
+      this.state.eventBus.publish(cancel)
+    }
+    else {
+      this.setState(
+             {
+             cancel: cancel,
+             task: cardDetails
+             }, () => {
+             if(sourceLaneId === 'lane_done'){
+                 this.cancel()
+             }
+             else if(sourceLaneId !== targetLaneId){
+                 if(targetLaneId === 'lane_todo'){
+                     $('#modal_todotask').modal('open');
+                 }
+                 if(targetLaneId === 'lane_done'){
+                     $('#modal_donetask').modal('open');
+                 }
+             }
+         })
+    }
   }
 
   cancel(){this.state.eventBus.publish(this.state.cancel)}
