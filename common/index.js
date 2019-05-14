@@ -22,44 +22,28 @@ var common = {
     },
     ACTIONS: {
         NEW_MODEL_ASIS: {
-            value: { type: String, default: ''},
-            format:{ type: String, default:'.ifc'},
-            files: [String]
+            format: '.ifc'
         },
         UPDATE_MODEL_ASIS: {
-            value: [String],
-            format:{ type: String, default:'.ifc'},
-            files: [String]
+            format: '.ifc'
         },
         NEW_MODEL_TOBE: {
-            value: { type: String, default: ''},
-            format:{ type: String, default:'.ifc'},
-            files: [String]
+            format: '.ifc'
             },
         UPDATE_MODEL_TOBE: {
-            value: [String],
-            format:{ type: String, default:'.ifc'},
-            files: [String]
+            format: '.ifc'
             },
         NEW_KPI_LCA: {
-            value: { type: Number, default: 0},
-            format:{ type: String, default:'kgCO2eq'},
-            files: [String]
+            format: 'kgCO2eq'
             },
         UPDATE_KPI_LCA: {
-            value: { type: Number, default: 0},
-            format:{ type: String, default:'kgCO2eq'},
-            files: [String]
+            format: 'kgCO2eq'
             },
         NEW_KPI_PLC: {
-            value: { type: Number, default: 0},
-            format:{ type: String, default:'kJ/m²'},
-            files: [String]
+            format: 'kJ/m²'
             },
         UPDATE_KPI_PLC: {
-            value: { type: Number, default: 0},
-            format:{ type: String, default:'kJ/m²'},
-            files: [String]
+            format: 'kJ/m²'
             },
 
     }

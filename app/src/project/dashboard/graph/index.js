@@ -19,10 +19,78 @@ class GraphComponent extends Component {
 
    update(){
      var childWidth = 200
+     var xOrigin = 15
+     var yOrigin = 15
      this.setState({nodes:[], links:[]}, () => {
-      var rootRevision = this.props.revisions.filter ((revision, index ) => (!revision.prevLinks.length))[0]
+      var rootTask = this.props.tasks.filter(task => (task.action === 'INIT'))[0]
 
-      var ascend = (type, revision, x, y, width, height, nodes, links) => {
+      var iterate = (task, x, y, width, height, nodes, links) => {
+        var selected = this.props.task ? (this.props.task._id === task._id) : false
+        nodes.push({task: task, x: x, y: y, selected: selected})
+        var childHeight = height/task.next.length
+        var startIndex = 0
+        var asisTaskIds = task.next.filter(nextTaskId => {
+          var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
+          return task.action.includes('ASIS')
+        })
+        asisTaskIds.map((asisTaskId, index) => {
+          var nextTask = this.props.tasks.filter ((task) => (task._id === asisTaskId))[0]
+          links.push({
+            task: nextTask,
+            source: {x: x, y: y},
+            target: {x: x + childWidth, y: y + (index * childHeight)},
+            dashed : ("0, 0"),
+            color: "#f7931e"
+          })
+          iterate(nextTask,  x + childWidth, y + (index * childHeight), width, childHeight, nodes, links)
+        });
+        startIndex += asisTaskIds.length
+
+        var tobeTaskIds = task.next.filter(tobeTaskId => {
+          var task = this.props.tasks.filter(task => (task._id === tobeTaskId))[0]
+          return task.action.includes('TOBE')
+        })
+
+        tobeTaskIds.map((tobeTaskId, index) => {
+          var nextTask = this.props.tasks.filter ((task) => (task._id === tobeTaskId))[0]
+          links.push({
+            task: nextTask,
+            source: {x: x, y: y},
+            target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
+            dashed : ("0, 0"),
+            color: "#f7931e"
+          })
+          iterate(nextTask,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
+        });
+        
+        startIndex += tobeTaskIds.length
+        
+        var kpiTaskIds = task.next.filter(kpiTaskId => {
+          var task = this.props.tasks.filter(task => (task._id === kpiTaskId))[0]
+          return task.action.includes('KPI')
+        })
+
+        kpiTaskIds.map((kpiTaskId, index) => {
+          var nextTask = this.props.tasks.filter ((task) => (task._id === kpiTaskId))[0]
+          links.push({
+            task: nextTask,
+            source: {x: x, y: y},
+            target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
+            dashed : ("3, 3"),
+            color: "#f7931e"
+          })
+          iterate(nextTask,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
+        });
+
+      };
+
+
+      iterate(rootTask, xOrigin, yOrigin, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
+      this.draw()
+     });
+   }
+/*
+      var iterate = (task, x, y, width, height, nodes, links) => {
         var selected = this.props.revision ? (this.props.revision._id === revision._id) : false
 
         nodes.push({type: type, revision: revision, x: x, y: y, selected: selected})
@@ -86,66 +154,11 @@ class GraphComponent extends Component {
           })
           ascend('KPI', nextRevision,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
         });
-        /*var index = 0
-        revision.nextLinks.map((nextLink) => {
-          var nextRevision = this.props.revisions.filter ((revision) => (revision._id === nextLink.revision))[0]
-          var newTask = this.props.tasks.filter ((task) => (task._id === nextLink.task))[0]
-          var childHeight = height/revision.nextLinks.length
-          if(newTask.actions.includes('ASIS_MODEL')){
-            links.push({
-              task: newTask,
-              source: {x: x, y: y},
-              target: {x: x+50, y: y + (index * 50)},
-              dashed : false,
-            })
-            ascend(nextRevision,  x+50, y + (index * 50), width, heigth, nodes, links)
-            index++
-          }
-        });*/
-       /* var index = 0
-        revision.nextLinks.map((nextLink) => {
-          var nextRevision = this.props.revisions.filter ((revision, index ) => (revision._id === nextLink.revision))[0]
-          var newTask = this.props.tasks.filter ((task, index ) => (task._id === nextLink.task))[0]
-          if(newTask.actions.includes('TOBE_MODEL')){
-            links.push({
-              task: newTask,
-              source: {x: x, y: y},
-              target: {x: x+25, y: 25 + y + (index * 25)},
-              dashed : true,
-            })
-            ascend(nextRevision,  x + 25, 25 + y + (index * 25), width, heigth, nodes, links)
-            index++
-          }
-        });*/
       }
       ascend('ASIS_MODEL', rootRevision, 15, 15, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
-      this.draw()
-    });
-/*
-     var ascend = (revision, xOrigin, yOrigin, width, height, nodes, links) => {
-      var selected = this.props.revision ? (this.props.revision._id === revision._id) : false
-      nodes.push({revision: revision, x: xOrigin, y: yOrigin, selected: selected})
-      var childHeight = height/revision.nextLinks.length
-      revision.nextLinks.map((nextLink, index) => {
-        var nextRevision = this.props.revisions.filter ((revision, index ) => (revision._id === nextLink.revision))[0]
-        var newTask = this.props.tasks.filter ((task, index ) => (task._id === nextLink.task))[0]
-        var dashed = newTask.actions.includes('ASIS_MODEL')
-        links.push({
-          task: newTask,
-          source: {x: xOrigin, y: yOrigin},
-          target: {x: xOrigin+50, y: index * childHeight + childHeight/2},
-          dashed : dashed,
-        })
-        ascend(nextRevision,  xOrigin+50, index * childHeight + childHeight/2, this.props.parentWidth, childHeight, nodes, links)
-      });
-    };
-     this.setState({nodes:[], links:[]}, () => {
-      ascend(rootRevision, 0, this.props.parentHeight/2, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
-      console.log(this.state.nodes)
-      console.log(this.state.links)
-      this.draw()
-     })*/
-   }
+      
+    });*/
+
    draw(){
         /* DRAWING */
         const svg = d3.select($("#svg-tree")[0]);
@@ -195,11 +208,43 @@ class GraphComponent extends Component {
         .attr("stroke-linecap", "butt")
         .attr("stroke-linejoin", "miter")
         .attr("font-weight", "800");
-      
 
         const circles = svg.append("g")
+        .selectAll("circle")
+        .data(this.state.nodes.filter(d => d.task.action.includes('ASIS') || d.task.action.includes('INIT')))
+        .enter()
+        .append("circle")
+        .attr("stroke", "#f7931e")
+        .attr("stroke-width", 2)
+        .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+        .attr("r", d => {return (d.selected)?radius_max:radius_min})
+        .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
+        .attr("fill",  "#fff")
+        .on("click", (d, i, n) => {
+             if(d.selected){
+               this.props.setTask(null)
+             } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
+         })
+        .on("mouseover", function(d, i) {
+         if(!d.selected){
+             d3.select(this)
+             .transition()
+             .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
+             .duration(transition_duration);
+         }
+         })
+        .on("mouseout", function(d, i) {
+         if(!d.selected){
+             d3.select(this)
+             .transition()
+             .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+             .duration(transition_duration);
+         }
+         });
+
+       /* const circles = svg.append("g")
            .selectAll("circle")
-           .data(this.state.nodes.filter(d => d.type ==='ASIS_MODEL'))
+           .data(this.state.nodes.filter(d => Object.keys(d.task.actions).filter(key => key.includes('ASIS')).length))
            .enter()
            .append("circle")
            .attr("stroke", "#f7931e")
@@ -210,9 +255,8 @@ class GraphComponent extends Component {
            .attr("fill",  "#fff")
            .on("click", (d, i, n) => {
                 if(d.selected){
-                  this.props.setRevision(null)
-                } else this.props.setRevision(this.props.revisions.filter((revision) => (revision._id === d.revision._id))[0])
-                
+                  this.props.setTask(null)
+                } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
             })
            .on("mouseover", function(d, i) {
             if(!d.selected){
@@ -229,11 +273,11 @@ class GraphComponent extends Component {
                 .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
                 .duration(transition_duration);
             }
-            });
+            });*/
 
         const rects = svg.append("g")
             .selectAll("rect")
-            .data(this.state.nodes.filter(d => d.type ==='TOBE_MODEL'))
+            .data(this.state.nodes.filter(d => d.task.action.includes('TOBE')))
             .enter()
             .append("rect")
             .attr("stroke", "#f7931e")
@@ -245,8 +289,8 @@ class GraphComponent extends Component {
             .attr("fill",  "#fff")
             .on("click", (d, i, n) => {
               if(d.selected){
-                this.props.setRevision(null)
-              } else this.props.setRevision(this.props.revisions.filter((revision) => (revision._id === d.revision._id))[0])
+                this.props.setTask(null)
+              } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
               
              })
             .on("mouseover", function(d, i) {
@@ -266,9 +310,10 @@ class GraphComponent extends Component {
              }
              });  
 
+        
         const triangles = svg.append("g")
              .selectAll("path")
-             .data(this.state.nodes.filter(d => d.type === 'KPI'))
+             .data(this.state.nodes.filter(d => d.task.action.includes('KPI')))
              .enter()
              .append("path")
              .attr("d", d => d3.symbol()
@@ -285,8 +330,8 @@ class GraphComponent extends Component {
              //.attr("height", d => {return ((d.selected)?radius_max:radius_min)*2})
              .on("click", (d, i, n) => {
               if(d.selected){
-                this.props.setRevision(null)
-              } else this.props.setRevision(this.props.revisions.filter((revision) => (revision._id === d.revision._id))[0])
+                this.props.setTask(null)
+              } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
               
               })
              .on("mouseover", function(d, i) {
@@ -304,22 +349,20 @@ class GraphComponent extends Component {
                   .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
                   .duration(transition_duration);
               }
-              });  
+              });
    }
 
    componentDidUpdate(prevProps, prevState) {
-      if (prevProps.revisions !== this.props.revisions) {
+      if (prevProps.tasks !== this.props.tasks) {
         this.update()
       }
-      if (prevProps.revision !== this.props.revision) {
-        this.update()
-      }
-      if (prevProps.tasks !== this.props.tasks){
+      if (prevProps.task !== this.props.task) {
         this.update()
       }
    }
    
    componentDidMount(){
+     this.update()
 
    }
 

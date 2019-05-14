@@ -8,30 +8,66 @@ class CardComponent extends Component {
 
   constructor(props){
     super(props);
+    this.onIn = this.onIn.bind(this)
+    this.onOut = this.onOut.bind(this)
+    this.state = {hover:false}
+  }
+  onIn(){
+    this.setState({hover: true})
+    $("#content_"+this.props.id).css('opacity', '1');
+    $("#content_"+this.props.id).css('max-height', '200px');
+
+}
+ onOut(){
+    this.setState({hover: false})
+    $("#content_"+this.props.id).css('transition', 'max-height 0.5s ease-out, opacity 0.5s ease-out');
+    $("#content_"+this.props.id).css('opacity', '0');
+    $("#content_"+this.props.id).css('max-height', '0');
+    $("#content_"+this.props.id).css('overflow', 'hidden');
+  }
+
+  componentDidUpdate() {
+    $('.cqkFMI').css('min-width', 0);
   }
 
   render(){
-
+      var isDone = (this.props.lane === 'lane_done')
+      
+      
       return (
-        <div className="section" style={{padding:'5px', pointerEvents: (this.props.enabled?'auto':'none'), opacity:(this.props.enabled?'1':'0.5')}}>
-           <div className="row">
-                <div className="col s6">
-                    {
-                        (this.props.lane === 'lane_done') ?
-                            <h7 className="black-text">{(new Date(this.props.doneDate)).toLocaleString("en-US")}</h7>
-                        : ''
-                    }
+        <div className="section hoverable"
+        onMouseOver={this.onIn}
+        onMouseOut={this.onOut} 
+        style={{
+        borderStyle: this.props.focused?'solid': "",
+        borderColor: this.props.focused?'#f7931e': "",
+        borderWidth: this.props.focused?'4px' : '',
+
+        padding: 0,
+        margin: 0
+        }}>
+            <div className="row" style={{marginBottom:'0px'}}>
+                <div className="col s6 left-align">
+                    <h6  className="black-text"><b>{this.props.name}</b></h6>
                 </div>
                 <div className="col s6 right-align">
-                    {
-                    this.props.roles.map((role, index) =>
-                         <h7 className="black-text"><i>{" " + role[0]}</i></h7>
-                    )
-                    }
+                    <h6 className="black-text"><i>{this.props.roles.map(role => role[0]).join()}</i></h6>
                 </div>
-                <div className="col s7">
-                    <h6 className="black-text"><b>{this.props.name}</b></h6>
-                    <p className="black-text">{this.props.content}</p>
+                    <div className="col s12" id={"content_"+this.props.id} style={{
+                        transition: 'max-height 0.5s ease-out, opacity 0.5s ease-out',
+                        opacity: '0',
+                        maxHeight: '0',
+                        overflow: 'hidden'
+                    }}>
+                        <p className="black-text">{this.props.content}</p>
+                    </div>
+
+                <div className="col s12">
+                    {
+                        (this.props.lane === 'lane_done') ?
+                        <h7 className="black-text">{(new Date(this.props.date)).toLocaleString("en-US")}</h7>
+                        : ''
+                    }
                 </div>
                 {/*
                     (this.props.lane !== 'lane_done')?
@@ -73,7 +109,7 @@ class CardComponent extends Component {
                 */}
            {
             (this.props.lane === 'lane_todo' || this.props.lane === 'lane_inprogress')?
-               <div className="row">
+               <div className="row" style={{marginBottom:'0px'}}>
                    <div className="col s5 center">
                         <h6 className="black-text">{(new Date(this.props.startDate)).toLocaleDateString("en-US")}</h6>
                    </div>

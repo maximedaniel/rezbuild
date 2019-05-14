@@ -8,41 +8,13 @@ import SocketContext from '../../SocketContext'
 
 var $ = window.$
 
-const lanesStyle = {
-    color:'#fff',
-    backgroundColor:'#f7931e',
-    fontFamily: 'Exo 2'
-}
-
-const cardStyle = {
-    maxWidth:'50px',
-    color:'#000',
-    backgroundColor:'#fff',
-    fontFamily: 'Exo 2'
-}
-
 class DashboardCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {revision: null, revisions: [],  tasks: [],  error: false, pending: false}
-    this.setRevision = this.setRevision.bind(this)
+    this.state = {task: null, tasks: [],  error: false, pending: false}
+    this.setTask = this.setTask.bind(this)
     this.fetchTasks = this.fetchTasks.bind(this)
-    this.fetchRevisions = this.fetchRevisions.bind(this)
-  }
-
-  fetchRevisions(){
-        var filter = {project: this.props.project._id}
-        this.setState({revisions: [], error: false, pending:  true}, () => {
-                this.props.socket.emit('/api/revision/get', filter, res => {
-                    if(res.revisions) {
-                        this.setState({revisions: res.revisions, error : false, pending : false})
-                    }
-                    if (res.error) {
-                        this.setState({revisions: [], error : res.error, pending : false});
-                    }
-                });
-        });
   }
 
   fetchTasks(){
@@ -60,12 +32,11 @@ class DashboardCore extends Component {
   }
 
   update(){
-    this.fetchRevisions()
     this.fetchTasks()
   }
 
-  setRevision(revision){
-    this.setState({revision: revision})
+  setTask(task){
+    this.setState({task: task})
   }
 
   componentDidMount(){
@@ -73,10 +44,6 @@ class DashboardCore extends Component {
       $('.tabs').tabs();
     });
     this.update()
-    this.props.socket.on('/api/revision/done', () => {
-    console.log('received /api/revision/done...')
-    this.update()
-    });
     this.props.socket.on('/api/task/done', () => {
     console.log('received /api/task/done...')
     this.update()
@@ -106,13 +73,14 @@ class DashboardCore extends Component {
                       </ul>
                     </div>
            </div>
+
            <div id="tab_board" className="col s12">
              <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
                  <div className="row transparent"  style={{marginBottom:0}}>
                       <div className="col s12 transparent">
-                                <h5 className="rezbuild-text">Revisions</h5>
+                                <h5 className="rezbuild-text">Navigation</h5>
                                  <div className="section" style={{height:'250px', paddingBottom:0}}>
-                                  {(this.state.revisions.length > 0 && this.state.tasks.length > 0) ?
+                                  {(this.state.tasks.length > 0) ?
                                   <ParentSize>
                                   {
                                     parent => (
@@ -126,9 +94,8 @@ class DashboardCore extends Component {
                                       // this function can be called inside MySuperCoolVxChart to cause a resize of the wrapper component
                                       resizeParent={parent.resize}
                                       tasks={this.state.tasks}
-                                      revisions={this.state.revisions}
-                                      revision={this.state.revision}
-                                      setRevision={this.setRevision}
+                                      task={this.state.task}
+                                      setTask={this.setTask}
                                     />
                                     )
                                    }
@@ -140,39 +107,31 @@ class DashboardCore extends Component {
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
               <div className='row'   style={{marginBottom:0}}>
-                 <div className="col s12 transparent">
+                 <div className="col s8 transparent">
                                 <h5 className="rezbuild-text">Tasks</h5>
-                                { (this.state.revisions.length > 0 && this.state.tasks.length > 0) ?
+                                { (this.state.tasks.length > 0) ?
                                      <TrelloComponent
                                        project = {this.props.project}
-                                       revisions={this.state.revisions}
-                                       revision = {this.state.revision}
-                                       setRevision = {this.setRevision}
                                        tasks = {this.state.tasks}
+                                       task = {this.state.task}
+                                       setTask = {this.setTask}
                                       />
                                       : loaderComponent}
                                 
                  </div>
-                 
-              </div>
-             </div>
-             <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
-              <div className='row'   style={{marginBottom:0}}>
-                 <div className="col s6 transparent">
+                 <div className="col s4 transparent">
                                 <h5 className="rezbuild-text">Files</h5>
-                                 { (this.state.revision) ?
+                                { (this.state.tasks.length > 0) ?
                                      <FileExplorerComponent
                                        project = {this.props.project}
-                                       revision = {this.state.revision}
-                                       setRevision = {this.setRevision}
+                                       tasks = {this.state.tasks}
+                                       task = {this.state.task}
+                                       setTask = {this.setTask}
                                       />
                                   : ''}
+                                
                  </div>
-                 <div className="col s6 transparent">
-                    <h5 className="rezbuild-text">3D model</h5>
-                    <div className="section" style={{height:'250px', paddingBottom:0}}>
-                    </div>
-                 </div>
+                 
               </div>
              </div>
 

@@ -24,6 +24,7 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0",
     "prettier": "^1.10.2",
+    "serve-index": "^1.9.1",
     "socket.io": "^2.2.0",
     "socket.io-events": "^0.4.6",
     "socket.io-handshake": "0.0.10",

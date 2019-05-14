@@ -27,34 +27,28 @@ class CreateProjectFormCore extends Component {
                     lane:  'lane_backlog',
                     content:  key,
                     roles:  Object.keys(common.ROLES),
-                    actions : [key]
+                    action: key,
+                    format: action.format
                   }
                   this.props.socket.emit('/api/task/create', create, res => {});
                })
-                var create = {
-                  project: res.projects._id,
-                  status: common.STATUS.INIT
-                }
-                console.log(create)
-                this.props.socket.emit('/api/revision/create', create, res => {
-                    if(res.revisions) {
-                        /*console.log(res.revisions)
-                        var create = {
-                          revision: res.revisions._id,
-                          name: 'Update Needs',
-                          lane:  'lane_backlog',
-                          content:  'Test',
-                        }
-                        this.props.socket.emit('/api/task/create', create, res => {});*/
 
-                        this.setState({error : false, pending : false}, () => {
-                            $('#modal_createproject').modal('close');
-                        })
-                    }
-                    if (res.error) {
-                        this.setState({error : res.error, pending : false});
-                    }
-                });
+               /* INIT TASK */
+               var create = {
+                project: res.projects._id,
+                lane:  'lane_done',
+                name: 'INIT',
+                date: new Date(),
+                user: 'token',
+                content:  'INIT',
+                roles:  Object.keys(common.ROLES),
+                action : 'INIT',
+               }
+               this.props.socket.emit('/api/task/create', create, res => {});
+
+               this.setState({error : false, pending : false}, () => {
+                $('#modal_createproject').modal('close');
+               })
             }
             if (res.error) {
                 this.setState({error : res.error, pending : false});

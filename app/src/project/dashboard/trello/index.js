@@ -5,22 +5,42 @@ import CardComponent from './card'
 import TodoTaskForm from './todoTask'
 import DoneTaskForm from './doneTask'
 import CreateTaskForm from './card/createTask'
-
+import common from 'common'
 var $ = window.$
 
 /* CARD STYLING */
-const cardStyle = {
-    maxWidth:'50px',
+const normalCardStyle = {
+    minWidth: '200px',
+    width: '200px',
+    maxWidth: '200px',
+    marginBottom: '10px',
     color:'#000',
     backgroundColor:'#fff',
-    fontFamily: 'Exo 2'
+    padding: '0',
+    fontFamily: 'Exo 2',
+    textShadow:"-1px -1px 0 #fff, 1px -1px 0 #fff,  -1px 1px 0 #fff, 1px 1px 0 #fff"
+}
+const selectedCardStyle = {
+    minWidth: '210px',
+    width: '210px',
+    maxWidth: '210px',
+    marginBottom: '10px',
+    color:'#000',
+    backgroundColor:'#fff',
+    padding: '0',
+    fontFamily: 'Exo 2',
+    textShadow:"-1px -1px 0 #fff, 1px -1px 0 #fff,  -1px 1px 0 #fff, 1px 1px 0 #fff"
 }
 
 /* LANE STYLING */
 const lanesStyle = {
+    minWidth: '220px',
+    width: '220px',
+    maxWidth: '220px',
     color:'#fff',
-    backgroundColor:'#f7931e',
-    fontFamily: 'Exo 2'
+    backgroundColor:  'rgba(247,147,30, .5)',
+    fontFamily: 'Exo 2',
+    textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"
 }
 
 class TrelloComponent extends Component {
@@ -30,12 +50,16 @@ class TrelloComponent extends Component {
     this.state = {eventBus: null, data : null}
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.onTaskChange = this.onTaskChange.bind(this)
+    this.onCardClick = this.onCardClick.bind(this)
     this.setEventBus = this.setEventBus.bind(this)
     this.eventBus = null
     this.cancel = this.cancel.bind(this)
   }
   setEventBus(handle){this.setState({eventBus: handle})}
   onTaskChange(nextData){this.setState({data:  nextData})}
+  onCardClick(cardId, metadata, laneId){
+    
+  }
   handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails){
          this.setState(
                 {
@@ -93,44 +117,39 @@ class TrelloComponent extends Component {
           style: lanesStyle
         }
      ]
-     if(this.props.revision) {
-      var  getParentRevisions = (revisionId, parentRevisionIds) => {
-        parentRevisionIds.push(revisionId)
-        var revision = this.props.revisions.filter(revision => revision._id === revisionId)[0]
-        revision.prevLinks.map(prevLink => getParentRevisions(prevLink.revision,parentRevisionIds) )
-      }
-      var parentRevisionIds = []
-      getParentRevisions(this.props.revision._id, parentRevisionIds)
- 
       for (var task of this.props.tasks){
-          for (var lane of lanes){
-            if(lane.id === task.lane){
-                  task.id = task._id
-                  task.enabled = true
-                  if(lane.id === 'lane_done'){
-                      if(parentRevisionIds.includes(task.revision)){
-                        lane.cards.push(task);
-                      }
-                  } else {
-                    if( !this.props.revision || this.props.revision.status.includes(...task.actions)){
-                      lane.cards.push(task);
-                    }
-                  }
-            }
-          }
+        var prevTaskIds = [] 
+
+        var ascend = (taskId, prevTaskIds) => {
+          prevTaskIds.push(taskId)
+          var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
+          currTask.prev.map((prevTaskId) => ascend(prevTaskId, prevTaskIds))
         }
-     } else {
-      for (var task of this.props.tasks){
+        if(this.props.task) ascend(this.props.task._id, prevTaskIds)
+        console.log(prevTaskIds)
         for (var lane of lanes){
           if(lane.id === task.lane){
                 task.id = task._id
                 task.enabled = true
+                task.focused = false
+                task.style = normalCardStyle
+                if(task.lane !== "lane_done" && this.props.task && common.STATUS[this.props.task.action].includes(task.action)){
+                    
+                  lane.cards.push(task);
+                }
+
+                if(task.lane === "lane_done" && this.props.task && prevTaskIds.includes(task._id)){
+                    task.focused = this.props.task._id === task._id
+                    task.style =  task.focused? selectedCardStyle:normalCardStyle
                     lane.cards.push(task);
+                }
+                if(!this.props.task){
+                    lane.cards.push(task);
+                }
           }
         }
       }
-     }
-     
+
     const data = {lanes: lanes}
     this.setState({data:data});
   }
@@ -139,7 +158,7 @@ class TrelloComponent extends Component {
     if (prevProps.tasks !== this.props.tasks){
             this.updateTasks()
     }
-    if (prevProps.revision !== this.props.revision){
+    if (prevProps.task !== this.props.task){
             this.updateTasks()
     }
     $('#modal_task').modal({
@@ -167,6 +186,7 @@ class TrelloComponent extends Component {
                 onDataChange={this.onTaskChange}
                 handleDragEnd={this.handleDragEnd}
                 eventBusHandle={this.setEventBus}
+                onCardClick={this.onCardClick}
                 customCardLayout
                 draggable
                 laneDraggable={false}
@@ -174,14 +194,14 @@ class TrelloComponent extends Component {
                 <CardComponent />
                 </Board>
           }
-          if (this.state.cancel){
-            todoTaskFormComponent =  <TodoTaskForm  project={this.props.project}  revision= {this.props.revision} task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
-            doneTaskFormComponent =  <DoneTaskForm  project={this.props.project}  revision= {this.props.revision} task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
+          if (this.state.task && this.state.cancel){
+            todoTaskFormComponent =  <TodoTaskForm  selectedTask={this.props.task} task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
+            doneTaskFormComponent =  <DoneTaskForm   selectedTask={this.props.task}  task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
           }
           createTaskButtonComponent = <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_createtask">
                                           <i className="material-icons">add</i>
                                       </a>
-          createTaskFormComponent =  <CreateTaskForm project={this.props.project} revision= {this.props.revision}  />
+          createTaskFormComponent =  <CreateTaskForm project={this.props.project} />
 
         }
         return  (

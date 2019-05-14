@@ -7,7 +7,6 @@ import BimController from './BimController'
 var mongoose = require("mongoose");
 var User = db.User;
 var Project = db.Project;
-var Revision = db.Revision;
 var Task = db.Task;
 
 var handshake = require('socket.io-handshake');
@@ -15,15 +14,33 @@ var fs = require('fs');
 
 var fileDir = "./files/"
 
+var serveIndex = require('serve-index')
+
 var app = express();
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
-app.use('/file/:name', (req, res, next) => {
-    fs.readFile(fileDir+'/'+ req.params.name, 'utf8', function(err, data) {
-    if (err) res.send(err);
-    else res.send(data);
-    });
+app.use('/:taskId/:filename', (req, res, next) => {
+    try {
+      res.sendFile(fileDir + "/" + req.params.taskId + "/" + req.params.filename, { root: __dirname })
+    }
+    catch(err){
+      res.send(err)
+    }
+
 })
+/*app.use('/:taskId/', (req, res, next) => {
+  var dirPath = fileDir+'/'+ req.params.taskId
+  fs.readdir(dirPath, function (err, files) {
+    //handling error
+    if (err) {
+      res.send(err);
+    } 
+    //listing all files using forEach
+    var ans = {}
+    if(files)files.map(file => ans[file] = fs.statSync(dirPath + '/' + file))
+    res.send(ans)
+  });
+});*/
 
 /*app.use('/file/:name', (req, res, next) => {
     var options = {
@@ -65,12 +82,11 @@ app.use(siofu.router)
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
     var uploader = new siofu()
-    uploader.dir =  fileDir
+    uploader.dir =  './src/files/'
     uploader.listen(client)
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
     require('./routes/project')(io, client)
-    require('./routes/revision')(io, client)
     require('./routes/task')(io, client)
     require('./routes/file')(io, client, uploader)
 });

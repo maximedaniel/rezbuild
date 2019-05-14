@@ -28,7 +28,7 @@ class App extends Component {
     }
     var socket = io(host)
     var uploader = new SocketIOFileUpload(socket);
-    this.state = {socket, uploader}
+    this.state = {host, socket, uploader}
   }
 
   render() {
