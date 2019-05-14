@@ -3,8 +3,7 @@ import SocketContext from './SocketContext'
 import NavbarComponent from './NavbarComponent'
 import ProjectListComponent from './ProjectListComponent'
 
-class RezbuildCore extends Component {
-
+class HomeCore extends Component {
   render() {
         return (
             <div>
@@ -13,13 +12,12 @@ class RezbuildCore extends Component {
             </div>
         );
   }
-
 }
 
-const RezbuildComponent = props => (
+const HomeComponent = props => (
   <SocketContext.Consumer>
-  {socket => <RezbuildCore {...props} socket={socket} />}
+  { (context) => <HomeCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 
-export default RezbuildComponent
+export default HomeComponent

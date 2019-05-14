@@ -2,7 +2,11 @@
 var mongoose = require("mongoose");
 
 var init = () => {
-    mongoose.connect("mongodb://127.0.0.1:27017/rezbuild", {useNewUrlParser: true, reconnectInterval: 5000, reconnectTries: Number.MAX_VALUE});
+    mongoose.connect("mongodb://127.0.0.1:27017/rezbuild", {
+    useNewUrlParser: true,
+    reconnectInterval: 5000,
+    reconnectTries: Number.MAX_VALUE
+    });
 }
 
 mongoose.connection.on('connecting', () =>{
@@ -22,6 +26,6 @@ init()
 //{useMongoClient: true }
 module.exports.User = require('./user');
 module.exports.Project = require('./project');
-module.exports.Revision = require('./revision');
+module.exports.File = require('./file');
 module.exports.Task = require('./task');
 

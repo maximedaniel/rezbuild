@@ -22,19 +22,27 @@ RUN \
 
 # Define mountable directories.
 
-VOLUME ["/usr/src/data/db"]
+VOLUME ["/usr/src/data/db", "/usr/src/api/src/files"]
 
 RUN npm config set strict-ssl false
 RUN npm cache clean --force
 
+WORKDIR /usr/src/common
+COPY common/package.json .
+RUN npm install
+RUN npm link
+COPY common/ .
+
 WORKDIR /usr/src/app
 COPY app/package.json .
 RUN npm install
+RUN npm link common
 COPY app/ .
 
 WORKDIR /usr/src/api
 COPY api/package.json .
 RUN npm install
+RUN npm link common
 COPY api/ .
 
 EXPOSE 3000

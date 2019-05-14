@@ -2,6 +2,8 @@ module.exports = function(io, client, bim){
 
    var Project = require('../models').Project
 
+   client.on('/api/project/done',  () => io.emit('/api/project/done', {}))
+
    client.on('/api/project/create', function (create, res) {
         console.log('/api/project/create', create)
         if(client.handshake.session.user) {

@@ -8,6 +8,8 @@ module.exports = function(io, client){
         else res({error: 'User not signed in'});
     });*/
 
+    client.on('/api/user/done',  () => io.emit('/api/user/done', {}))
+
     client.on('/api/signin', function (email, password, res) {
          User.findOne({email:email, password:password}, (error, user) => {
                        if(error) {
@@ -47,4 +49,7 @@ module.exports = function(io, client){
          res({user: true})
     });
 
+    client.on('/api/token', function (empty, res) {
+        res({user: client.handshake.session.user})
+    });
 }
