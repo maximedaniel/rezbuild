@@ -2,7 +2,6 @@
 import express from 'express'
 import db from './models'
 import cors from 'cors'
-import BimController from './BimController'
 
 var mongoose = require("mongoose");
 var User = db.User;
