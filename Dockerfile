@@ -9,12 +9,13 @@ FROM ubuntu:14.04
 
 # Install MongoDB.
 RUN \
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' > /etc/apt/sources.list.d/mongodb.list && \
+  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 && \
+  echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/4.0 multiverse" > /etc/apt/sources.list.d/mongodb-org-4.0.list && \
   apt-get update && \
-  apt-get -y install curl &&\
+  apt-get -y install curl && \
   curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && \
   echo exit 0 > /usr/sbin/policy-rc.d && \
+  sudo touch /etc/init.d/mongod && \
   apt-get install -y mongodb-org=4.0.5 mongodb-org-server=4.0.5 mongodb-org-shell=4.0.5 mongodb-org-mongos=4.0.5 mongodb-org-tools=4.0.5 git nodejs && \
   rm -rf /var/lib/apt/lists/* \
   rm -rf /usr/src/data/db/*
