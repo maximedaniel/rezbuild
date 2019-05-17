@@ -74,9 +74,9 @@ class FileExplorerCore extends Component {
                                     width="100%"
                                     height="100%"
                                     src="https://www.youtube.com/embed/suNadRnHy-U"
-                                    frameborder="0"
+                                    frameBorder="0"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
+                                    allowFullScreen
                                     >é
                                     </iframe>
                                     <a className="btn rezbuild col s2 right-align"
@@ -87,11 +87,11 @@ class FileExplorerCore extends Component {
                                 </div> : ""
                             }
                             </div>
-        asisFileExplorer = <ul class="collection black-text">
+        asisFileExplorer = <ul className="collection black-text">
                                 { this.state.asisTask.files ?
                                     this.state.asisTask.files.map((filename, index) => {
                                         
-                                                return <li class="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+                                                return <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
                                                     <p className="col s10">{filename} </p>
                                                     <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisTask._id + "/" + filename}>
                                                         <i className="material-icons white-text">cloud_download</i>
@@ -111,9 +111,9 @@ class FileExplorerCore extends Component {
                                     width="100%"
                                     height="100%"
                                     src="https://www.youtube.com/embed/suNadRnHy-U"
-                                    frameborder="0"
+                                    frameBorder="0"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
+                                    allowFullScreen
                                     >é
                                     </iframe>
                                     <a className="btn rezbuild col s2 right-align"
@@ -124,11 +124,11 @@ class FileExplorerCore extends Component {
                                 </div> : ""
                             }
                             </div>
-        tobeFileExplorer = <ul class="collection black-text">
+        tobeFileExplorer = <ul className="collection black-text">
                                 { this.state.tobeTask.files ?
                                     this.state.tobeTask.files.map((filename, index) => {
                                         
-                                                return <li class="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+                                                return <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
                                                     <p className="col s10">{filename} </p>
                                                     <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeTask._id + "/" + filename}>
                                                         <i className="material-icons white-text">cloud_download</i>
@@ -140,11 +140,11 @@ class FileExplorerCore extends Component {
 
         }
         if(this.state.kpiTask){
-        kpiFileExplorer = <ul class="collection black-text">
+        kpiFileExplorer = <ul className="collection black-text">
                                 { this.state.kpiTask.files ?
                                     this.state.kpiTask.files.map((filename, index) => {
                                         
-                                                return <li class="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+                                                return <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
                                                     <p className="col s10">{filename} </p>
                                                     <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.kpiTask._id + "/" + filename}>
                                                         <i className="material-icons white-text">cloud_download</i>

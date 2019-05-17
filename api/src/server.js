@@ -2,7 +2,6 @@
 import express from 'express'
 import db from './models'
 import cors from 'cors'
-import BimController from './BimController'
 
 var mongoose = require("mongoose");
 var User = db.User;
@@ -26,7 +25,6 @@ app.use('/:taskId/:filename', (req, res, next) => {
     catch(err){
       res.send(err)
     }
-
 })
 /*app.use('/:taskId/', (req, res, next) => {
   var dirPath = fileDir+'/'+ req.params.taskId

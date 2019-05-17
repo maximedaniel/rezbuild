@@ -26,24 +26,47 @@ class DoneTaskFormCore extends Component {
   submit(event){
    event.preventDefault()
    this.setState({pending:true, error: false}, () => {
-       var create = {
-        project: this.props.task.project,
-        lane:   'lane_done',
-        name: this.props.task.name,
-        content: this.props.task.content,
-        startDate: this.props.task.startDate,
-        endDate: this.props.task.endDate,
-        date: new Date(),
-        user: 'token',
-        roles: this.props.task.roles,
-        action: this.props.task.action,
-        value: this.props.task.value,
-        format:  this.props.task.format,
-        files: this.props.task.files,
-        prev: [this.props.selectedTask._id],
-        next: []
-       }
-       this.props.socket.emit('/api/task/create', create, res => {
+    if(this.props.task.lane === "lane_todo"){
+        this.props.uploader.submitFiles(this.refs.files.files)
+        if(this.refs.file) this.props.uploader.submitFiles(this.refs.file.files)
+        var filter = {_id: this.props.task._id}
+        var update = {
+            user: "token",
+            lane: 'lane_done',
+            files: Array.from(this.refs.files.files).map(file => file.name),
+            value:  (this.refs.file)? this.refs.file.files[0].name : this.refs.value.value
+        }
+        this.props.socket.emit('/api/task/update', filter, update, res => {
+            if(res.tasks){
+                this.setState({pending:false, error: false}, () => {
+                    $("#modal_donetask").modal('close')
+                    this.props.socket.emit('/api/task/done')
+                })
+            }
+            if(res.error){
+                this.setState({pending:false, error: res.error})
+            }
+        }) 
+    }
+    if(this.props.task.lane === "lane_backlog"){
+        var create = {
+            project: this.props.task.project,
+            lane:   'lane_done',
+            name: this.props.task.name,
+            content: this.props.task.content,
+            startDate: this.props.task.startDate,
+            endDate: this.props.task.endDate,
+            date: new Date(),
+            user: 'token',
+            roles: this.props.task.roles,
+            action: this.props.task.action,
+            value: this.props.task.value,
+            format:  this.props.task.format,
+            files: this.props.task.files,
+            prev: [this.props.selectedTask._id],
+            next: []
+        }
+        this.props.socket.emit('/api/task/create', create, res => {
             if(res.tasks){
                 this.setState({newTaskId: res.tasks._id}, () =>{
                     this.props.uploader.submitFiles(this.refs.files.files)
@@ -80,73 +103,8 @@ class DoneTaskFormCore extends Component {
             if(res.error){
                 this.setState({pending:false, error: res.error})
             }
-       });
-
-         /* METTRE A JOUR LA PRECEDENTE TASK ET L ACTUELLE */
-
-         //$("#modal_donetask").modal('close')
-         //this.props.socket.emit('/api/task/done')
-       
-       
-
-
-    //      /* GET USER */
-    //     this.props.socket.emit('/api/token', {}, res => {
-    //         var userId = res.user._id
-    //         /* CREATE NEW REVISION */
-    //         var create = {
-    //         project: this.props.revision.project,
-    //         name: 'Revision',
-    //         prevLinks: [{revision:this.props.revision._id, task:this.props.task.id}],
-    //         nextLinks: []
-    //         }
-    //         this.props.socket.emit('/api/revision/create', create, res => {
-    //             if(res.revisions){
-    //                 this.setState({newRevisionId: res.revisions._id}, () => {
-    //                     var filter = {_id: this.state.newRevisionId}
-    //                     var update = {}
-    //                     common.ACTIONS.map((action, index) => update[action.name] = this.props.revision[action.name])
-    //                     Object.keys(this.refs).forEach((ref) => {
-    //                             if(this.refs[ref].files){
-    //                                 this.props.uploader.submitFiles(this.refs[ref].files)
-    //                                 var fileNameList = []
-    //                                 Array.from(this.refs[ref].files).forEach(file => {
-    //                                     fileNameList.push(this.state.newRevisionId + '_' + file.name)
-    //                                 });
-    //                                 if(Array.isArray(update[ref])){
-    //                                     update[ref] = update[ref].concat(fileNameList)
-    //                                 } else  update[ref] = fileNameList
-    //                             } else {
-    //                                 update[ref] = this.refs[ref].value
-    //                             }
-    //                     })
-    //                     /* UPDATE NEW REVISION WITH FILES */
-    //                     this.props.socket.emit('/api/revision/update', filter, update, res => {
-    //                         if(res.revisions){
-    //                             var filter = {_id: this.props.revision._id}
-    //                             var update = { '$push': { nextLinks: {revision: this.state.newRevisionId, task:this.props.task.id}}}
-    //                             this.props.socket.emit('/api/revision/update', filter, update, res => {
-    //                                 if(res.revisions){
-    //                                     /* UPDATE NEW REVISION WITH TASKS */
-    //                                     this.copyTasksFromTo(this.props.revision._id, this.state.newRevisionId)
-    //                                     this.setState({pending:false, error: false})
-    //                                 }
-    //                                 if(res.error){
-    //                                     this.setState({pending:false, error: res.error})
-    //                                 }
-    //                             })                         
-    //                         }
-    //                         if(res.error){
-    //                             this.setState({pending:false, error: res.error})
-    //                         }
-    //                     });
-    //                 })
-    //             }
-    //             if(res.error){
-    //                 this.setState({pending:false, error: res.error})
-    //             }
-    //         });
-    //     })
+        });
+    }
     })
   }
 

@@ -75,42 +75,49 @@ class ProjectListCore extends Component {
         let projectListComponent;
 
         if (this.state.projects){
-            projectListComponent = this.state.projects.map((project, index) =>
-                  <tr key={index}>
-                    <td>{project.name}</td>
-                    <td>{project.hasAuthorizedUsers}</td>
-                    <td>{new Date(project.date).toString().split('GMT')[0]}</td>
-                    <td>
-                        <a className="btn-floating waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }><i className="material-icons">folder_open</i></a>
-                        <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
-                            <i className="material-icons rezbuild-text">close</i>
-                        </a>
-                        <RemoveProjectForm project={project}/>
-                    </td>
-                  </tr>
-            );
+            projectListComponent = 
+            <table>
+              <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>Creation date</th>
+                    <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  this.state.projects.map((project, index) => {
+                      return <tr key={index}>
+                        <td>{project.name}</td>
+                        <td>{project.hasAuthorizedUsers}</td>
+                        <td>{new Date(project.date).toString().split('GMT')[0]}</td>
+                        <td>
+                            <a className="btn-floating waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }><i className="material-icons">folder_open</i></a>
+                            <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
+                                <i className="material-icons rezbuild-text">close</i>
+                            </a>
+                            <RemoveProjectForm project={project}/>
+                        </td>
+                  </tr>})
+                }
+              </tbody>
+            </table>
+            
         }
         return (
                  <div className='container transparent' style={{marginTop:'2rem'}}>
                     <div className='row'>
                       <div className='col s12'>
-                          <table>
-                            <thead className='rezbuild-text'>
-                              <tr style={{borderBottom: '2px solid #f7931e'}}>
-                                  <th>Name</th>
-                                  <th>Owner</th>
-                                  <th>Creation date</th>
-                                  <th>Actions</th>
-                              </tr>
-                            </thead>
-                            <tbody>
                                {projectListComponent}
-                            </tbody>
-                          </table>
+                      </div>
+                      <div className='col s12 center'>
+                                {preloaderComponent}
+                      </div>
+                      <div className='col s12 center'>
+                          {errorComponent}
                       </div>
                     </div>
-                    {preloaderComponent}
-                    {errorComponent}
                     <div className="fixed-action-btn">
                       <a className="btn-floating btn-large" href="#!">
                         <i className="large material-icons">mode_edit</i>

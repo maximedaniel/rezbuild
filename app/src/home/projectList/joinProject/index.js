@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
-//import $ from 'jquery'
-//import M from "materialize-css/dist/js/materialize.js";
 import SocketContext from '../../../SocketContext'
-import axios from 'axios'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 

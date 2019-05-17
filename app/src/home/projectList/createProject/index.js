@@ -20,7 +20,7 @@ class CreateProjectFormCore extends Component {
         var create = {name : this.refs.name.value, owner: "token", users: ["token"]}
         this.props.socket.emit('/api/project/create', create, res => {
             if (res.projects){
-               Object.entries(common.ACTIONS).map(([key, action]) => {
+               Object.entries(common.ACTIONS).forEach(([key, action]) => {
                   var create = {
                     project: res.projects._id,
                     name: key,
@@ -43,6 +43,7 @@ class CreateProjectFormCore extends Component {
                 content:  'INIT',
                 roles:  Object.keys(common.ROLES),
                 action : 'INIT',
+                format : '.ifc'
                }
                this.props.socket.emit('/api/task/create', create, res => {});
 

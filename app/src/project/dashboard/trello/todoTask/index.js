@@ -34,20 +34,45 @@ class TodoTaskFormCore extends Component {
  submit(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {
-      var _task = this.props.task
-      if(_task._id === this.props.task._id){ 
-          _task.lane = 'lane_todo'
-      }
-      delete _task._id
-      var create = _task
-      this.props.socket.emit('/api/task/create', create,  res => {
-            if(res.tasks) {
-                this.setState({error : false, pending : false}, () => $("#modal_todotask").modal('close'));
+      
+      var create = {
+        project: this.props.task.project,
+        lane:   'lane_todo',
+        name: this.props.task.name,
+        content: this.props.task.content,
+        startDate: this.state.startDate,
+        endDate: this.state.endDate,
+        roles: this.props.task.roles,
+        action: this.props.task.action,
+        value: this.props.task.value,
+        format:  this.props.task.format,
+        files: this.props.task.files,
+        prev: [this.props.selectedTask._id],
+        next: []
+       }
+       
+      if(this.refs.user.value) create.user = this.refs.user.value
+
+       this.props.socket.emit('/api/task/create', create, res => {
+            if(res.tasks){
+              var filter = {_id: this.props.selectedTask._id}
+              var update = { $push: {next: res.tasks._id}}
+              this.props.socket.emit('/api/task/update', filter, update, res => {
+                  if(res.tasks){
+                      this.setState({pending:false, error: false}, () => {
+                        $("#modal_todotask").modal('close')
+                        this.props.socket.emit('/api/task/done')
+                      })
+                  }
+                  if(res.error){
+                      this.setState({pending:false, error: res.error})
+                  }
+              }) 
             }
-            if (res.error) {
-                this.setState({error : res.error, pending : false});
+            if(res.error){
+                this.setState({pending:false, error: res.error})
             }
-        })
+       });
     })
   }
 
@@ -60,6 +85,7 @@ class TodoTaskFormCore extends Component {
   componentDidMount(){
     $(document).ready(() => {
         $('#modal_todotask').modal();
+        $('select').material_select();
     })
   }
 
@@ -69,24 +95,42 @@ class TodoTaskFormCore extends Component {
     if(this.props.task){
         formBody =  <div>
                           <div className="input-field col s6">
+                              <select  defaultValue="" id="user" ref="user">
+                                <option value=""></option>
+                                  {
+                                    this.props.users
+                                    .filter(user => {
+                                      return this.props.task.roles.includes(...user.roles)
+                                      }
+                                    )
+                                    .map((user, index) => 
+                                      <option name="user" value={user._id} key={index}>
+                                      {user.firstname + " " + user.lastname+ " (" + user.email + ")"}
+                                      </option>
+                                    )
+                                  }
+                              </select>
+                              <label>Assign a user</label>
+                          </div>
+                          <div className="input-field col s3">
                             <label className="active">From date</label>
                             <DatePicker
-                                selected={this.state.startDate}
+                                selected={new Date(this.state.startDate)}
                                 selectsStart
-                                maxDate={this.state.endDate}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
+                                maxDate={new Date(this.state.endDate)}
+                                startDate={new Date(this.state.startDate)}
+                                endDate={new Date(this.state.endDate)}
                                 onChange={this.handleStartDateChange}
                             />
                           </div>
-                          <div className="input-field col s6">
+                          <div className="input-field col s3">
                             <label className="active">To date</label>
                             <DatePicker
-                                selected={this.state.endDate}
+                                selected={new Date(this.state.endDate)}
                                 selectsEnd
-                                minDate={this.state.startDate}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
+                                minDate={new Date(this.state.startDate)}
+                                startDate={new Date(this.state.startDate)}
+                                endDate={new Date(this.state.endDate)}
                                 onChange={this.handleEndDateChange}
                             />
                            </div>
