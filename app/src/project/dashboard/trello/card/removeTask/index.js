@@ -12,36 +12,25 @@ class RemoveTaskFormCore extends Component {
 
   constructor(props){
    super(props);
-   this.handleRemoveTask = this.handleRemoveTask.bind(this);
+   this.cancel = this.cancel.bind(this)
    this.state = {error : false, pending : false}
   }
 
   componentDidMount() {
-      $("#modal_removetask_"+this.props.task._id).modal();
+      $("#modal_removetask").modal();
   }
 
-  componentWillUnmount() {
-      $("#modal_removetask_"+this.props.task._id).modal('close');
+
+  cancel(){
+    console.log('removeTask', this.props.cancel)
+    this.props.cancel()
+    $('#modal_removetask').modal('close');
   }
 
-  handleRemoveTask(event){
-   event.preventDefault();
-    this.setState({error : false, pending : true}, () => {
-        var filter = {_id:this.props.task._id}
-        this.props.socket.emit('/api/task/delete', filter, res => {
-            if(res.tasks) {
-                this.setState({error : false, pending : false}, () => $("#modal_removetask_"+this.props.task._id).modal('close'));
-            }
-            if (res.error) {
-                this.setState({error : res.error, pending : false}, () => $("#modal_removetask_"+this.props.task._id).modal('close'));
-            }
-        })
-    })
-  };
 
   render() {
     return (
-    <div id={"modal_removetask_"+this.props.task._id} className="modal">
+    <div id="modal_removetask" className="modal">
         <div className="rezbuild center" style={{marginBottom:'0'}}>
             <h4 className="white-text" style={{lineHeight:'150%'}}>Remove task</h4>
         </div>
@@ -51,10 +40,10 @@ class RemoveTaskFormCore extends Component {
               <h5 className="rezbuild-text">Do you want to remove <strong style={{fontWeight:'900'}}>{this.props.task.name}</strong> ?</h5>
               </div>
               <div className="input-field col s6 right-align">
-                  <a className="btn waves-effect waves-light" href="#!" onClick={this.handleRemoveTask}>YES</a>
+                  <a className="btn waves-effect waves-light" href="#!">YES</a>
               </div>
               <div className="input-field col s6 left-align">
-                  <a className="btn waves-effect waves-light white rezbuild-text" href="#!"  onClick={() => $("#modal_removetask_"+this.props.task._id).modal('close')}>NO</a>
+                  <a className="btn waves-effect waves-light white rezbuild-text" href="#!"  onClick={this.cancel}>NO</a>
               </div>
                 { this.state.pending ?
                  <div className="preloader-wrapper small active">

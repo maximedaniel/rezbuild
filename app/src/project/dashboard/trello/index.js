@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Board from 'react-trello'
-import _ from 'lodash'
 import CardComponent from './card'
+import BacklogTaskForm from './backlogTask'
 import TodoTaskForm from './todoTask'
 import DoneTaskForm from './doneTask'
 import CreateTaskForm from './card/createTask'
@@ -13,17 +13,6 @@ const normalCardStyle = {
     minWidth: '200px',
     width: '200px',
     maxWidth: '200px',
-    marginBottom: '10px',
-    color:'#000',
-    backgroundColor:'#fff',
-    padding: '0',
-    fontFamily: 'Exo 2',
-    textShadow:"-1px -1px 0 #fff, 1px -1px 0 #fff,  -1px 1px 0 #fff, 1px 1px 0 #fff"
-}
-const selectedCardStyle = {
-    minWidth: '210px',
-    width: '210px',
-    maxWidth: '210px',
     marginBottom: '10px',
     color:'#000',
     backgroundColor:'#fff',
@@ -68,28 +57,86 @@ class TrelloComponent extends Component {
       cardId: cardId,
       index: 0
     }
-    if(sourceLaneId === targetLaneId) {
-      this.state.eventBus.publish(cancel)
+    if(cardDetails.enabled){
+      if(sourceLaneId === 'lane_backlog'){
+        if(targetLaneId === 'lane_todo'){
+          this.setState(
+            {
+            cancel: cancel,
+            task: cardDetails
+            }, () => {$('#modal_todotask').modal('open');})
+          return
+        }
+        if(targetLaneId === 'lane_done'){
+          this.setState(
+            {
+            cancel: cancel,
+            task: cardDetails
+            }, () => {$('#modal_donetask').modal('open');})
+          return
+        }
+      }
+      if(sourceLaneId === 'lane_todo'){
+        if(targetLaneId === 'lane_backlog'){
+          this.setState(
+            {
+            cancel: cancel,
+            task: cardDetails
+            }, () => {$('#modal_backlogtask').modal('open');})
+          return
+        }
+        if(targetLaneId === 'lane_done'){
+          this.setState(
+            {
+            cancel: cancel,
+            task: cardDetails
+            }, () => {$('#modal_donetask').modal('open');})
+          return
+        }
+      }
+      if(sourceLaneId === 'lane_done'){
+        if(targetLaneId === 'lane_todo'){
+          this.setState(
+            {
+            cancel: null,
+            task: null
+            }, () => {this.state.eventBus.publish(cancel);})
+          return
+        }
+        if(targetLaneId === 'lane_backlog'){
+          this.setState(
+            {
+            cancel: cancel,
+            task: cardDetails
+            }, () => {$('#modal_backlogtask').modal('open');})
+          return
+        }
+      }
     }
-    else {
-      this.setState(
-             {
-             cancel: cancel,
-             task: cardDetails
-             }, () => {
-             if(sourceLaneId === 'lane_done'){
-                 this.cancel()
-             }
-             else if(sourceLaneId !== targetLaneId){
-                 if(targetLaneId === 'lane_todo'){
-                     $('#modal_todotask').modal('open');
-                 }
-                 if(targetLaneId === 'lane_done'){
-                     $('#modal_donetask').modal('open');
-                 }
-             }
-         })
-    }
+    this.setState(
+      {
+      cancel: null,
+      task: null
+      }, () => {this.state.eventBus.publish(cancel);})
+    return
+
+    /*this.setState(
+            {
+            cancel: cancel,
+            task: cardDetails
+            }, () => {
+            if(sourceLaneId === 'lane_done'){
+                this.cancel()
+            }
+            else if(sourceLaneId !== targetLaneId){
+                if(targetLaneId === 'lane_todo'){
+                    $('#modal_todotask').modal('open');
+                }
+                if(targetLaneId === 'lane_done'){
+                    $('#modal_donetask').modal('open');
+                }
+            }
+        })*/
   }
 
   cancel(){this.state.eventBus.publish(this.state.cancel)}
@@ -122,7 +169,51 @@ class TrelloComponent extends Component {
           style: lanesStyle
         }
      ]
-      for (var task of this.props.tasks){
+
+     lanes.forEach(lane => {
+        this.props.tasks.forEach(task => {
+          if(task.action === 'INIT') return
+          if(lane.id === task.lane){
+            task.id = task._id
+            task.enabled = false
+            task.focused = false
+            task.dashed = false
+            task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
+            task.style = normalCardStyle
+            if(this.props.task){
+              /* BACKLOG */
+              var prevTaskIds = [] 
+              var ascend = (taskId, prevTaskIds) => {
+                prevTaskIds.push(taskId)
+                var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
+                currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
+              }
+              ascend(this.props.task._id, prevTaskIds)
+
+              if(lane.id === 'lane_backlog'){
+                if(common.STATUS[this.props.task.action].includes(task.action)){
+                  task.enabled = true
+                }
+
+              }
+              /* BACKLOG */
+              if(lane.id === 'lane_todo'){
+                task.enabled = prevTaskIds.includes(task._id)
+                task.focused = task.dashed =  this.props.task._id === task._id
+                
+              }
+              /* DONE */
+              if(lane.id === 'lane_done'){
+                task.enabled = prevTaskIds.includes(task._id)
+                task.focused = this.props.task._id === task._id
+              }
+            }
+
+            lane.cards.push(task);
+          }
+        })
+     })
+      /*for (var task of this.props.tasks){
         var prevTaskIds = [] 
 
         var ascend = (taskId, prevTaskIds) => {
@@ -135,25 +226,27 @@ class TrelloComponent extends Component {
         for (var lane of lanes){
           if(lane.id === task.lane){
                 task.id = task._id
-                task.enabled = true
+                task.enabled = false
                 task.focused = false
+                task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
                 task.style = normalCardStyle
                 if(task.lane !== "lane_done" && this.props.task && common.STATUS[this.props.task.action].includes(task.action)){
-                    
-                  lane.cards.push(task);
+                  task.enabled = true    
                 }
 
                 if(task.lane === "lane_done" && this.props.task && prevTaskIds.includes(task._id)){
+                    task.enabled = true    
                     task.focused = this.props.task._id === task._id
                     task.style =  task.focused? selectedCardStyle:normalCardStyle
-                    lane.cards.push(task);
                 }
                 if(!this.props.task){
-                    lane.cards.push(task);
+                    task.enabled = true    
                 }
+                task.cardDraggable = task.enabled 
+                lane.cards.push(task);
           }
         }
-      }
+      }*/
 
     const data = {lanes: lanes}
     this.setState({data:data});
@@ -177,6 +270,7 @@ class TrelloComponent extends Component {
 
   render() {
         let trelloComponent;
+        let backlogTaskFormComponent;
         let todoTaskFormComponent;
         let doneTaskFormComponent;
         let createTaskFormComponent;
@@ -200,8 +294,10 @@ class TrelloComponent extends Component {
                 </Board>
           }
           if (this.state.task && this.state.cancel){
-            todoTaskFormComponent =  <TodoTaskForm  selectedTask={this.props.task} task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
+            backlogTaskFormComponent =  <BacklogTaskForm  setTask={this.props.setTask} selectedTask={this.props.task} tasks={this.props.tasks} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />
+            todoTaskFormComponent =  <TodoTaskForm  selectedTask={this.props.task} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />
             doneTaskFormComponent =  <DoneTaskForm   selectedTask={this.props.task}  task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
+         
           }
           createTaskButtonComponent = <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_createtask">
                                           <i className="material-icons">add</i>
@@ -214,6 +310,7 @@ class TrelloComponent extends Component {
                 {createTaskButtonComponent}
                 {createTaskFormComponent}
                 {trelloComponent}
+                {backlogTaskFormComponent}
                 {todoTaskFormComponent}
                 {doneTaskFormComponent}
          </div>

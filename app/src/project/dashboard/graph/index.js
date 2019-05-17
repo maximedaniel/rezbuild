@@ -33,13 +33,13 @@ class GraphComponent extends Component {
           var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
           return task.action.includes('ASIS')
         })
-        asisTaskIds.map((asisTaskId, index) => {
+        asisTaskIds.forEach((asisTaskId, index) => {
           var nextTask = this.props.tasks.filter ((task) => (task._id === asisTaskId))[0]
           links.push({
             task: nextTask,
             source: {x: x, y: y},
             target: {x: x + childWidth, y: y + (index * childHeight)},
-            dashed : ("0, 0"),
+            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
             color: "#f7931e"
           })
           iterate(nextTask,  x + childWidth, y + (index * childHeight), width, childHeight, nodes, links)
@@ -51,13 +51,13 @@ class GraphComponent extends Component {
           return task.action.includes('TOBE')
         })
 
-        tobeTaskIds.map((tobeTaskId, index) => {
+        tobeTaskIds.forEach((tobeTaskId, index) => {
           var nextTask = this.props.tasks.filter ((task) => (task._id === tobeTaskId))[0]
           links.push({
             task: nextTask,
             source: {x: x, y: y},
             target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
-            dashed : ("0, 0"),
+            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
             color: "#f7931e"
           })
           iterate(nextTask,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
@@ -70,13 +70,13 @@ class GraphComponent extends Component {
           return task.action.includes('KPI')
         })
 
-        kpiTaskIds.map((kpiTaskId, index) => {
+        kpiTaskIds.forEach((kpiTaskId, index) => {
           var nextTask = this.props.tasks.filter ((task) => (task._id === kpiTaskId))[0]
           links.push({
             task: nextTask,
             source: {x: x, y: y},
             target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
-            dashed : ("3, 3"),
+            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
             color: "#f7931e"
           })
           iterate(nextTask,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
@@ -175,7 +175,8 @@ class GraphComponent extends Component {
         .y( d => d.y)
         .curve(d3.curveMonotoneX);
 
-        const link = svg.append("g")
+        /* LINKS */
+        svg.append("g")
         .selectAll("path")
         .data(this.state.links)
         .enter()
@@ -191,7 +192,9 @@ class GraphComponent extends Component {
         .attr("fill", "none");
       
         const sizeLabel = 12
-        const label = svg.append("g")
+        
+        /* LABELS */
+        svg.append("g")
         .selectAll("text")
         .data(this.state.links)
         .enter()
@@ -209,16 +212,17 @@ class GraphComponent extends Component {
         .attr("stroke-linejoin", "miter")
         .attr("font-weight", "800");
 
-        const circles = svg.append("g")
+        /* CIRCLES */
+        svg.append("g")
         .selectAll("circle")
         .data(this.state.nodes.filter(d => d.task.action.includes('ASIS') || d.task.action.includes('INIT')))
         .enter()
         .append("circle")
         .attr("stroke", "#f7931e")
-        .attr("stroke-width", 2)
         .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
         .attr("r", d => {return (d.selected)?radius_max:radius_min})
         .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
+        .style("stroke-dasharray", d => d.dashed)
         .attr("fill",  "#fff")
         .on("click", (d, i, n) => {
              if(d.selected){
@@ -226,20 +230,20 @@ class GraphComponent extends Component {
              } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
          })
         .on("mouseover", function(d, i) {
-         if(!d.selected){
-             d3.select(this)
-             .transition()
-             .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
-             .duration(transition_duration);
-         }
+          if(!d.selected){
+              d3.select(this)
+              .transition()
+              .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
+              .duration(transition_duration);
+          }
          })
         .on("mouseout", function(d, i) {
-         if(!d.selected){
-             d3.select(this)
-             .transition()
-             .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-             .duration(transition_duration);
-         }
+          if(!d.selected){
+              d3.select(this)
+              .transition()
+              .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+              .duration(transition_duration);
+          }
          });
 
        /* const circles = svg.append("g")
@@ -275,7 +279,8 @@ class GraphComponent extends Component {
             }
             });*/
 
-        const rects = svg.append("g")
+        /* RECTS */
+            svg.append("g")
             .selectAll("rect")
             .data(this.state.nodes.filter(d => d.task.action.includes('TOBE')))
             .enter()
@@ -294,24 +299,24 @@ class GraphComponent extends Component {
               
              })
             .on("mouseover", function(d, i) {
-             if(!d.selected){
-                 d3.select(this)
-                 .transition()
-                 .attr("transform", d => "translate(" + (d.x - radius_max)+ "," + ( d.y - radius_max)+ ") scale("+selectionScale+")")
-                 .duration(transition_duration);
-             }
+              if(!d.selected){
+                  d3.select(this)
+                  .transition()
+                  .attr("transform", d => "translate(" + (d.x - radius_max)+ "," + ( d.y - radius_max)+ ") scale("+selectionScale+")")
+                  .duration(transition_duration);
+              }
              })
             .on("mouseout", function(d, i) {
-             if(!d.selected){
-                 d3.select(this)
-                 .transition()
-                 .attr("transform", d => "translate(" + (d.x - radius_min)+ "," + (d.y - radius_min) + ")")
-                 .duration(transition_duration);
-             }
+              if(!d.selected){
+                  d3.select(this)
+                  .transition()
+                  .attr("transform", d => "translate(" + (d.x - radius_min)+ "," + (d.y - radius_min) + ")")
+                  .duration(transition_duration);
+              }
              });  
 
-        
-        const triangles = svg.append("g")
+        /* TRIANGLES */
+        svg.append("g")
              .selectAll("path")
              .data(this.state.nodes.filter(d => d.task.action.includes('KPI')))
              .enter()
@@ -329,26 +334,25 @@ class GraphComponent extends Component {
              //.attr("width", d => {return ((d.selected)?radius_max:radius_min)*2})
              //.attr("height", d => {return ((d.selected)?radius_max:radius_min)*2})
              .on("click", (d, i, n) => {
-              if(d.selected){
-                this.props.setTask(null)
-              } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
-              
+                if(d.selected){
+                  this.props.setTask(null)
+                } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
               })
              .on("mouseover", function(d, i) {
-              if(!d.selected){
-                  d3.select(this)
-                  .transition()
-                  .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
-                  .duration(transition_duration);
-              }
+                if(!d.selected){
+                    d3.select(this)
+                    .transition()
+                    .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
+                    .duration(transition_duration);
+                }
               })
              .on("mouseout", function(d, i) {
-              if(!d.selected){
-                  d3.select(this)
-                  .transition()
-                  .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-                  .duration(transition_duration);
-              }
+                if(!d.selected){
+                    d3.select(this)
+                    .transition()
+                    .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+                    .duration(transition_duration);
+                }
               });
    }
 

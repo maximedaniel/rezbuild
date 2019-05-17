@@ -12,9 +12,10 @@ class DashboardCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {task: null, tasks: [],  error: false, pending: false}
+    this.state = {task: null, tasks: [], users: [],  error: false, pending: false}
     this.setTask = this.setTask.bind(this)
     this.fetchTasks = this.fetchTasks.bind(this)
+    this.fetchUsers = this.fetchUsers.bind(this)
   }
 
   fetchTasks(){
@@ -31,8 +32,32 @@ class DashboardCore extends Component {
     });
   }
 
+  fetchUsers(){
+    this.setState({users: [], error : false, pending : true}, () => {
+      var filter = {_id: this.props.project._id }
+      this.props.socket.emit('/api/project/get', filter, res => {
+          if(res.projects){
+              var filter = {_id: { "$in" : res.projects[0].users}}
+              this.props.socket.emit('/api/user/get', filter, res => {
+                  if(res.users){
+                      console.log(res.users)
+                      this.setState({users : res.users, error : false, pending : false})
+                  }
+                  if(res.error){
+                      this.setState({users : null, error : false, pending : false});
+                  }
+              });
+          }
+          if(res.error){
+              this.setState({users : null, error : false, pending : false});
+          }
+      });
+    });
+  }
+
   update(){
     this.fetchTasks()
+    this.fetchUsers()
   }
 
   setTask(task){
@@ -46,7 +71,11 @@ class DashboardCore extends Component {
     this.update()
     this.props.socket.on('/api/task/done', () => {
     console.log('received /api/task/done...')
-    this.update()
+    this.fetchTasks()
+    });
+    this.props.socket.on('/api/user/done', () => {
+    console.log('received /api/user/done...')
+    this.fetchUsers()
     });
   }
 
@@ -109,12 +138,13 @@ class DashboardCore extends Component {
               <div className='row'   style={{marginBottom:0}}>
                  <div className="col s8 transparent">
                                 <h5 className="rezbuild-text">Tasks</h5>
-                                { (this.state.tasks.length > 0) ?
+                                { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
                                      <TrelloComponent
                                        project = {this.props.project}
                                        tasks = {this.state.tasks}
                                        task = {this.state.task}
                                        setTask = {this.setTask}
+                                       users = {this.state.users}
                                       />
                                       : loaderComponent}
                                 

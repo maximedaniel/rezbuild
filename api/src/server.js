@@ -25,7 +25,6 @@ app.use('/:taskId/:filename', (req, res, next) => {
     catch(err){
       res.send(err)
     }
-
 })
 /*app.use('/:taskId/', (req, res, next) => {
   var dirPath = fileDir+'/'+ req.params.taskId

@@ -43,12 +43,10 @@ class CreateTaskFormCore extends Component {
   submit(event){
    event.preventDefault();
    if(this.props.task){
+     /*
        var filter = {_id: this.props.task._id}
        var update = {
-          //date: {type: Date, default: Date.now},
-          //revision: this.props.task.revision,
           project: this.props.project._id,
-          //lane:   {type: String, default: 'lane_backlog'},
           name: this.refs.name.value,
           content:  this.refs.content.value,
           startDate: this.state.startDate,
@@ -65,25 +63,26 @@ class CreateTaskFormCore extends Component {
                     this.setState({pending:false, error: res.error})
                 }
             });
-       })
+       })*/
    }
    else {
        var create = {
-          //date: {type: Date, default: Date.now},
           project: this.props.project._id,
-          //lane:   {type: String, default: 'lane_backlog'},
           name: this.refs.name.value,
+          lane:  'lane_backlog',
           content:  this.refs.content.value,
-          startDate: this.state.startDate,
-          endDate: this.state.endDate,
-          roles: $("#select_roles option:selected").map(function() {return $(this).val();}).get(),
-          actions: $("#select_actions option:selected").map(function() {return $(this).val();}).get()
+          roles: [].filter.call(this.refs.roles.options, o => o.selected).map(o => o.value),
+          action: this.refs.action.value,
+          format: common.ACTIONS[this.refs.action.value].format
         }
 
        this.setState({pending:true, error: false}, () => {
             this.props.socket.emit('/api/task/create', create, res => {
                 if(res.tasks){
-                    this.setState({pending:false, error: false}, () => $('#modal_createtask' + this.state.id).modal('close'))
+                    this.setState({pending:false, error: false}, () => {
+                      $('#modal_createtask' + this.state.id).modal('close')
+                      this.props.socket.emit('/api/task/done')
+                  })
                 }
                 if(res.error){
                     this.setState({pending:false, error: res.error})
@@ -146,7 +145,7 @@ class CreateTaskFormCore extends Component {
                      </div>
                      <div className="row">
                       <div className="input-field col s6">
-                        <select multiple required defaultValue={["Customer"]} id={"select_roles"+ this.state.id}>
+                        <select multiple required defaultValue={["Customer"]} id={"select_roles"+ this.state.id} ref="roles">
                           <option value="" disabled>Choose role(s)</option>
                           <option name="roles" value="Customer" id="role_customer">Customer</option>
                           <option name="roles" value="Designer" id="role_designer">Designer</option>
@@ -155,7 +154,7 @@ class CreateTaskFormCore extends Component {
                         <label>Authorized Role(s)</label>
                       </div>
                       <div className="input-field col s6">
-                        <select multiple required defaultValue={["NEW_FILE"]} id={"select_actions"+ this.state.id}>
+                        <select required defaultValue={common.ACTIONS.NEW_MODEL_ASIS} id={"select_actions"+ this.state.id} ref="action">
                           <option value="" disabled>Choose action(s)</option>
                             {
                              Object.entries(common.ACTIONS).map(([key, value]) => {
