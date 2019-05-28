@@ -106,9 +106,9 @@ class ProjectListCore extends Component {
             
         }
         return (
-                 <div className='container transparent' style={{marginTop:'2rem'}}>
+                 <div className='container' style={{marginTop:'2rem'}}>
                     <div className='row'>
-                      <div className='col s12'>
+                      <div className='col s12 white'>
                                {projectListComponent}
                       </div>
                       <div className='col s12 center'>

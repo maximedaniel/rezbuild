@@ -6,8 +6,9 @@ import SigninForm from './signin'
 import SignupForm from './signup'
 import RezbuildComponent from './home'
 import ProjectComponent from './project'
+import TechnologyLibraryComponent from './technologyLibrary'
 import io from 'socket.io-client';
-import SocketIOFileUpload  from 'socketio-file-upload';
+import SocketIOFileUpload  from 'socketio-file-upload'
 import SocketContext from './SocketContext'
 
 class App extends Component {
@@ -53,6 +54,7 @@ class App extends Component {
                     <Route path ='/' component={RezbuildComponent} />
                     <Route path='/signin' component={SigninForm} />
                     <Route path='/signup' component={SignupForm} />
+                    <Route path='/technologies' component={TechnologyLibraryComponent} />
                     <Route path='/:_id' component={ProjectComponent} />
                     <Route path='/:_id/signin' component={SigninForm} />
                     <Route path='/:_id/signup' component={SignupForm} />

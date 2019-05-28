@@ -55,7 +55,7 @@ class SigninFormCore extends Component {
   render() {
      return (
     <div className="row" style={{paddingTop:'25vh'}}>
-          <div className="col push-l4 l4 push-m3 m6 push-s1 s10 center white" style={{padding:'0rem', fontSize:'0'}}>
+          <div className="col push-l4 l4 push-m3 m6 push-s1 s10 center white z-depth-1" style={{padding:'0rem', fontSize:'0'}}>
               <div className="col s12 center rezbuild">
                 <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
               </div>

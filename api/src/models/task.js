@@ -15,8 +15,9 @@ var body = {
 
   roles: [String],
   action: String,
-  value: String,
-  format: String,
+  names: [String],
+  values: [String],
+  formats: [String],
   files: [String],
   prev: [{type: Schema.Types.ObjectId, ref: 'Task'}],
   next: [{type: Schema.Types.ObjectId, ref: 'Task'}]

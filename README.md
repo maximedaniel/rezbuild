@@ -17,14 +17,19 @@ Realisation
 
 
 # Task
-V - Filtrer/GRISER  tâches non réalisables
-- assign User to Task
-- Ajouter KPI à ASIS MODEL
-- Integrer données entrées au projet
-- Integrer liste des KPI
-- move to next node when created
-- disabled multiple todo task sequence ?
+~ - Integrer données entrées au projet (manque dernier onglet)
+X - move to next node when created
+V - disabled multiple todo task sequence ?
+
+X -  Ajouter KPI à ASIS MODEL
+X - Integrer liste des KPI par category
 
 # Tools
-- OpenBimLibraryTool
-- RankingTechnologyTool
+V - OpenBimLibraryTool -> 
+V - RankingTechnologyTool -> rezbuild-sorter.herokuapp.com
+
+# Rendu
+
+X - Live Demo -> rezbuildapp.estia.fr
+X - Rezbuild Docker Image -> dockerhub
+X - Rezbuild Source Code -> github

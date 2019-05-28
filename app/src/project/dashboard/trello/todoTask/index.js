@@ -44,8 +44,9 @@ class TodoTaskFormCore extends Component {
         endDate: this.state.endDate,
         roles: this.props.task.roles,
         action: this.props.task.action,
-        value: this.props.task.value,
-        format:  this.props.task.format,
+        names: this.props.task.names,
+        formats:  this.props.task.formats,
+        values: this.props.task.values,
         files: this.props.task.files,
         prev: [this.props.selectedTask._id],
         next: []

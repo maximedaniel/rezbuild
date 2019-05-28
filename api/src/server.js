@@ -18,6 +18,17 @@ var serveIndex = require('serve-index')
 var app = express();
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
+app.use('/ifc/:Id', (req, res, next) => {
+  try {
+    var splittedId = req.params.Id.split('_', 2)
+    var taskId = splittedId[0]
+    var filename = splittedId[1] + '.ifc'
+    res.sendFile(fileDir + "/" + taskId + "/" + filename, { root: __dirname })
+  }
+  catch(err){
+    res.send(err)
+  }
+})
 app.use('/:taskId/:filename', (req, res, next) => {
     try {
       res.sendFile(fileDir + "/" + req.params.taskId + "/" + req.params.filename, { root: __dirname })
@@ -70,7 +81,7 @@ var session = require('express-session')({
 });
 var sharedsession = require("express-socket.io-session");
 app.use(session);
-io.set('origins', '*:*');
+io.set('origins',  '*:*');
 io.use(sharedsession(session));
 
 
@@ -85,7 +96,7 @@ io.on('connection', function(client){
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
     require('./routes/project')(io, client)
-    require('./routes/task')(io, client)
+    require('./routes/task')(io, client) // test
     require('./routes/file')(io, client, uploader)
 });
 
