@@ -3,6 +3,7 @@ import TrelloComponent from './trello'
 import FileExplorerComponent from './fileExplorer'
 import GraphComponent from './graph'
 import TeamComponent from './team'
+import ProjectInformationComponent from './projectInformation'
 import { ParentSize } from '@vx/responsive'
 import SocketContext from '../../SocketContext'
 
@@ -94,11 +95,12 @@ class DashboardCore extends Component {
         return  (
            <div>
            <div className="row">
-                    <div className="col s12">
+                    <div className="col s12 white">
                       <ul className="tabs">
-                        <li className="tab col s3"><a className="active" href="#tab_board">Workspace</a></li>
-                        <li className="tab col s3"><a href="#tab_project">Tools</a></li>
-                        <li className="tab col s3"><a href="#tab_team">Settings</a></li>
+                        <li className="tab col s2"><a className="active" href="#tab_board">Workspace</a></li>
+                        <li className="tab col s2"><a href="#tab_tools">Tools</a></li>
+                        <li className="tab col s2"><a href="#tab_team">Team</a></li>
+                        <li className="tab col s3"><a href="#tab_project">Project Information</a></li>
                       </ul>
                     </div>
            </div>
@@ -134,9 +136,9 @@ class DashboardCore extends Component {
                       </div>
                  </div>
              </div>
-             <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
-              <div className='row'   style={{marginBottom:0}}>
-                 <div className="col s8 transparent">
+             <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
+              <div className='row'>
+                 <div className="col s12 transparent">
                                 <h5 className="rezbuild-text">Tasks</h5>
                                 { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
                                      <TrelloComponent
@@ -149,7 +151,7 @@ class DashboardCore extends Component {
                                       : loaderComponent}
                                 
                  </div>
-                 <div className="col s4 transparent">
+                 <div className="col s12 transparent">
                                 <h5 className="rezbuild-text">Files</h5>
                                 { (this.state.tasks.length > 0) ?
                                      <FileExplorerComponent
@@ -159,31 +161,64 @@ class DashboardCore extends Component {
                                        setTask = {this.setTask}
                                       />
                                   : ''}
-                                
                  </div>
-                 
               </div>
              </div>
-
            </div>
-
+          <div id="tab_tools" className="col s12">
+            <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+                <div className="row transparent"  style={{marginBottom:0}}>
+                    <div className="col s12 transparent">
+                            <div className="section" style={{height:'250px', paddingBottom:0}}>
+                              <div className="col s12 m6">
+                                <div className="card white">
+                                  <div className="card-content black-text">
+                                    <span className="card-title rezbuild-text">OpenBimLibraryTool</span>
+                                    <p>Description of OpenBimLibraryTool...</p>
+                                  </div>
+                                  <div class="card-action">
+                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="/technologies">OPEN IN NEW TAB</a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col s12 m6">
+                                <div className="card white">
+                                  <div className="card-content black-text">
+                                    <span className="card-title rezbuild-text">RankingTechnologyTool</span>
+                                    <p>Description of RankingTechnologyTool...</p>
+                                  </div>
+                                  <div class="card-action">
+                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="http://rezbuild-sorter.herokuapp.com">OPEN IN NEW TAB</a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+          </div>
            <div id="tab_team" className="col s12">
              <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
-                 <div className="row transparent"  style={{marginBottom:0}}>
-                      <div className="col l6 s12 transparent">
-                            <h5 className="rezbuild-text">Team</h5>
-                             <div className="section" style={{height:'250px', paddingBottom:0}}>
+                 <div className="row transparent">
+                      <div className="col s12 transparent">
+                             <div className="section">
                                 <TeamComponent project={this.props.project} params={this.props.params}/>
                              </div>
                       </div>
-                      <div className="col l6 s12 transparent">
-                            <h5 className="rezbuild-text">Project</h5>
-                             <div className="section" style={{height:'250px', paddingBottom:0}}>
-                             </div>
-                      </div>
                  </div>
               </div>
            </div>
+          <div id="tab_project" className="col s12">
+            <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+                <div className="row transparent">
+                    <div className="col s12 transparent">
+                            <div className="section">
+                              <ProjectInformationComponent  project={this.props.project} params={this.props.params}/>
+                            </div>
+                    </div>
+                </div>
+            </div>
+          </div>
          </div>
         );
     }

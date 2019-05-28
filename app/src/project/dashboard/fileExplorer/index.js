@@ -5,6 +5,7 @@ import FileBrowser, {Icons}  from 'react-keyed-file-browser';
 import { throws } from 'assert';*/
 import SocketContext from '../../../SocketContext'
 import common from 'common'
+import { futimes } from 'fs';
 var $ = window.$
 
 
@@ -12,42 +13,46 @@ class FileExplorerCore extends Component {
 
     constructor(props){
         super(props)
-        var attributes = [...new Set(Object.keys(common.ACTIONS).map(key =>  {var arg = key.split('_'); arg.shift(); return arg.join('_') }))]
-        this.state = {attributes: attributes, error: false, pending: false}
+        this.state = {error: false, pending: false}
     }
 
     fetchFiles() {
         this.setState({asisTask: null, tobeTask: null, kpiTask: null, error: false, pending: true}, () => {
             if(this.props.task){
-                var getLastAsisTask = (taskId) => {
+                var getLastParentTaskWithAction = (taskId, action) => {
                     var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-                    if(currTask.action.includes('ASIS')) return currTask
-                    return currTask.prev.map((prevTaskId) => getLastAsisTask(prevTaskId))[0]
+                    if(currTask.action.includes(action)) return currTask
+                    return currTask.prev.map((prevTaskId) => getLastParentTaskWithAction(prevTaskId, action))[0]
                 }
-    
-                var getLastTobeTask = (taskId) => {
+                /*var getLastChildrenTaskWithAction = (taskId, action) => {
                     var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-                    if(currTask.action.includes('TOBE')) return currTask
-                    return currTask.prev.map((prevTaskId) => getLastTobeTask(prevTaskId))[0]
-                }
-    
-                var getLastKpiTask = (taskId) => {
-                  var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-                  if(currTask.action.includes('KPI')) return currTask
-                  return currTask.prev.map((prevTaskId) => getLastKpiTask(prevTaskId))[0]
-                }
-    
+                    if(currTask.action.includes(action)) return currTask
+                    return currTask.next.map((nextTaskId) => getLastChildrenTaskWithAction(nextTaskId, action))[0]
+                }*/
                 this.setState({
-                    asisTask: getLastAsisTask(this.props.task._id),
-                    tobeTask: getLastTobeTask(this.props.task._id),
-                    kpiTask:  getLastKpiTask(this.props.task._id),
-                    error: false, pending: false})
+                asisModelTask :getLastParentTaskWithAction(this.props.task._id, 'MODEL_ASIS'),
+                asisEnvironmentalTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_ENVIRONMENTAL_ASIS'),
+                asisEconomicalTask :getLastParentTaskWithAction(this.props.task._id, 'KPI_ECONOMICAL_ASIS'),
+                asisSocialTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_SOCIAL_ASIS'),
+                asisEnergicalTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_ENERGICAL_ASIS'),
+                asisComfortTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_COMFORT_ASIS'),
+                tobeModelTask : getLastParentTaskWithAction(this.props.task._id, 'MODEL_TOBE'),
+                tobeEconomicalTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_ECONOMICAL_TOBE'),
+                tobeEnvironmentalTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_ENVIRONMENTAL_TOBE'),
+                tobeSocialTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_SOCIAL_TOBE'),
+                tobeEnergicalTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_ENERGICAL_TOBE'),
+                tobeComfortTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_COMFORT_TOBE'),
+                error: false, pending: false}, () => console.log(this.state))
             }
         })
     }
    
    componentDidMount(){
        this.fetchFiles()
+       $(document).ready(function(){
+         $('ul.tabs').tabs();
+       });
+
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -59,134 +64,468 @@ class FileExplorerCore extends Component {
 
     render(){
        let asisModelViewer;
-       let asisFileExplorer;
+       let asisModelFileExplorer;
+       let asisEconomicalKpiViewer;
+       let asisSocialKpiViewer;
+       let asisEnvironmentalKpiViewer;
+       let asisComfortKpiViewer;
+       let asisEnergicalKpiViewer;
        let tobeModelViewer;
-       let tobeFileExplorer;
-       let kpiValueViewer;
-       let kpiFileExplorer;
+       let tobeModelFileExplorer;
+       let tobeEconomicalKpiViewer;
+       let tobeSocialKpiViewer;
+       let tobeEnvironmentalKpiViewer;
+       let tobeComfortKpiViewer;
+       let tobeEnergicalKpiViewer;
        
-       if(this.state.asisTask){
+       if(this.state.asisModelTask){
         asisModelViewer = <div>
                             {
-                                this.state.asisTask.files ?
+                                this.state.asisModelTask.values.length ?
                                 <div style={{width:"auto", height:'315px', position: 'relative'}}>
                                     <iframe
                                     width="100%"
                                     height="100%"
-                                    src="https://www.youtube.com/embed/suNadRnHy-U"
+                                    src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
-                                    >é
+                                    >
                                     </iframe>
                                     <a className="btn rezbuild col s2 right-align"
                                     style={{position:"absolute", top:"10px", right:"10px"}}
-                                    href={"http://" + this.props.host + "/" + this.state.asisTask._id + "/" + this.state.asisTask.value} >
+                                    href={"http://" + this.props.host + "/" + this.state.asisModelTask._id + "/" + this.state.asisModelTask.values[0]} >
                                     <i className="material-icons white-text">cloud_download</i>
                                     </a>
                                 </div> : ""
                             }
                             </div>
-        asisFileExplorer = <ul className="collection black-text">
-                                { this.state.asisTask.files ?
-                                    this.state.asisTask.files.map((filename, index) => {
-                                        
-                                                return <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+        asisModelFileExplorer = <ul className="collection black-text">
+                                { this.state.asisModelTask.files.length ?
+                                    this.state.asisModelTask.files.map((filename, index) => 
+                                                <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
                                                     <p className="col s10">{filename} </p>
-                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisTask._id + "/" + filename}>
+                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisModelTask._id + "/" + filename}>
                                                         <i className="material-icons white-text">cloud_download</i>
                                                     </a>
                                                 </li>
-                                    }) : ""
+                                    ) : ""
                                 }
                             </ul>
 
        }
-       if(this.state.tobeTask){
+       if(this.state.asisEconomicalTask){
+        asisEconomicalKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.asisEconomicalTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.asisEconomicalTask.values[index]}</td>
+                                <td>{this.state.asisEconomicalTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.asisEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.asisEconomicalTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEconomicalTask._id + "/" + this.state.asisEconomicalTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       if(this.state.asisEnergicalTask){
+        asisEnergicalKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.asisEnergicalTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.asisEnergicalTask.values[index]}</td>
+                                <td>{this.state.asisEnergicalTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.asisEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.asisEnergicalTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEnergicalTask._id + "/" + this.state.asisEnergicalTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       if(this.state.asisSocialTask){
+        asisSocialKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.asisSocialTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.asisSocialTask.values[index]}</td>
+                                <td>{this.state.asisSocialTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.asisSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.asisSocialTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisSocialTask._id + "/" + this.state.asisSocialTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       if(this.state.asisEnvironmentalTask){
+        asisEnvironmentalKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.asisEnvironmentalTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.asisEnvironmentalTask.values[index]}</td>
+                                <td>{this.state.asisEnvironmentalTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.asisEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.asisEnvironmentalTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEnvironmentalTask._id + "/" + this.state.asisEnvironmentalTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       
+       if(this.state.asisComfortTask){
+        asisComfortKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.asisComfortTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.asisComfortTask.values[index]}</td>
+                                <td>{this.state.asisComfortTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.asisComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.asisComfortTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisComfortTask._id + "/" + this.state.asisComfortTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+
+
+
+
+       if(this.state.tobeModelTask){
         tobeModelViewer = <div>
                             {
-                                this.state.tobeTask.files ?
+                                this.state.tobeModelTask.values.length ?
                                 <div style={{width:"auto", height:'315px', position: 'relative'}}>
                                     <iframe
                                     width="100%"
                                     height="100%"
-                                    src="https://www.youtube.com/embed/suNadRnHy-U"
+                                    src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.tobeModelTask._id + "_" + this.state.tobeModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
-                                    >é
+                                    >
                                     </iframe>
                                     <a className="btn rezbuild col s2 right-align"
                                     style={{position:"absolute", top:"10px", right:"10px"}}
-                                    href={"http://" + this.props.host + "/" + this.state.tobeTask._id + "/" + this.state.tobeTask.value} >
+                                    href={"http://" + this.props.host + "/" + this.state.tobeModelTask._id + "/" + this.state.tobeModelTask.values[0]} >
                                     <i className="material-icons white-text">cloud_download</i>
                                     </a>
                                 </div> : ""
                             }
                             </div>
-        tobeFileExplorer = <ul className="collection black-text">
-                                { this.state.tobeTask.files ?
-                                    this.state.tobeTask.files.map((filename, index) => {
-                                        
-                                                return <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+        tobeModelFileExplorer = <ul className="collection black-text">
+                                { this.state.tobeModelTask.files.length ?
+                                    this.state.tobeModelTask.files.map((filename, index) => 
+                                                <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
                                                     <p className="col s10">{filename} </p>
-                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeTask._id + "/" + filename}>
+                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeModelTask._id + "/" + filename}>
                                                         <i className="material-icons white-text">cloud_download</i>
                                                     </a>
                                                 </li>
-                                    }) : ""
+                                    ) : ""
                                 }
                             </ul>
 
-        }
-        if(this.state.kpiTask){
-        kpiFileExplorer = <ul className="collection black-text">
-                                { this.state.kpiTask.files ?
-                                    this.state.kpiTask.files.map((filename, index) => {
-                                        
-                                                return <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
-                                                    <p className="col s10">{filename} </p>
-                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.kpiTask._id + "/" + filename}>
-                                                        <i className="material-icons white-text">cloud_download</i>
-                                                    </a>
-                                                </li>
-                                    }) : ""
-                                }
-                            </ul>
-
-        }
-        var sectionStyle = {
+       }
+       if(this.state.tobeEconomicalTask){
+        tobeEconomicalKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.tobeEconomicalTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.tobeEconomicalTask.values[index]}</td>
+                                <td>{this.state.tobeEconomicalTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.tobeEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.tobeEconomicalTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEconomicalTask._id + "/" + this.state.tobeEconomicalTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       if(this.state.tobeEnergicalTask){
+        tobeEnergicalKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.tobeEnergicalTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.tobeEnergicalTask.values[index]}</td>
+                                <td>{this.state.tobeEnergicalTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.tobeEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.tobeEnergicalTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEnergicalTask._id + "/" + this.state.tobeEnergicalTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       if(this.state.tobeSocialTask){
+        tobeSocialKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.tobeSocialTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.tobeSocialTask.values[index]}</td>
+                                <td>{this.state.tobeSocialTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.tobeSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.tobeSocialTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeSocialTask._id + "/" + this.state.tobeSocialTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       if(this.state.tobeEnvironmentalTask){
+        tobeEnvironmentalKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.tobeEnvironmentalTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.tobeEnvironmentalTask.values[index]}</td>
+                                <td>{this.state.tobeEnvironmentalTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.tobeEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.tobeEnvironmentalTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEnvironmentalTask._id + "/" + this.state.tobeEnvironmentalTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }
+       
+       if(this.state.tobeComfortTask){
+        tobeComfortKpiViewer = 
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Format</th>
+                    <th>File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        this.state.tobeComfortTask.names.map((name, index) => 
+                            <tr>
+                                <td>{name}</td>
+                                <td>{this.state.tobeComfortTask.values[index]}</td>
+                                <td>{this.state.tobeComfortTask.formats[index]}</td>
+                                <td>
+                                    <li className="collection-item valign-wrapper" value={this.state.tobeComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{this.state.tobeComfortTask.files[index]} </p>
+                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeComfortTask._id + "/" + this.state.tobeComfortTask.files[index]}>
+                                            <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+       }       
+        /*var sectionStyle = {
             borderRadius: '3px',
             margin: '5px 5px',
             padding:'10px', 
             backgroundColor:  'rgba(247,147,30,.5)'
-        }
+        }*/
         var titleStyle = {
-            textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"
+            //textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"
+            color: '#000'
         }
         return (
          <div>
-            <div className="section  white-text" style={sectionStyle}>
+            <div className="section white white-text z-depth-1" style={{paddingTop:0}}>
                 <div className= "row" style={{marginBottom:0}}>
-                    <h6 style={titleStyle}><b>ASIS MODEL & FILES</b></h6>
-                    {asisModelViewer}
-                    {asisFileExplorer}
-
-                </div>
-            </div>
-
-            <div className="section  white-text" style={sectionStyle}>
-                <div className= "row" style={{marginBottom:0}}>
-                    <h6 style={titleStyle}><b>TOBE MODEL & FILES</b></h6>
-                    {tobeModelViewer}
-                    {tobeFileExplorer}
-                </div>
-            </div>
-            <div className="section  white-text" style={sectionStyle}>
-                <div className= "row" style={{marginBottom:0}}>
-                    <h6 style={titleStyle}><b>KPI & FILES</b></h6>
-                    {kpiValueViewer}
-                    {kpiFileExplorer}
+                        <div className="col s12">
+                        <ul className="tabs">
+                            <li className="tab col s4"><a href="#asis">ASIS</a></li>
+                            <li className="tab col s4"><a href="#tobe">TOBE</a></li>
+                        </ul>
+                        </div>
+                        <div id="asis" className="col s12 grey-text">
+                            <h6>MODEL</h6>
+                            {asisModelViewer}
+                            {asisModelFileExplorer}
+                            <h6>ECONOMICAL KPIs</h6>
+                            {asisEconomicalKpiViewer}
+                            <h6>ENERGICAL KPIs</h6>
+                            {asisEnergicalKpiViewer}
+                            <h6>SOCIAL KPIs</h6>
+                            {asisSocialKpiViewer}
+                            <h6>ENVIRONMENTAL KPIs</h6>
+                            {asisEnvironmentalKpiViewer}
+                            <h6>COMFORT KPIs</h6>
+                            {asisComfortKpiViewer}
+                        </div>
+                        <div id="tobe" className="col s12 grey-text">
+                            <h6>MODEL</h6>
+                            {tobeModelViewer}
+                            {tobeModelFileExplorer}
+                            <h6>ECONOMICAL KPIs</h6>
+                            {tobeEconomicalKpiViewer}
+                            <h6>ENERGICAL KPIs</h6>
+                            {tobeEnergicalKpiViewer}
+                            <h6>SOCIAL KPIs</h6>
+                            {tobeSocialKpiViewer}
+                            <h6>ENVIRONMENTAL KPIs</h6>
+                            {tobeEnvironmentalKpiViewer}
+                            <h6>COMFORT KPIs</h6>
+                            {tobeComfortKpiViewer}
+                        </div>
                 </div>
             </div>
           </div>

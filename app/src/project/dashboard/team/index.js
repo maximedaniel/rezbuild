@@ -74,10 +74,10 @@ class TeamCore extends Component {
             if (this.state.users){
 
                 usersComponent =
-                        <ul className="collection">
+                        <ul className="collection" style={{border:0}}>
                         {this.state.users.map((collaborator, index) =>
                             <li className="collection-item avatar" key={index}>
-                              <i className="medium material-icons circle rezbuild-text" style={{fontSize:'42px'}}>account_circle</i>
+                              <i className="medium material-icons circle white rezbuild-text" style={{fontSize:'42px'}}>account_circle</i>
                               <span className="title rezbuild-text" style={{fontWeight:'900'}}>{collaborator.firstname} {collaborator.lastname}</span>
                               <p>{collaborator.roles}</p>
                               <a href={"mailto:"+collaborator.email} className="secondary-content"><i className="material-icons">email</i></a>
@@ -98,7 +98,7 @@ class TeamCore extends Component {
 
 
         return (
-                <div>
+                <div className="col s12 white z-depth-1" style={{paddingTop:'0.5rem'}} >
                     {errorComponent}
                     {preloaderComponent}
                     {addUserButtonComponent}

@@ -31,7 +31,7 @@ class GraphComponent extends Component {
         var startIndex = 0
         var asisTaskIds = task.next.filter(nextTaskId => {
           var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
-          return task.action.includes('ASIS')
+          return task.action.includes('MODEL_ASIS')
         })
         asisTaskIds.forEach((asisTaskId, index) => {
           var nextTask = this.props.tasks.filter ((task) => (task._id === asisTaskId))[0]
@@ -48,7 +48,7 @@ class GraphComponent extends Component {
 
         var tobeTaskIds = task.next.filter(tobeTaskId => {
           var task = this.props.tasks.filter(task => (task._id === tobeTaskId))[0]
-          return task.action.includes('TOBE')
+          return task.action.includes('MODEL_TOBE')
         })
 
         tobeTaskIds.forEach((tobeTaskId, index) => {
@@ -215,7 +215,7 @@ class GraphComponent extends Component {
         /* CIRCLES */
         svg.append("g")
         .selectAll("circle")
-        .data(this.state.nodes.filter(d => d.task.action.includes('ASIS') || d.task.action.includes('INIT')))
+        .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_ASIS') || d.task.action.includes('INIT')))
         .enter()
         .append("circle")
         .attr("stroke", "#f7931e")
@@ -282,7 +282,7 @@ class GraphComponent extends Component {
         /* RECTS */
             svg.append("g")
             .selectAll("rect")
-            .data(this.state.nodes.filter(d => d.task.action.includes('TOBE')))
+            .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_TOBE')))
             .enter()
             .append("rect")
             .attr("stroke", "#f7931e")

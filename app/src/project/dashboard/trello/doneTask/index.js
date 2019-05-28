@@ -27,15 +27,33 @@ class DoneTaskFormCore extends Component {
    event.preventDefault()
    this.setState({pending:true, error: false}, () => {
     if(this.props.task.lane === "lane_todo"){
-        this.props.uploader.submitFiles(this.refs.files.files)
-        if(this.refs.file) this.props.uploader.submitFiles(this.refs.file.files)
+
         var filter = {_id: this.props.task._id}
         var update = {
             user: "token",
             lane: 'lane_done',
-            files: Array.from(this.refs.files.files).map(file => file.name),
-            value:  (this.refs.file)? this.refs.file.files[0].name : this.refs.value.value
+            names: [],
+            values: [],
+            files: []
         }
+
+        var allAttachedFiles = [];
+
+        this.props.task.names.map((name, index) => {
+            update.names.push(name)
+            
+            var value = (this.refs[name].files)?this.refs[name].files[0].name:this.refs[name].value
+            update.values.push(value)
+
+            var file = this.refs['files_'+name].files[0].name
+            update.files.push(file)
+
+            if(this.refs[name].files) allAttachedFiles.push(this.refs[name].files[0])
+            allAttachedFiles.push(this.refs['files_'+name].files[0])
+        })
+
+        this.props.uploader.submitFiles(allAttachedFiles)
+
         this.props.socket.emit('/api/task/update', filter, update, res => {
             if(res.tasks){
                 this.setState({pending:false, error: false}, () => {
@@ -60,8 +78,9 @@ class DoneTaskFormCore extends Component {
             user: 'token',
             roles: this.props.task.roles,
             action: this.props.task.action,
-            value: this.props.task.value,
-            format:  this.props.task.format,
+            names: this.props.task.names,
+            values: this.props.task.values,
+            formats:  this.props.task.formats,
             files: this.props.task.files,
             prev: [this.props.selectedTask._id],
             next: []
@@ -69,14 +88,30 @@ class DoneTaskFormCore extends Component {
         this.props.socket.emit('/api/task/create', create, res => {
             if(res.tasks){
                 this.setState({newTaskId: res.tasks._id}, () =>{
-                    this.props.uploader.submitFiles(this.refs.files.files)
-                    if(this.refs.file) this.props.uploader.submitFiles(this.refs.file.files)
-
                     var filter = {_id: this.state.newTaskId}
                     var update = {
-                        files: Array.from(this.refs.files.files).map(file => file.name),
-                        value:  (this.refs.file)? this.refs.file.files[0].name : this.refs.value.value
+                        names: [],
+                        values: [],
+                        files: []
                     }
+                    
+                    var allAttachedFiles = [];
+
+                    this.props.task.names.map((name, index) => {
+                        update.names.push(name)
+                        
+                        var value = (this.refs[name].files)?this.refs[name].files[0].name:this.refs[name].value
+                        update.values.push(value)
+
+                        var file = this.refs['files_'+name].files[0].name
+                        update.files.push(file)
+
+                        if(this.refs[name].files) allAttachedFiles.push(this.refs[name].files[0])
+                        allAttachedFiles.push(this.refs['files_'+name].files[0])
+                    })
+                    
+                    this.props.uploader.submitFiles(allAttachedFiles)
+
                     this.props.socket.emit('/api/task/update', filter, update, res => {
                         if(res.tasks){
                             var filter = {_id: this.props.selectedTask._id}
@@ -95,9 +130,6 @@ class DoneTaskFormCore extends Component {
                             this.setState({pending:false, error: res.error})
                         }
                     }) 
-
-                    
-
                 })
             }
             if(res.error){
@@ -141,57 +173,54 @@ class DoneTaskFormCore extends Component {
 
     let formBody;
     let body;
-    let fileBody;
 
     if(this.props.task){
         formBody =  <div>
-                        {
-                            this.props.task.format.startsWith('.') ? 
-                            <div>
-                                <div className="col l2 m4">
-                                    { !this.props.task.action.includes('NEW') ?
-                                        <a className="btn white col s6"  id= {"button_"+ this.props.task.action}  style={{height:'3rem', lineHeight:'3rem'}}>
-                                            <i className="material-icons rezbuild-text ">cloud_download</i>
-                                        </a> : ""}
-                                </div> 
-                                <div className="file-field input-field col l10 m8 pull-l1 pull-m2" style={{marginTop:'0'}}>
+                        {  
+                            this.props.task.names.map((name, index) => 
+                                <div className="row">
+                                {
+                                    this.props.task.formats[index].startsWith('.') ? 
+                                        <div className="file-field input-field col s6" style={{marginTop:'0'}}>
+                                            <h6 className="grey-text">{name}</h6>
+                                            <div className="btn rezbuild col s1">
+                                            <i className="material-icons white-text">cloud_upload</i>
+                                            <input required type="file" id={"values_"+this.props.task._id+'_'+name}  ref={name} accept={this.props.task.formats[index]}/>
+                                            </div>
+                                            <div className="file-path-wrapper col s11">
+                                            <input className="file-path validate" type="text"
+                                                placeholder={"Upload " + name}
+                                            />
+                                            </div>
+                                        </div>
+                                        :
+                                        <div className="input-field col s6">
+                                            <input required id={"values_"+this.props.task._id+'_'+name}  ref={name} type="number" className="validate" />
+                                            <label htmlFor={"values_"+this.props.task._id+'_'+name}>{name} ({this.props.task.formats[index]})</label>
+                                        </div>
+                                }
+                                <div className="file-field input-field col s6" style={{marginTop:'0'}}>
+                                        <h6 className="grey-text">Attached file(s)</h6>
                                         <div className="btn rezbuild col s1">
                                         <i className="material-icons white-text">cloud_upload</i>
-                                        <input required type="file" id={"file_"+this.props.task.action} ref="file" accept={this.props.task.format}/>
+                                        <input required type="file" id={"files_" +this.props.task._id+'_'+name}  ref= {'files_'+name}/>
                                         </div>
                                         <div className="file-path-wrapper col s11">
                                         <input className="file-path validate" type="text"
-                                            placeholder={"Upload " + this.props.task.action.replace('_',' ').toLowerCase()}
+                                            placeholder="Upload attached file"
                                         />
                                         </div>
                                 </div>
-                            </div>
-                            :
-                            <div className="input-field col s12 m6 l4">
-                                <input required id={"value_" + this.props.task._id}  ref="value" type="number" className="validate" />
-                                <label htmlFor={this.props.task.action}>{this.props.task.name.replace('_',' ')} ({this.props.task.format.toLowerCase()})</label>
-                            </div>
+                                </div>
+                            )
                         }
-                        <div className="file-field input-field col l10 m8 push-l1 pull-m2" style={{marginTop:'0'}}>
-                                <div className="btn rezbuild col s1">
-                                <i className="material-icons white-text">cloud_upload</i>
-                                <input required type="file" id={"files_" + this.props.task._id}  ref= "files" multiple/>
-                                </div>
-                                <div className="file-path-wrapper col s11">
-                                <input className="file-path validate" type="text"
-                                    placeholder="Upload attached file(s)"
-                                />
-                                </div>
-                        </div>
-
                     </div>
-
     body =
         <div>
             <div className="rezbuild center" style={{marginBottom:'0'}}>
             <h4 className="white-text" style={{lineHeight:'150%'}}>Actions to complete <b>{this.props.task.name}</b></h4>
             </div>
-            <div className="modal-content">
+            <div className="modal-content" style={{padding:0}}>
                   <form className="col s12" onSubmit={this.submit}>
                      <div className="row">
                         {formBody}
