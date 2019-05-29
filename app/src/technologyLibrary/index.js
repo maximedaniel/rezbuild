@@ -1,15 +1,9 @@
 import React, { Component } from 'react'
-import {browserHistory} from 'react-router'
-import common from 'common'
 
 var $ = window.$
 
 class TechnologyLibraryComponent extends Component {
-
-  constructor(props){
-   super(props);
-  }
-
+    
   componentDidMount() {
       $(document).ready(function() {
         //M.FormSelect.init($('#roles'), {});

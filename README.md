@@ -17,6 +17,7 @@ Realisation
 
 
 # Task
+V - create Task
 ~ - Integrer données entrées au projet (manque dernier onglet)
 X - move to next node when created
 V - disabled multiple todo task sequence ?
@@ -24,12 +25,4 @@ V - disabled multiple todo task sequence ?
 X -  Ajouter KPI à ASIS MODEL
 X - Integrer liste des KPI par category
 
-# Tools
-V - OpenBimLibraryTool -> 
-V - RankingTechnologyTool -> rezbuild-sorter.herokuapp.com
 
-# Rendu
-
-X - Live Demo -> rezbuildapp.estia.fr
-X - Rezbuild Docker Image -> dockerhub
-X - Rezbuild Source Code -> github

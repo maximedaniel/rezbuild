@@ -11,16 +11,13 @@ class ProjectInformationCore extends Component {
     this.state = {project : null,  error : false, pending : false}
   }
   submit(event){
-    console.log('SUBMIT!')
     event.preventDefault();
      this.setState({error : false, pending : true}, () => {
          var filter = {_id: this.props.project._id}
          var update = {}
          Object.keys(this.refs).forEach(key => {
            var value = this.refs[key].value
-           console.log(key, value)
            if(value === "on") value = $('#'+key).is(':checked')
-           console.log(key, value)
            update[key] = value
            }
          );

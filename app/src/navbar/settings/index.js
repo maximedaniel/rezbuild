@@ -80,11 +80,11 @@ class SettingsFormCore extends Component {
                         <label>Role(s)</label>
                       </div>
                         <div className="input-field col s6" style={{lineHeight:'1.5'}}>
-                              <input id="input_email" ref="email" name="email" type="email"  defaultValue={this.props.user.email} required/>
+                              <input id="input_email" ref="email" name="email" type="email"  autoComplete="username email" defaultValue={this.props.user.email} required/>
                               <label className="active" htmlFor="input_email">Email</label>
                         </div>
                         <div className="input-field col s6" style={{lineHeight:'1.5'}}>
-                              <input id="input_password" ref="password" type="password" name="password" required/>
+                              <input id="input_password" ref="password" type="password" name="password" autoComplete="current-password" required/>
                               <label className="active" htmlFor="input_password">New Password</label>
                         </div>
                      </div>

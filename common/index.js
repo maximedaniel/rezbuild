@@ -6,7 +6,7 @@ var common = {
     },
     ROLES: {
         CUSTOMER: {name: 'Customer', description: 'The customer is...'},
-        DESIGNER: {name: 'Designer', description: 'The customer is...'},
+        DESIGNER: {name: 'Designer', description: 'The designer is...'},
         ARCHITECT: {name: 'Architect', description: 'The architect is...'},
     },
     STATUS: {
@@ -40,6 +40,7 @@ var common = {
                 'Benefit Cost Ratio (BC Ratio)',
                 'National Inflation Rate',
                 'Real Estate Assessment to Sales Ratio',
+                'Real Estate Coefficient of Dispersion',
                 'Pay Back Time (PBT)',
                 'Return on Investments (ROI)',
 
@@ -111,8 +112,8 @@ var common = {
                 "GWP - GhGs",
                 "Energy class of the building",
                 "Sustainable resource use",
-                ],
-                format: [
+                ], //38
+                formats: [
                     "Electric/Thermal/etc.",
                     "toe",
                     "toe",
@@ -335,6 +336,7 @@ var common = {
             formats: ['.ifc'],
             values: ['']
         },
+        
         KPI_ECONOMICAL_TOBE: {
             names: [
                 'Internal Rate of Return (IRR)',
@@ -345,6 +347,7 @@ var common = {
                 'Benefit Cost Ratio (BC Ratio)',
                 'National Inflation Rate',
                 'Real Estate Assessment to Sales Ratio',
+                'Real Estate Coefficient of Dispersion',
                 'Pay Back Time (PBT)',
                 'Return on Investments (ROI)',
 
@@ -417,7 +420,7 @@ var common = {
                 "Energy class of the building",
                 "Sustainable resource use",
                 ],
-                format: [
+                formats: [
                     "Electric/Thermal/etc.",
                     "toe",
                     "toe",

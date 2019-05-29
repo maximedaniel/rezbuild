@@ -17,15 +17,9 @@ class App extends Component {
     super(props);
     let {host} = window.location
     if(host.indexOf(':') !== -1){
-        console.log("running on localhost...")
-        console.log("before : ", host)
         host = host.replace('3000','3001')
-        console.log("after : ", host)
     } else {
-        console.log("running on distanthost...")
-        console.log("before : ", host)
         host = host.replace('app','api')
-        console.log("after : ", host)
     }
     var socket = io(host)
     var uploader = new SocketIOFileUpload(socket);

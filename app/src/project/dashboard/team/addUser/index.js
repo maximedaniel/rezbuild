@@ -46,7 +46,6 @@ class AddUserFormCore extends Component {
 
   handleCopyUrl(event){
    event.preventDefault();
-   console.log("handleCopyUrl")
    $('#input_projecturl').select();
    document.execCommand('copy');
 
@@ -66,7 +65,6 @@ class AddUserFormCore extends Component {
            var filter = {_id: this.props.params._id}
            var update = {"$push" : {users : user._id}}
            this.props.socket.emit('/api/project/update', filter, update, res => {
-                console.log(res)
                 if (res.projects) {
                     this.setState({error : false, pending : false}, () => {
                         $('#modal_adduser').modal('close');

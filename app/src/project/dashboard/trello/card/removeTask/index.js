@@ -17,12 +17,11 @@ class RemoveTaskFormCore extends Component {
   }
 
   componentDidMount() {
-      $("#modal_removetask").modal();
+      $("#modal_removetask").modal({dismissible: false});
   }
 
 
   cancel(){
-    console.log('removeTask', this.props.cancel)
     this.props.cancel()
     $('#modal_removetask').modal('close');
   }

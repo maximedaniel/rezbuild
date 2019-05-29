@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import SocketContext from '../../../../SocketContext'
-import DatePicker from 'react-datepicker'
 import "../../../../../node_modules/react-datepicker/dist/react-datepicker.css"
-import common from 'common'
-//import fs, {createReadStream} from 'fs';
 axios.defaults.withCredentials = true
 
 var $ = window.$
@@ -39,17 +36,22 @@ class DoneTaskFormCore extends Component {
 
         var allAttachedFiles = [];
 
-        this.props.task.names.map((name, index) => {
+        this.props.task.names.forEach((name, index) => {
             update.names.push(name)
             
             var value = (this.refs[name].files)?this.refs[name].files[0].name:this.refs[name].value
             update.values.push(value)
-
-            var file = this.refs['files_'+name].files[0].name
+            
+            var file = ""
+            if(this.refs['files_'+name].files.length)  {
+                file = this.refs['files_'+name].files[0].name
+                allAttachedFiles.push(this.refs['files_'+name].files[0])
+            }
             update.files.push(file)
 
-            if(this.refs[name].files) allAttachedFiles.push(this.refs[name].files[0])
-            allAttachedFiles.push(this.refs['files_'+name].files[0])
+            if(this.refs[name].files && this.refs[name].files.length){
+                allAttachedFiles.push(this.refs[name].files[0])
+            }
         })
 
         this.props.uploader.submitFiles(allAttachedFiles)
@@ -97,17 +99,23 @@ class DoneTaskFormCore extends Component {
                     
                     var allAttachedFiles = [];
 
-                    this.props.task.names.map((name, index) => {
+                    this.props.task.names.forEach((name, index) => {
                         update.names.push(name)
                         
                         var value = (this.refs[name].files)?this.refs[name].files[0].name:this.refs[name].value
                         update.values.push(value)
 
-                        var file = this.refs['files_'+name].files[0].name
+                        var file = ""
+                        if(this.refs['files_'+name].files.length)  {
+                            file = this.refs['files_'+name].files[0].name
+                            allAttachedFiles.push(this.refs['files_'+name].files[0])
+                        }
                         update.files.push(file)
 
-                        if(this.refs[name].files) allAttachedFiles.push(this.refs[name].files[0])
-                        allAttachedFiles.push(this.refs['files_'+name].files[0])
+            
+                        if(this.refs[name].files && this.refs[name].files.length){
+                            allAttachedFiles.push(this.refs[name].files[0])
+                        }
                     })
                     
                     this.props.uploader.submitFiles(allAttachedFiles)
@@ -152,15 +160,12 @@ class DoneTaskFormCore extends Component {
     });
 
     $(document).ready(() => {
-        $('#modal_donetask').modal();
+        $('#modal_donetask').modal({dismissible: false});
         this.props.uploader.addEventListener("progress", (event) => {
             this.setState({progress: (event.bytesLoaded / event.file.size * 100).toFixed(0)}, () => {
-                //console.log("File is", this.state.progress, "percent loaded");
             })
         });
         this.props.uploader.addEventListener("complete", (event) => {
-            //console.log(event.success);
-            //console.log(event.file);
         });
     })
   }
@@ -195,15 +200,15 @@ class DoneTaskFormCore extends Component {
                                         </div>
                                         :
                                         <div className="input-field col s6">
-                                            <input required id={"values_"+this.props.task._id+'_'+name}  ref={name} type="number" className="validate" />
-                                            <label htmlFor={"values_"+this.props.task._id+'_'+name}>{name} ({this.props.task.formats[index]})</label>
+                                            <input required id={"values_"+this.props.task._id+'_'+name}  ref={name} type="number" className="validate"  defaultValue={this.props.task.values[index]}/>
+                                            <label className="active" htmlFor={"values_"+this.props.task._id+'_'+name}>{name} ({this.props.task.formats[index]})</label>
                                         </div>
                                 }
                                 <div className="file-field input-field col s6" style={{marginTop:'0'}}>
-                                        <h6 className="grey-text">Attached file(s)</h6>
+                                        <h6 className="grey-text">Attached file</h6>
                                         <div className="btn rezbuild col s1">
                                         <i className="material-icons white-text">cloud_upload</i>
-                                        <input required type="file" id={"files_" +this.props.task._id+'_'+name}  ref= {'files_'+name}/>
+                                        <input type="file" id={"files_" +this.props.task._id+'_'+name}  ref= {'files_'+name}/>
                                         </div>
                                         <div className="file-path-wrapper col s11">
                                         <input className="file-path validate" type="text"

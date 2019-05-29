@@ -33,9 +33,7 @@ class SignupFormCore extends Component {
             lastname : this.refs.lastname.value.toUpperCase(),
             roles : $("#select_signup_roles  option:selected").map(function() {return $(this).val();}).get(),
         }
-        console.log(create)
         this.props.socket.emit('/api/signup', create, res => {
-            console.log(res)
             if (res.user) {
                 this.setState({error : false, pending : false}, () =>{
                     browserHistory.push(((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')
