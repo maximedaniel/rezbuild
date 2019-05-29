@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker.css"
 import SocketContext from '../../../../../SocketContext'
-import MDReactComponent from 'markdown-react-js'
 import common from 'common'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -98,10 +94,10 @@ class CreateTaskFormCore extends Component {
 
   componentDidMount(){
     $(document).ready(() => {
-        $('#modal_createtask'+ this.state.id).modal();
+        $('#modal_createtask'+ this.state.id).modal({dismissible: false});
         $('ul.tabs').tabs();
         $('select').material_select();
-        $('#modal_createtask'+ this.state.id).modal();
+        $('#modal_createtask'+ this.state.id).modal({dismissible: false});
     });
   }
   componentDidUpdate(prevProps, prevState) {
@@ -111,10 +107,6 @@ class CreateTaskFormCore extends Component {
   }
 
   render() {
-    const fileFormats = [ '.csv', '.doc', '.docx', '.pdf', '.txt', '.ifc', '.xlsx', '.xlsx']
-    const colorCategories = [ '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4',
-    '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722',
-    '#795548', '#9e9e9e', '#607d8b', '#000000', '#ffffff', '#f7931e']
     let taskFormBody;
     taskFormBody =
         <div>

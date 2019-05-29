@@ -61,11 +61,11 @@ class SigninFormCore extends Component {
               </div>
              <form className="col s12" onSubmit={this.handleSubmit}>
                 <div className="input-field col s12">
-                      <input id="input_email" name='email' ref="email" type="email" required/>
+                      <input id="input_email" name='email' ref="email" type="email" autoComplete="username email" required/>
                       <label htmlFor="input_email">Email</label>
                 </div>
                 <div className="input-field col s12">
-                      <input id="input_password" name='password' ref="password" type="password" required/>
+                      <input id="input_password" name='password' ref="password" type="password" autoComplete="current-password" required/>
                       <label htmlFor="input_password">Password</label>
                 </div>
 

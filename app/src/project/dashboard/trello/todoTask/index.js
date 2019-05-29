@@ -85,7 +85,7 @@ class TodoTaskFormCore extends Component {
 
   componentDidMount(){
     $(document).ready(() => {
-        $('#modal_todotask').modal();
+        $('#modal_todotask').modal({dismissible: false});
         $('select').material_select();
     })
   }

@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-/*import SocketContext from './SocketContext'
-import common from 'common'
-import FileBrowser, {Icons}  from 'react-keyed-file-browser';
-import { throws } from 'assert';*/
 import SocketContext from '../../../SocketContext'
-import common from 'common'
-import { futimes } from 'fs';
+
 var $ = window.$
 
 
@@ -42,7 +37,7 @@ class FileExplorerCore extends Component {
                 tobeSocialTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_SOCIAL_TOBE'),
                 tobeEnergicalTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_ENERGICAL_TOBE'),
                 tobeComfortTask : getLastParentTaskWithAction(this.props.task._id, 'KPI_COMFORT_TOBE'),
-                error: false, pending: false}, () => console.log(this.state))
+                error: false, pending: false})
             }
         })
     }
@@ -80,15 +75,16 @@ class FileExplorerCore extends Component {
        
        if(this.state.asisModelTask){
         asisModelViewer = <div>
+                            <h6>MODEL</h6>
                             {
                                 this.state.asisModelTask.values.length ?
                                 <div style={{width:"auto", height:'315px', position: 'relative'}}>
                                     <iframe
+                                    title="ASIS MODEL VIEWER"
                                     width="100%"
                                     height="100%"
                                     src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
-                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                     >
                                     </iframe>
@@ -116,6 +112,8 @@ class FileExplorerCore extends Component {
        }
        if(this.state.asisEconomicalTask){
         asisEconomicalKpiViewer = 
+        <div>
+        <h6>ECONOMICAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -133,21 +131,25 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.asisEconomicalTask.values[index]}</td>
                                 <td>{this.state.asisEconomicalTask.formats[index]}</td>
                                 <td>
+                                    { this.state.asisEconomicalTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisEconomicalTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEconomicalTask._id + "/" + this.state.asisEconomicalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+        </div>
        }
        if(this.state.asisEnergicalTask){
         asisEnergicalKpiViewer = 
+        <div>
+        <h6>ENERGICAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -165,21 +167,25 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.asisEnergicalTask.values[index]}</td>
                                 <td>{this.state.asisEnergicalTask.formats[index]}</td>
                                 <td>
+                                    { this.state.asisEnergicalTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisEnergicalTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEnergicalTask._id + "/" + this.state.asisEnergicalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+            </div>
        }
        if(this.state.asisSocialTask){
         asisSocialKpiViewer = 
+        <div>
+        <h6>SOCIAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -197,21 +203,25 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.asisSocialTask.values[index]}</td>
                                 <td>{this.state.asisSocialTask.formats[index]}</td>
                                 <td>
+                                    { this.state.asisSocialTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisSocialTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisSocialTask._id + "/" + this.state.asisSocialTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+            </div>
        }
        if(this.state.asisEnvironmentalTask){
         asisEnvironmentalKpiViewer = 
+        <div>
+        <h6>ENVIRONMENTAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -229,22 +239,26 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.asisEnvironmentalTask.values[index]}</td>
                                 <td>{this.state.asisEnvironmentalTask.formats[index]}</td>
                                 <td>
+                                    { this.state.asisEnvironmentalTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisEnvironmentalTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEnvironmentalTask._id + "/" + this.state.asisEnvironmentalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+        </div>
        }
        
        if(this.state.asisComfortTask){
         asisComfortKpiViewer = 
+        <div>
+        <h6>COMFORT KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -262,18 +276,19 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.asisComfortTask.values[index]}</td>
                                 <td>{this.state.asisComfortTask.formats[index]}</td>
                                 <td>
-                                    <li className="collection-item valign-wrapper" value={this.state.asisComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                    { this.state.asisComfortTask.files[index] !== "" ?  <li className="collection-item valign-wrapper" value={this.state.asisComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisComfortTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisComfortTask._id + "/" + this.state.asisComfortTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+        </div>
        }
 
 
@@ -281,15 +296,16 @@ class FileExplorerCore extends Component {
 
        if(this.state.tobeModelTask){
         tobeModelViewer = <div>
+                            <h6>MODEL</h6>
                             {
                                 this.state.tobeModelTask.values.length ?
                                 <div style={{width:"auto", height:'315px', position: 'relative'}}>
                                     <iframe
+                                    title="TOBE MODEL VIEWER"
                                     width="100%"
                                     height="100%"
                                     src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.tobeModelTask._id + "_" + this.state.tobeModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
-                                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                     >
                                     </iframe>
@@ -317,6 +333,8 @@ class FileExplorerCore extends Component {
        }
        if(this.state.tobeEconomicalTask){
         tobeEconomicalKpiViewer = 
+        <div>
+        <h6>ECONOMICAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -334,21 +352,24 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.tobeEconomicalTask.values[index]}</td>
                                 <td>{this.state.tobeEconomicalTask.formats[index]}</td>
                                 <td>
-                                    <li className="collection-item valign-wrapper" value={this.state.tobeEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                    { this.state.tobeEconomicalTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeEconomicalTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEconomicalTask._id + "/" + this.state.tobeEconomicalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : '' }
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+        </div>
        }
        if(this.state.tobeEnergicalTask){
         tobeEnergicalKpiViewer = 
+        <div>
+        <h6>ENERGICAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -366,21 +387,25 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.tobeEnergicalTask.values[index]}</td>
                                 <td>{this.state.tobeEnergicalTask.formats[index]}</td>
                                 <td>
-                                    <li className="collection-item valign-wrapper" value={this.state.tobeEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                    
+                                    { this.state.tobeEnergicalTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeEnergicalTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEnergicalTask._id + "/" + this.state.tobeEnergicalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+        </div>
        }
        if(this.state.tobeSocialTask){
         tobeSocialKpiViewer = 
+        <div>
+        <h6>SOCIAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -398,21 +423,24 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.tobeSocialTask.values[index]}</td>
                                 <td>{this.state.tobeSocialTask.formats[index]}</td>
                                 <td>
-                                    <li className="collection-item valign-wrapper" value={this.state.tobeSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                    { this.state.tobeSocialTask.files[index] !== "" ?  <li className="collection-item valign-wrapper" value={this.state.tobeSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeSocialTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeSocialTask._id + "/" + this.state.tobeSocialTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+        </div>
        }
        if(this.state.tobeEnvironmentalTask){
         tobeEnvironmentalKpiViewer = 
+            <div>
+            <h6>ENVIRONMENTAL KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -430,22 +458,25 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.tobeEnvironmentalTask.values[index]}</td>
                                 <td>{this.state.tobeEnvironmentalTask.formats[index]}</td>
                                 <td>
-                                    <li className="collection-item valign-wrapper" value={this.state.tobeEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                    { this.state.tobeEnvironmentalTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeEnvironmentalTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEnvironmentalTask._id + "/" + this.state.tobeEnvironmentalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+            </div>
        }
        
        if(this.state.tobeComfortTask){
         tobeComfortKpiViewer = 
+            <div>
+            <h6>COMFORT KPIs</h6>
             <table className="col s12 white center">
                <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
@@ -463,18 +494,19 @@ class FileExplorerCore extends Component {
                                 <td>{this.state.tobeComfortTask.values[index]}</td>
                                 <td>{this.state.tobeComfortTask.formats[index]}</td>
                                 <td>
-                                    <li className="collection-item valign-wrapper" value={this.state.tobeComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                    {  this.state.tobeComfortTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeComfortTask.files[index]} </p>
                                         <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeComfortTask._id + "/" + this.state.tobeComfortTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
-                                    </li>
+                                    </li> : ''}
                                 </td>
                             </tr>
                         )
                   }
               </tbody>
             </table>
+            </div>
        }       
         /*var sectionStyle = {
             borderRadius: '3px',
@@ -482,48 +514,37 @@ class FileExplorerCore extends Component {
             padding:'10px', 
             backgroundColor:  'rgba(247,147,30,.5)'
         }*/
-        var titleStyle = {
-            //textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"
+        /*var titleStyle = {
+            textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"
             color: '#000'
-        }
+        }*/
+        
         return (
          <div>
             <div className="section white white-text z-depth-1" style={{paddingTop:0}}>
                 <div className= "row" style={{marginBottom:0}}>
                         <div className="col s12">
                         <ul className="tabs">
-                            <li className="tab col s4"><a href="#asis">ASIS</a></li>
-                            <li className="tab col s4"><a href="#tobe">TOBE</a></li>
+                            <li className="tab col s5"><a href="#asis">ASIS</a></li>
+                            <li className="tab col s5"><a href="#tobe">TOBE</a></li>
                         </ul>
                         </div>
                         <div id="asis" className="col s12 grey-text">
-                            <h6>MODEL</h6>
                             {asisModelViewer}
                             {asisModelFileExplorer}
-                            <h6>ECONOMICAL KPIs</h6>
                             {asisEconomicalKpiViewer}
-                            <h6>ENERGICAL KPIs</h6>
                             {asisEnergicalKpiViewer}
-                            <h6>SOCIAL KPIs</h6>
                             {asisSocialKpiViewer}
-                            <h6>ENVIRONMENTAL KPIs</h6>
                             {asisEnvironmentalKpiViewer}
-                            <h6>COMFORT KPIs</h6>
                             {asisComfortKpiViewer}
                         </div>
                         <div id="tobe" className="col s12 grey-text">
-                            <h6>MODEL</h6>
                             {tobeModelViewer}
                             {tobeModelFileExplorer}
-                            <h6>ECONOMICAL KPIs</h6>
                             {tobeEconomicalKpiViewer}
-                            <h6>ENERGICAL KPIs</h6>
                             {tobeEnergicalKpiViewer}
-                            <h6>SOCIAL KPIs</h6>
                             {tobeSocialKpiViewer}
-                            <h6>ENVIRONMENTAL KPIs</h6>
                             {tobeEnvironmentalKpiViewer}
-                            <h6>COMFORT KPIs</h6>
                             {tobeComfortKpiViewer}
                         </div>
                 </div>

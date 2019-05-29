@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import SocketContext from '../../../../SocketContext'
-import DatePicker from 'react-datepicker'
 import "../../../../../node_modules/react-datepicker/dist/react-datepicker.css"
 axios.defaults.withCredentials = true
 

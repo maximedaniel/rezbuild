@@ -41,7 +41,6 @@ class DashboardCore extends Component {
               var filter = {_id: { "$in" : res.projects[0].users}}
               this.props.socket.emit('/api/user/get', filter, res => {
                   if(res.users){
-                      console.log(res.users)
                       this.setState({users : res.users, error : false, pending : false})
                   }
                   if(res.error){
@@ -71,11 +70,9 @@ class DashboardCore extends Component {
     });
     this.update()
     this.props.socket.on('/api/task/done', () => {
-    console.log('received /api/task/done...')
     this.fetchTasks()
     });
     this.props.socket.on('/api/user/done', () => {
-    console.log('received /api/user/done...')
     this.fetchUsers()
     });
   }
@@ -138,7 +135,7 @@ class DashboardCore extends Component {
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
               <div className='row'>
-                 <div className="col s12 transparent">
+                 <div className="col s6 transparent">
                                 <h5 className="rezbuild-text">Tasks</h5>
                                 { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
                                      <TrelloComponent
@@ -151,7 +148,7 @@ class DashboardCore extends Component {
                                       : loaderComponent}
                                 
                  </div>
-                 <div className="col s12 transparent">
+                 <div className="col s6 transparent">
                                 <h5 className="rezbuild-text">Files</h5>
                                 { (this.state.tasks.length > 0) ?
                                      <FileExplorerComponent

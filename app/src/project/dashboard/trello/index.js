@@ -222,7 +222,6 @@ class TrelloComponent extends Component {
           currTask.prev.map((prevTaskId) => ascend(prevTaskId, prevTaskIds))
         }
         if(this.props.task) ascend(this.props.task._id, prevTaskIds)
-        console.log(prevTaskIds)
         for (var lane of lanes){
           if(lane.id === task.lane){
                 task.id = task._id
