@@ -83,7 +83,7 @@ class FileExplorerCore extends Component {
                                     title="ASIS MODEL VIEWER"
                                     width="100%"
                                     height="100%"
-                                    src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]}
+                                    src={"//35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allowFullScreen
                                     >
@@ -304,7 +304,7 @@ class FileExplorerCore extends Component {
                                     title="TOBE MODEL VIEWER"
                                     width="100%"
                                     height="100%"
-                                    src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.tobeModelTask._id + "_" + this.state.tobeModelTask.values[0].split('.ifc')[0]}
+                                    src={"//35.189.193.44/Rezbuild/Visualize/" + this.state.tobeModelTask._id + "_" + this.state.tobeModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allowFullScreen
                                     >
