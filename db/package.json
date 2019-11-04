@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
 
-    "start": "cross-env ME_CONFIG_MONGODB_AUTH_DATABASE=rezbuild ME_CONFIG_BASICAUTH_USERNAME=mdaniel ME_CONFIG_BASICAUTH_PASSWORD=Avatar56. node ./node_modules/mongo-express/app.js",
+    "start": "cross-env ME_CONFIG_MONGODB_SERVER=127.0.0.1 ME_CONFIG_MONGODB_AUTH_DATABASE=rezbuild ME_CONFIG_BASICAUTH_USERNAME=mdaniel ME_CONFIG_BASICAUTH_PASSWORD=Avatar56. node ./node_modules/mongo-express/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
