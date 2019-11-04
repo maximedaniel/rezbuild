@@ -27,22 +27,30 @@ class CardComponent extends Component {
   }
 
   componentDidUpdate() {
-    $('.cqkFMI').css('min-width', 0);
+    $('.rXSjd').css('min-width', '50px');
     $('#textarea_'+this.props.id).trigger('autoresize');
   }
 
   render(){
       return (
         <div className="section hoverable"
-        onMouseOver={this.onIn}
-        onMouseOut={this.onOut} 
+        onMouseOver={ this.props.draggable?this.onIn:null}
+        onMouseOut={this.props.draggable?this.onOut:null} 
         style={{
+        minWidth: '200px',
+        width: '200px',
+        maxWidth: '200px',
+        color:'#000',
+        backgroundColor:'#fff',
+        fontFamily: 'Exo 2',
+        textShadow:"-1px -1px 0 #fff, 1px -1px 0 #fff,  -1px 1px 0 #fff, 1px 1px 0 #fff",
         borderStyle: this.props.dashed?'dashed': "solid",
         borderColor: this.props.focused?'#f7931e': "#fff",
         borderWidth: this.props.focused?'4px' : '0px',
-        opacity: this.props.enabled?'1':'0.5',
-        padding: 0,
-        margin: 0
+        opacity: this.props.draggable?'1':'0.5',
+        padding: '0',
+        marginBottom: '10px',
+
         }}>
             <div className="row" style={{marginBottom:'0px'}}>
                 <div className="col s6 left-align">

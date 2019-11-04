@@ -173,7 +173,7 @@ class DashboardCore extends Component {
                                     <span className="card-title rezbuild-text">OpenBimLibraryTool</span>
                                     <p>Description of OpenBimLibraryTool...</p>
                                   </div>
-                                  <div class="card-action">
+                                  <div className="card-action">
                                     <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="/technologies">OPEN IN NEW TAB</a>
                                   </div>
                                 </div>
@@ -184,7 +184,7 @@ class DashboardCore extends Component {
                                     <span className="card-title rezbuild-text">RankingTechnologyTool</span>
                                     <p>Description of RankingTechnologyTool...</p>
                                   </div>
-                                  <div class="card-action">
+                                  <div className="card-action">
                                     <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="http://rezbuild-sorter.herokuapp.com">OPEN IN NEW TAB</a>
                                   </div>
                                 </div>

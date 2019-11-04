@@ -2,6 +2,8 @@
 var mongoose = require("mongoose");
 
 var init = () => {
+    // mongodb://mdaniel:Avatar56.@ds155714.mlab.com:55714/rezbuild
+    // mongodb://127.0.0.1:27017/rezbuild
     mongoose.connect("mongodb://127.0.0.1:27017/rezbuild", {
     useNewUrlParser: true,
     reconnectInterval: 5000,

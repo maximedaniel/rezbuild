@@ -1,5 +1,7 @@
 
-# EACH FEATURE -> SCHEMA APP/API
+# FOR DEV
+
+npm link ../common
 
 # SYSTEM ARCHITECTURE
 
