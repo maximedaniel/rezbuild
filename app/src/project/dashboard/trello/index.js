@@ -50,6 +50,7 @@ class TrelloComponent extends Component {
     
   }
   handleDragEnd(cardId, sourceLaneId, targetLaneId, position, cardDetails){
+    
     let cancel = {
       type: 'MOVE_CARD',
       fromLaneId: targetLaneId,
@@ -57,7 +58,7 @@ class TrelloComponent extends Component {
       cardId: cardId,
       index: 0
     }
-    if(cardDetails.enabled){
+    if(cardDetails.draggable){
       if(sourceLaneId === 'lane_backlog'){
         if(targetLaneId === 'lane_todo'){
           this.setState(
@@ -169,13 +170,38 @@ class TrelloComponent extends Component {
           style: lanesStyle
         }
      ]
-
+     /* DONE TASKS */
+    /* this.props.tasks.forEach(task => {
+      if(task.action === 'INIT') return
+      if(task.lane === 'lane_done'){
+        task.id = task._id
+        task.draggable = false
+        task.focused = false
+        task.dashed = false
+        task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
+        task.style = normalCardStyle
+        if(this.props.task){
+          var prevTaskIds = [] 
+          var ascend = (taskId, prevTaskIds) => {
+            prevTaskIds.push(taskId)
+            var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
+            currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
+          }
+          ascend(this.props.task._id, prevTaskIds)
+            task.draggable = prevTaskIds.includes(task._id)
+            task.focused = this.props.task._id === task._id
+        }
+      }
+      lane.cards.push(task);
+     });*/
+     
      lanes.forEach(lane => {
         this.props.tasks.forEach(task => {
           if(task.action === 'INIT') return
           if(lane.id === task.lane){
             task.id = task._id
-            task.enabled = false
+            task.draggable = false
+
             task.focused = false
             task.dashed = false
             task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
@@ -192,23 +218,22 @@ class TrelloComponent extends Component {
 
               if(lane.id === 'lane_backlog'){
                 if(common.STATUS[this.props.task.action].includes(task.action)){
-                  task.enabled = true
+                  task.draggable = true
                 }
 
               }
               /* BACKLOG */
               if(lane.id === 'lane_todo'){
-                task.enabled = prevTaskIds.includes(task._id)
+                task.draggable = prevTaskIds.includes(task._id)
                 task.focused = task.dashed =  this.props.task._id === task._id
                 
               }
               /* DONE */
               if(lane.id === 'lane_done'){
-                task.enabled = prevTaskIds.includes(task._id)
+                task.draggable = prevTaskIds.includes(task._id)
                 task.focused = this.props.task._id === task._id
               }
             }
-
             lane.cards.push(task);
           }
         })
@@ -277,7 +302,23 @@ class TrelloComponent extends Component {
 
         if (this.props.tasks){
           if (this.state.data){
-            trelloComponent = <Board data={this.state.data} style= {
+            const components = {
+              Card: CardComponent,
+              laneDraggable: false,
+            
+            }
+            trelloComponent = <Board 
+            data={this.state.data} 
+            eventBusHandle={this.setEventBus}
+            onDataChange= {this.onTaskChange}
+            handleDragEnd= {this.handleDragEnd}
+            onCardClick= {this.onCardClick}
+            cardStyle = {normalCardStyle}
+            components={components} style= {
+                   { backgroundColor:'transparent',
+                   fontFamily: 'Exo 2'}} />;
+            /*
+             <Board data={this.state.data} style= {
                     { backgroundColor:'transparent',
                     fontFamily: 'Exo 2'}
                 }
@@ -286,11 +327,10 @@ class TrelloComponent extends Component {
                 eventBusHandle={this.setEventBus}
                 onCardClick={this.onCardClick}
                 customCardLayout
-                draggable
                 laneDraggable={false}
                 >
                 <CardComponent />
-                </Board>
+                </Board>*/
           }
           if (this.state.task && this.state.cancel){
             backlogTaskFormComponent =  <BacklogTaskForm  setTask={this.props.setTask} selectedTask={this.props.task} tasks={this.props.tasks} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />

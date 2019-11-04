@@ -46,10 +46,18 @@ RUN npm install
 RUN npm link common
 COPY api/ .
 
+
+WORKDIR /usr/src/db
+COPY db/package.json .
+RUN npm install
+RUN npm link common
+COPY db/ .
+
 EXPOSE 3000
 EXPOSE 3001
 EXPOSE 27017
+EXPOSE 8081
 
 WORKDIR /usr/src/
 
-CMD mongod --dbpath=/usr/src/data/db & (cd api && npm start) & (cd app && npm start)
+CMD mongod --dbpath=/usr/src/data/db & (cd db && npm start) & (cd api && npm start) & (cd app && npm start) 

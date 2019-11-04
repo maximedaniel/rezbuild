@@ -1,3 +1,7 @@
+
+# FOR DEV
+npm link ../common
+
 # TODO
 Add button for technologies list
 Add button for task creation
