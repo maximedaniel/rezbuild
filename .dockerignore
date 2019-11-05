@@ -1,2 +1,6 @@
 app/node_modules
+app/package-lock.json
 api/node_modules
+api/package-lock.json
+db/node_modules
+db/package-lock.json
