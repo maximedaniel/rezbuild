@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import SocketContext from '../../../SocketContext'
+import SocketContext from '../../../SocketContext';
 
-var $ = window.$
+var $ = window.$;
 
 
 class FileExplorerCore extends Component {
@@ -16,7 +16,7 @@ class FileExplorerCore extends Component {
             if(this.props.task){
                 var getLastParentTaskWithAction = (taskId, action) => {
                     var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-                    if(currTask.action.includes(action)) return currTask
+                    if(currTask.action.includes(action) && currTask.lane !=='lane_todo') return currTask // && currTask.lane !=='lane_todo'
                     return currTask.prev.map((prevTaskId) => getLastParentTaskWithAction(prevTaskId, action))[0]
                 }
                 /*var getLastChildrenTaskWithAction = (taskId, action) => {

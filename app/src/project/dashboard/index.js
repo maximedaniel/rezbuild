@@ -135,7 +135,7 @@ class DashboardCore extends Component {
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
               <div className='row'>
-                 <div className="col s6 transparent">
+                 <div className="col l7 m12 s12 transparent">
                                 <h5 className="rezbuild-text">Tasks</h5>
                                 { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
                                      <TrelloComponent
@@ -148,7 +148,7 @@ class DashboardCore extends Component {
                                       : loaderComponent}
                                 
                  </div>
-                 <div className="col s6 transparent">
+                 <div className="col l5 m12 s12 transparent">
                                 <h5 className="rezbuild-text">Files</h5>
                                 { (this.state.tasks.length > 0) ?
                                      <FileExplorerComponent

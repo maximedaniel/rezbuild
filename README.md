@@ -1,5 +1,11 @@
 
-# Dev
+# LAST DEBUGGING
+
+V - taches grisées non interatives
+V - taches impossible après taches TODO
+~ - Visualiser toutes informations pour chaque modèle
+V - Tache customizée non fonctionnelle ASIS
+V - Récupérer base de données
 
 # Technical
 

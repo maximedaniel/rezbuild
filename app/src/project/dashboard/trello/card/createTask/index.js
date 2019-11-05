@@ -69,7 +69,9 @@ class CreateTaskFormCore extends Component {
           content:  this.refs.content.value,
           roles: [].filter.call(this.refs.roles.options, o => o.selected).map(o => o.value),
           action: this.refs.action.value,
-          format: common.ACTIONS[this.refs.action.value].format
+          names: common.ACTIONS[this.refs.action.value].names,
+          values: common.ACTIONS[this.refs.action.value].values,
+          formats: common.ACTIONS[this.refs.action.value].formats
         }
 
        this.setState({pending:true, error: false}, () => {

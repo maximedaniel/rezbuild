@@ -22,9 +22,8 @@ class DoneTaskFormCore extends Component {
 
   submit(event){
    event.preventDefault()
-   this.setState({pending:true, error: false}, () => {
+   this.setState({newTaskId: this.props.task._id, pending:true, error: false}, () => {
     if(this.props.task.lane === "lane_todo"){
-
         var filter = {_id: this.props.task._id}
         var update = {
             user: "token",
@@ -46,8 +45,8 @@ class DoneTaskFormCore extends Component {
             if(this.refs['files_'+name].files.length)  {
                 file = this.refs['files_'+name].files[0].name
                 allAttachedFiles.push(this.refs['files_'+name].files[0])
+                update.files.push(file)
             }
-            update.files.push(file)
 
             if(this.refs[name].files && this.refs[name].files.length){
                 allAttachedFiles.push(this.refs[name].files[0])
@@ -106,11 +105,12 @@ class DoneTaskFormCore extends Component {
                         update.values.push(value)
 
                         var file = ""
+                        //console.log("this.refs['files_'+name].files.length : ", this.refs['files_'+name].files.length)
                         if(this.refs['files_'+name].files.length)  {
                             file = this.refs['files_'+name].files[0].name
                             allAttachedFiles.push(this.refs['files_'+name].files[0])
+                            update.files.push(file)
                         }
-                        update.files.push(file)
 
             
                         if(this.refs[name].files && this.refs[name].files.length){

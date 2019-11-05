@@ -147,54 +147,115 @@ class TrelloComponent extends Component {
   }
 
   updateTasks(){
-    var lanes = [
+     /* REMOVE INIT TASK */
+     var notInitTasks = this.props.tasks.filter(task => task.action !== 'INIT')
+
+     /* DONE TASKS */
+     var doneTasks = notInitTasks.filter(task => task.lane === 'lane_done')
+     var doneCards = doneTasks.map(doneTask => {
+      doneTask.id = doneTask._id
+      doneTask.draggable = false
+      doneTask.focused = false
+      doneTask.dashed = false
+      doneTask.userDetails = doneTask.user?this.props.users.filter(user => user._id === doneTask.user)[0]: ''
+      doneTask.style = normalCardStyle
+      if(this.props.task){
+        /* if task selected then get previous tasks */
+        var prevTaskIds = [] 
+        var ascend = (taskId, prevTaskIds) => {
+          prevTaskIds.push(taskId)
+          var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
+          currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
+        }
+        ascend(this.props.task._id, prevTaskIds)
+
+        /* DONE LANE */
+        doneTask.draggable = prevTaskIds.includes(doneTask._id)
+        doneTask.focused = this.props.task._id === doneTask._id
+      }
+      return doneTask;
+     });
+
+     /* TODO TASKS */
+     var todoTasks = notInitTasks.filter(task => task.lane === 'lane_todo')
+     var todoCards = todoTasks.map(todoTask => {
+      todoTask.id = todoTask._id
+      todoTask.draggable = false
+      todoTask.focused = false
+      todoTask.dashed = false
+      todoTask.userDetails = todoTask.user?this.props.users.filter(user => user._id === todoTask.user)[0]: ''
+      todoTask.style = normalCardStyle
+      if(this.props.task){
+        /* if task selected then get previous tasks */
+        var prevTaskIds = [] 
+        var ascend = (taskId, prevTaskIds) => {
+          prevTaskIds.push(taskId)
+          var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
+          currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
+        }
+        ascend(this.props.task._id, prevTaskIds)
+
+        /* TODO LANE */
+        todoTask.draggable = prevTaskIds.includes(todoTask._id)
+        todoTask.focused = todoTask.dashed =  this.props.task._id === todoTask._id
+      }
+      return todoTask;
+     });
+
+     /* BACKLOG TASKS */
+     var backlogTasks = notInitTasks.filter(task => task.lane === 'lane_backlog')
+     var backlogCards = backlogTasks.map(backlogTask => {
+      backlogTask.id = backlogTask._id
+      backlogTask.draggable = false
+      backlogTask.focused = false
+      backlogTask.dashed = false
+      backlogTask.userDetails = backlogTask.user?this.props.users.filter(user => user._id === backlogTask.user)[0]: ''
+      backlogTask.style = normalCardStyle
+      if(this.props.task){
+        /* if task selected then get previous tasks */
+        var prevTaskIds = [] 
+        var ascend = (taskId, prevTaskIds) => {
+          prevTaskIds.push(taskId)
+          var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
+          currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
+        }
+        ascend(this.props.task._id, prevTaskIds)
+
+        /* BACKLOG LANE */
+         /* Is there a todo card draggable ? */
+         var aTodoCardIsDraggable = !todoCards.filter(todoCard => todoCard.draggable === true).length;
+         if(aTodoCardIsDraggable && common.STATUS[this.props.task.action].includes(backlogTask.action)){
+          backlogTask.draggable = true
+         }
+      }
+      return backlogTask;
+     });
+     
+
+     var lanes = [
         {
           id: 'lane_backlog',
           title: 'BACKLOG',
           label: '?/?',
-          cards: [],
+          cards: backlogCards,
           style: lanesStyle
         },
         {
           id: 'lane_todo',
           title: 'TODO',
           label: '?/?',
-          cards: [],
+          cards: todoCards,
           style: lanesStyle
         },
         {
           id: 'lane_done',
           title: 'DONE',
           label: '?/?',
-          cards: [],
+          cards: doneCards,
           style: lanesStyle
         }
-     ]
-     /* DONE TASKS */
-    /* this.props.tasks.forEach(task => {
-      if(task.action === 'INIT') return
-      if(task.lane === 'lane_done'){
-        task.id = task._id
-        task.draggable = false
-        task.focused = false
-        task.dashed = false
-        task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
-        task.style = normalCardStyle
-        if(this.props.task){
-          var prevTaskIds = [] 
-          var ascend = (taskId, prevTaskIds) => {
-            prevTaskIds.push(taskId)
-            var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-            currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
-          }
-          ascend(this.props.task._id, prevTaskIds)
-            task.draggable = prevTaskIds.includes(task._id)
-            task.focused = this.props.task._id === task._id
-        }
-      }
-      lane.cards.push(task);
-     });*/
-     
+    ]
+     /* 
      lanes.forEach(lane => {
         this.props.tasks.forEach(task => {
           if(task.action === 'INIT') return
@@ -207,7 +268,6 @@ class TrelloComponent extends Component {
             task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
             task.style = normalCardStyle
             if(this.props.task){
-              /* BACKLOG */
               var prevTaskIds = [] 
               var ascend = (taskId, prevTaskIds) => {
                 prevTaskIds.push(taskId)
@@ -222,13 +282,11 @@ class TrelloComponent extends Component {
                 }
 
               }
-              /* BACKLOG */
               if(lane.id === 'lane_todo'){
                 task.draggable = prevTaskIds.includes(task._id)
                 task.focused = task.dashed =  this.props.task._id === task._id
                 
               }
-              /* DONE */
               if(lane.id === 'lane_done'){
                 task.draggable = prevTaskIds.includes(task._id)
                 task.focused = this.props.task._id === task._id
@@ -237,40 +295,7 @@ class TrelloComponent extends Component {
             lane.cards.push(task);
           }
         })
-     })
-      /*for (var task of this.props.tasks){
-        var prevTaskIds = [] 
-
-        var ascend = (taskId, prevTaskIds) => {
-          prevTaskIds.push(taskId)
-          var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-          currTask.prev.map((prevTaskId) => ascend(prevTaskId, prevTaskIds))
-        }
-        if(this.props.task) ascend(this.props.task._id, prevTaskIds)
-        for (var lane of lanes){
-          if(lane.id === task.lane){
-                task.id = task._id
-                task.enabled = false
-                task.focused = false
-                task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
-                task.style = normalCardStyle
-                if(task.lane !== "lane_done" && this.props.task && common.STATUS[this.props.task.action].includes(task.action)){
-                  task.enabled = true    
-                }
-
-                if(task.lane === "lane_done" && this.props.task && prevTaskIds.includes(task._id)){
-                    task.enabled = true    
-                    task.focused = this.props.task._id === task._id
-                    task.style =  task.focused? selectedCardStyle:normalCardStyle
-                }
-                if(!this.props.task){
-                    task.enabled = true    
-                }
-                task.cardDraggable = task.enabled 
-                lane.cards.push(task);
-          }
-        }
-      }*/
+     })*/
 
     const data = {lanes: lanes}
     this.setState({data:data});
