@@ -60,4 +60,5 @@ EXPOSE 8081
 
 WORKDIR /usr/src/
 
-CMD mongod --dbpath=/usr/src/data/db & (cd db && npm start) & (cd api && npm start) & (cd app && npm start) 
+CMD mongod --dbpath=/usr/src/data/db  & (cd api && npm start) & (cd app && npm start)
+# & (cd db && npm start) 

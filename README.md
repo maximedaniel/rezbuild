@@ -1,4 +1,13 @@
 
+# local build and run
+- docker build -t rezbuild .
+- docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 -it rezbuild
+
+# distant build and run
+- docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 --name rezbuild tydius/rezbuild
+- docker run -d --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock pyouroboros/ouroboros
+
+
 # LAST DEBUGGING
 
 V - taches grisées non interatives
@@ -16,14 +25,6 @@ Network architecture
 Mockup
 Validation
 Realisation
-
-# local run
-- docker build -t rezbuild .
-- docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 -it rezbuild
-
-# Distant run
-- docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 --name rezbuild tydius/rezbuild
-- docker run -d --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock pyouroboros/ouroboros
 
 
 # Task
