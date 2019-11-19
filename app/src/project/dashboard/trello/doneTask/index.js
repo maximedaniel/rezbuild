@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import SocketContext from '../../../../SocketContext'
 import "../../../../../node_modules/react-datepicker/dist/react-datepicker.css"
-axios.defaults.withCredentials = true
+import sanitize from 'sanitize-filename'
 
+axios.defaults.withCredentials = true
 var $ = window.$
 
 class DoneTaskFormCore extends Component {
@@ -43,12 +44,15 @@ class DoneTaskFormCore extends Component {
             
             var file = ""
             if(this.refs['files_'+name].files.length)  {
-                file = this.refs['files_'+name].files[0].name
+                console.log("this.refs['files_'+name].files[0]:", this.refs['files_'+name].files[0])
                 allAttachedFiles.push(this.refs['files_'+name].files[0])
+
+                file = sanitize(this.refs['files_'+name].files[0].name)
                 update.files.push(file)
             }
 
             if(this.refs[name].files && this.refs[name].files.length){
+                console.log("this.refs[name].files[0]:", this.refs[name].files[0])
                 allAttachedFiles.push(this.refs[name].files[0])
             }
         })
@@ -107,13 +111,16 @@ class DoneTaskFormCore extends Component {
                         var file = ""
                         //console.log("this.refs['files_'+name].files.length : ", this.refs['files_'+name].files.length)
                         if(this.refs['files_'+name].files.length)  {
-                            file = this.refs['files_'+name].files[0].name
+                            console.log("this.refs['files_'+name].files[0]:", this.refs['files_'+name].files[0])
                             allAttachedFiles.push(this.refs['files_'+name].files[0])
+
+                            file = sanitize(this.refs['files_'+name].files[0].name)
                             update.files.push(file)
                         }
 
             
                         if(this.refs[name].files && this.refs[name].files.length){
+                            console.log("this.refs[name].files[0]:", this.refs[name].files[0])
                             allAttachedFiles.push(this.refs[name].files[0])
                         }
                     })

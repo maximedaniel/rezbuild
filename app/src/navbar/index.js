@@ -92,6 +92,7 @@ class NavbarCore extends Component {
             <div className="nav-wrapper">
               <a href="#!" data-activates="slide-out" className="button-collapse" style={{padding:'0', display:'inline-flex'}} onClick={() => $('.button-collapse').sideNav('show')}> <i className="material-icons">menu</i></a>
 
+              <a href="#!" className="brand-logo center">Welcome <b>{this.state.user.firstname}</b></a>
               <ul className="right">
                 <li><a href="#!"><img  className="brand-logo right" src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} /></a></li>
               </ul>

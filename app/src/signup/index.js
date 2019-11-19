@@ -105,12 +105,12 @@ class SignupFormCore extends Component {
                 }
 
                 <div className="row">
-                    <div className="col s6">
+                    <div className="col s12">
                           <button className="btn waves-effect waves-light" type="submit">SIGN UP</button>
                     </div>
-                    <div className="col s6">
+                {/**<div className="col s6">
                           <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')}>SIGN IN</button>
-                          </div>
+              </div>**/}
                 </div>
               </form>
           </div>

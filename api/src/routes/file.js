@@ -1,3 +1,7 @@
+
+
+import sanitize from 'sanitize-filename'
+
 module.exports = function(io, client, uploader){
    var File = require('../models').File
    var fs = require('fs');
@@ -6,7 +10,11 @@ module.exports = function(io, client, uploader){
         fs.mkdir(uploader.dir+'/'+event.file.meta.taskId, { recursive: true }, (err) => {
             if (err)  console.log('ERROR: ' + err);
           });
-        fs.rename(uploader.dir+ '/' + event.file.name, uploader.dir+'/'+event.file.meta.taskId + '/' + event.file.name, function(err) {
+
+        //console.log('Filename:', event.file.name);
+        var newFilename = sanitize(event.file.name);
+        //console.log('newFilename:', newFilename);
+        fs.rename(uploader.dir+ '/' + event.file.name, uploader.dir+'/'+event.file.meta.taskId + '/' + newFilename, function(err) {
             if ( err ) console.log('ERROR: ' + err);
         });
    });
