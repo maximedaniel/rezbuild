@@ -41,7 +41,13 @@ class ProjectListCore extends Component {
   componentDidUpdate(prevProps, prevState) {
       if (prevState.projects !== this.state.projects) {
             $('.modal').modal();
+            $('.tooltipped').tooltip({delay:0, html:true});
+            //$('.tap-target').tapTarget();
       }
+  }
+
+  componentDidUnmount() {
+    $('.tooltipped').tooltip('remove');
   }
 
   render() {
@@ -76,13 +82,32 @@ class ProjectListCore extends Component {
 
         if (this.state.projects){
             projectListComponent = 
-            <table>
+            <div className="col s12">
+              <div className="col s3  l3 rezbuild-text left-align"> <h6>Name</h6> </div>
+              <div className="col s5  l4 rezbuild-text left-align"><h6>Creation Date</h6> </div>
+              <div className="col s4  l5 white-text"><h6>Action</h6> </div>
+             {
+                this.state.projects.map((project, index) => {
+                    return (
+                      <div className="col s12" style={{marginBottom:'1rem', padding:'0'}}>
+                        <div  className="col s3  l3 left-align">{project.name}</div>
+                        <div  className="col s5  l4 left-align">{new Date(project.date).toString().split('GMT')[0]}</div>
+                        <div  className="col s4  l5 right-align">
+                          <a className="hide-on-large-only btn waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }><i className="material-icons">open_in_browser</i></a>
+                          <a className="hide-on-large-only btn waves-effect waves-light white rezbuild-text modal-trigger" style={{marginLeft:'1rem'}} href={"#modal_removeproject_"+project._id}><i className="material-icons">remove_circle</i></a>
+                          <a className="hide-on-med-and-down btn waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }> Open <i className="material-icons right">open_in_browser</i></a>
+                          <a className="hide-on-med-and-down btn waves-effect waves-light white rezbuild-text modal-trigger" style={{marginLeft:'1rem'}} href={"#modal_removeproject_"+project._id}><i className="material-icons left">remove_circle</i> Remove</a>
+                            <RemoveProjectForm project={project}/>
+                        </div>
+                      </div>);
+                })
+              }
+           </div>
+           /*{ <table>
               <thead className='rezbuild-text'>
                 <tr style={{borderBottom: '2px solid #f7931e'}}>
                     <th>Name</th>
-                    <th>Owner</th>
                     <th>Creation date</th>
-                    <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -90,42 +115,51 @@ class ProjectListCore extends Component {
                   this.state.projects.map((project, index) => {
                       return <tr key={index}>
                         <td>{project.name}</td>
-                        <td>{project.hasAuthorizedUsers}</td>
                         <td>{new Date(project.date).toString().split('GMT')[0]}</td>
-                        <td>
-                            <a className="btn-floating waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }><i className="material-icons">folder_open</i></a>
-                            <a className="btn-floating waves-effect waves-light white modal-trigger" href={"#modal_removeproject_"+project._id}>
-                                <i className="material-icons rezbuild-text">close</i>
-                            </a>
+                        <td className="right-align">
+                          <a className="btn waves-effect waves-light col s5" href="#!" onClick={() => browserHistory.push('/'+project._id) }> Open <i className="material-icons right">open_in_browser</i></a>
+                          <a className="btn waves-effect waves-light white rezbuild-text modal-trigger col s5" style={{marginLeft:'1rem'}} href={"#modal_removeproject_"+project._id}><i className="material-icons left">remove_circle</i> Remove</a>
                             <RemoveProjectForm project={project}/>
                         </td>
                   </tr>})
                 }
               </tbody>
-            </table>
+              </table>}*/
             
         }
+        let actionComponent;
+        if (this.state.projects){
+          actionComponent = 
+          <div>
+            <div className= 'col s4 left-align'>
+                <h5 className="rezbuild-text">Project List</h5>
+            </div>
+            <div className= 'col s8 right-align' style={{paddingTop:'0.5rem'}}>  
+                <a  className="hide-on-med-and-up btn modal-trigger"                      href="#modal_createproject"><i className="material-icons">add_box</i></a>
+                <a  className="hide-on-med-and-up btn white rezbuild-text modal-trigger"  href="#modal_joinproject" style={{marginLeft:'1rem'}}><i className="material-icons">add_to_photos</i></a>
+                <a  className="hide-on-small-only btn modal-trigger"                      href="#modal_createproject"><i className="material-icons right">add_box</i> NEW</a>
+                <a  className="hide-on-small-only btn white rezbuild-text modal-trigger"  href="#modal_joinproject" style={{marginLeft:'1rem'}}><i className="material-icons left">add_to_photos</i>JOIN</a>
+             </div>
+          </div>
+        }
+
         return (
                  <div className='container' style={{marginTop:'2rem'}}>
                     <div className='row'>
-                      <div className='col s12 white'>
-                               {projectListComponent}
+                      <div className='section col s12'>
+                        <div className= 'section col s12 transparent'  style={{marginBottom:'1rem'}}>
+                                  {actionComponent}
+                        </div>
+                        <div className='section col s12 white z-depth-1' style={{paddingTop:'0.5rem'}}>
+                                {projectListComponent}
+                        </div>
+                        <div className='section col s12 center'>
+                                  {preloaderComponent}
+                        </div>
+                        <div className='section col s12 center'>
+                            {errorComponent}
+                        </div>
                       </div>
-                      <div className='col s12 center'>
-                                {preloaderComponent}
-                      </div>
-                      <div className='col s12 center'>
-                          {errorComponent}
-                      </div>
-                    </div>
-                    <div className="fixed-action-btn">
-                      <a className="btn-floating btn-large" href="#!">
-                        <i className="large material-icons">mode_edit</i>
-                      </a>
-                      <ul>
-                        <li><a className="btn-floating tooltipped modal-trigger" href="#modal_joinproject" data-position="left" data-tooltip="Join a project"><i className="material-icons">publish</i></a></li>
-                        <li><a className="btn-floating tooltipped modal-trigger" href="#modal_createproject" data-position="left" data-tooltip="Create a project"><i className="material-icons">add</i></a></li>
-                      </ul>
                     </div>
                     <CreateProjectForm/>
                     <JoinProjectForm/>

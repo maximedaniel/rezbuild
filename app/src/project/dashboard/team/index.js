@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 import AddUserForm from './addUser'
+import common from 'common'
+
 
 class TeamCore extends Component {
 
@@ -79,16 +81,21 @@ class TeamCore extends Component {
                             <li className="collection-item avatar" key={index}>
                               <i className="medium material-icons circle white rezbuild-text" style={{fontSize:'42px'}}>account_circle</i>
                               <span className="title rezbuild-text" style={{fontWeight:'900'}}>{collaborator.firstname} {collaborator.lastname}</span>
-                              <p>{collaborator.roles}</p>
-                              <a href={"mailto:"+collaborator.email} className="secondary-content"><i className="material-icons">email</i></a>
+                              <p>
+                              {
+                                collaborator.roles.map(role => common.ROLES[role].name).join(', ')
+                              }
+                              </p>
+                              <a href={"mailto:"+collaborator.email} className="btn secondary-content"><i className="material-icons right">email</i> EMAIL</a>
                             </li>
                         )}
                         </ul>
 
             }
 
-            addUserButtonComponent = <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_adduser">
-                    <i className="material-icons">add</i>
+            addUserButtonComponent = <a className="btn waves-effect waves-light modal-trigger" href="#modal_adduser">
+                    <i className="material-icons left">person_add</i>
+                    Invite
                     </a>
             addUserFormComponent =  <AddUserForm project={this.props.project} params={this.props.params}/>
         }

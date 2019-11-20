@@ -2,28 +2,30 @@
 
 
 
-# IMPORTANT BUGS
-- Download files does not work
- 
+# IMPORTANT
 
-# IMPROVEMENTS
-- Send mail when todo task assigned.
+
+# TODO
+- Add information tooltip to each field of the project information
 - Set the form to blank.
-- Giving 10 points to each KIPs expectations.
-V - After Login could be useful to have somewhere indication of user, like “Welcome <username> 
 - After Login a new user doesn’t know where to start from. Something pointing / Highlighting the “edit” button (where I guess you shall start from) could be helpful here. 
-- Mouse over the “edit” button shows 2 buttons “+” and “upload ( I guess). Could be useful to have tooltips when mouse over those, showing something like “Add a new project”, “Upload …” .
-- When open “Create project” fields are pre-filled with a French site, can it be made more generic? 
-- In “Create  project”  the “country” field could benefit from a dropdown list. 
-- In “Create  project”  can the “degree days” be filled automatically starting from the entered location. 
-- If I leave the page even for a few seconds while filling “Create project” window, aftr returning there when click on - - “Create” I see an error “User not signed in” so cannot proceed. 
 - Project Information → General Information, not clear what Exposure means. Maybe add details about roof/main entrance/etc.
 - App not multilingual. I think at least language of the 3 demo sites should be provided (Italian, Spanish, Norwegian). 
 - Project Information → General Information: “adjacent to unheated room” not clear what that means. 
 - Project Information → General Information:Clear inter-floor height (m) does not accept decimals (cannot enter 2.5 m). Similar issue for other linear dimensions.
 - Project Information → General Information: when editing/adding values, when click on Save no message is shown (like “Changes Have been saved”, even though they infact are saved)  and the window remains exactly the same, so user doesn’t get any feedback for his action. 
-- Project Information → Wrap: better use Envelope instead of Wrap. 
 
+
+# DONE
+- Invite user remove '#field'
+- add float value to every fields
+- After Login could be useful to have somewhere indication of user, like “Welcome <username> 
+- Mouse over the “edit” button shows 2 buttons “+” and “upload ( I guess). Could be useful to have tooltips when mouse over those, showing something like “Add a new project”, “Upload …” .
+- Project Information → Wrap: better use Envelope instead of Wrap.
+- When open “Create project” fields are pre-filled with a French site, can it be made more generic? 
+- Giving 10 points to each KIPs expectations.
+- Download files does not work
+- Send mail when todo task assigned.
 
 # Comment injecter et retirer mes volumes du container Doker ?
 n

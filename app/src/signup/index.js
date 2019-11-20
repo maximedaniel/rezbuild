@@ -20,8 +20,12 @@ class SignupFormCore extends Component {
       $(document).ready(function() {
         //M.FormSelect.init($('#roles'), {});
         $('select').material_select();
+        $('.tooltipped').tooltip({delay:0, html:true});
       });
   }
+ componentWillUnmount(){
+   $('.tooltipped').tooltip('remove');
+ }
 
   handleSubmit(event){
    event.preventDefault();
@@ -51,9 +55,14 @@ class SignupFormCore extends Component {
     return (
     <div className="row" style={{paddingTop:'8vh'}}>
           <div className="col push-l4 l4 push-m3 m6 push-s1 s10 center white z-depth-1" style={{padding:'0rem', fontSize:'0'}}>
-              <div className="col s12 center rezbuild">
+          <div className="col s12 rezbuild white-text">
+                <div className="col s6 left-align">
+                  <h5 className="header">Sign up</h5>
+                </div>
+                <div className="col s6 right-align">
                 <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
-              </div>
+                </div>
+              </div> 
           <form className="col s12" onSubmit={this.handleSubmit}>
                     <div className="input-field col s12">
                         <input  id="input_firstname" ref="firstname" name="firstname" type="text" required/>
@@ -105,12 +114,12 @@ class SignupFormCore extends Component {
                 }
 
                 <div className="row">
-                    <div className="col s12">
-                          <button className="btn waves-effect waves-light" type="submit">SIGN UP</button>
+                    <div className="col s6">
+                          <button className="btn waves-effect waves-light" type="submit">SUBMIT  <i class="material-icons right">send</i></button>
                     </div>
-                {/**<div className="col s6">
-                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')}>SIGN IN</button>
-              </div>**/}
+                  <div className="col s6">
+                            <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')}>  <i class="material-icons left">cancel</i> CANCEL</button>
+                  </div>
                 </div>
               </form>
           </div>

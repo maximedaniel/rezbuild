@@ -114,7 +114,7 @@ class AddUserFormCore extends Component {
                   <label htmlFor="input_autocomplete_adduser">Find an existing user...</label>
               </div>
               <div className="input-field col l2 m3  s12 center">
-                  <button className="btn waves-effect waves-light" type="submit">ADD</button>
+                  <button className="btn waves-effect waves-light" type="submit">SUBMIT <i className="material-icons right">send</i></button>
               </div>
           </div>
 
@@ -132,11 +132,11 @@ class AddUserFormCore extends Component {
           <form className="col s12"   onSubmit={this.handleCopyUrl} autoComplete="off">
           <div className="row">
             <div className="input-field col l10 m9 s12">
-              <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  defaultValue={window.location.href.replace('#!','')  + '/signin'} />
+              <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  defaultValue={window.location.href.split('#')[0]  + '/signin'} />
               <label  className="active" htmlFor="input_projecturl">Or share this url...</label>
             </div>
               <div className="input-field col l2 m3 s12 center">
-                  <button className="btn waves-effect waves-light" type="submit">COPY</button>
+                  <button className="btn waves-effect waves-light" type="submit"> <i className="material-icons right">content_copy</i>COPY</button>
               </div>
           </div>
           </form>

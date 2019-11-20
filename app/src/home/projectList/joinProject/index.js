@@ -90,12 +90,15 @@ class JoinProjectFormCore extends Component {
 
     let unauthorizedprojectlistComponent =
           <div className="row">
-              <div className="input-field col l10 m9 s12">
-                  <input id="input_autocomplete_joinproject" type="text"  ref="projectname"  className="autocomplete" required />
-                  <label htmlFor="input_autocomplete_joinproject">Name</label>
+              <div className="input-field col l12 m9 s12">
+                  <input placeholder="Search a project..." id="input_autocomplete_joinproject" type="text"  ref="projectname"  className="autocomplete" required />
+                  <label htmlFor="input_autocomplete_joinproject">Project</label>
               </div>
-              <div className="input-field col l2 m3  s12 center">
-                  <button className="btn waves-effect waves-light" type="submit">JOIN</button>
+              <div className="input-field col s6 right-align">
+                  <button className="btn waves-effect waves-light" type="submit">SUBMIT<i className="material-icons right">send</i></button>
+             </div>
+              <div className="input-field col s6 left-align">
+                  <a className="btn waves-effect waves-light white rezbuild-text" href="#!"  onClick={() => $("#modal_joinproject").modal('close')}> <i className="material-icons left">cancel</i>CANCEL</a>
               </div>
           </div>
 

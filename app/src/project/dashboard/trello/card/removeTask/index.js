@@ -39,10 +39,10 @@ class RemoveTaskFormCore extends Component {
               <h5 className="rezbuild-text">Do you want to remove <strong style={{fontWeight:'900'}}>{this.props.task.name}</strong> ?</h5>
               </div>
               <div className="input-field col s6 right-align">
-                  <a className="btn waves-effect waves-light" href="#!">YES</a>
+                  <a className="btn waves-effect waves-light" href="#!">YES<i className="material-icons right">check</i></a>
               </div>
               <div className="input-field col s6 left-align">
-                  <a className="btn waves-effect waves-light white rezbuild-text" href="#!"  onClick={this.cancel}>NO</a>
+                  <a className="btn waves-effect waves-light white rezbuild-text" href="#!"  onClick={this.cancel}><i className="material-icons left">clear</i>NO</a>
               </div>
                 { this.state.pending ?
                  <div className="preloader-wrapper small active">

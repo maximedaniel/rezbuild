@@ -46,13 +46,20 @@ class FileExplorerCore extends Component {
        this.fetchFiles()
        $(document).ready(function(){
          $('ul.tabs').tabs();
+         $('.tooltipped').tooltip({delay:0, html:true});
        });
 
    }
 
+    componentWillUnmount(){
+    $('.tooltipped').tooltip('remove');
+    }
+
    componentDidUpdate(prevProps, prevState) {
      if (prevProps.task !== this.props.task){
        this.fetchFiles()
+       $('ul.tabs').tabs();
+       $('.tooltipped').tooltip({delay:0, html:true});
      }
     }
  
@@ -88,26 +95,32 @@ class FileExplorerCore extends Component {
                                     allowFullScreen
                                     >
                                     </iframe>
-                                    <a className="btn rezbuild col s2 right-align"
+                                    <a className="btn rezbuild col s2 right-align tooltipped" data-position="top" data-tooltip="Download"
                                     style={{position:"absolute", top:"10px", right:"10px"}}
+                                    
                                     href={"http://" + this.props.host + "/" + this.state.asisModelTask._id + "/" + this.state.asisModelTask.values[0]} >
                                     <i className="material-icons white-text">cloud_download</i>
                                     </a>
                                 </div> : ""
                             }
                             </div>
-        asisModelFileExplorer = <ul className="collection black-text">
-                                { this.state.asisModelTask.files.length ?
-                                    this.state.asisModelTask.files.map((filename, index) => 
-                                                <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
-                                                    <p className="col s10">{filename} </p>
-                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisModelTask._id + "/" + filename}>
-                                                        <i className="material-icons white-text">cloud_download</i>
-                                                    </a>
-                                                </li>
-                                    ) : ""
-                                }
-                            </ul>
+        asisModelFileExplorer = 
+            <div>
+                <h6>ATTACHED FILE</h6>
+                <ul className="collection black-text">
+                    { this.state.asisModelTask.files.length ?
+                        this.state.asisModelTask.files.map((filename, index) => 
+                                    <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+                                        <p className="col s10">{filename} </p>
+                                        <a className="btn rezbuild col s2 right-align tooltipped" data-position="top" data-tooltip="Download"
+                                            href={"http://" + this.props.host + "/" + this.state.asisModelTask._id + "/" + filename}>
+                                        <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li>
+                        ) : ""
+                    }
+                </ul>
+            </div>
 
        }
        if(this.state.asisEconomicalTask){
@@ -134,8 +147,9 @@ class FileExplorerCore extends Component {
                                     { this.state.asisEconomicalTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisEconomicalTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEconomicalTask._id + "/" + this.state.asisEconomicalTask.files[index]}>
-                                            <i className="material-icons white-text">cloud_download</i>
+                                        <a className="btn rezbuild col s2 right-align tooltipped" data-position="top" data-tooltip="Download"
+                                        href={"http://" + this.props.host + "/" + this.state.asisEconomicalTask._id + "/" + this.state.asisEconomicalTask.files[index]}>
+                                        <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
                                 </td>
@@ -170,8 +184,9 @@ class FileExplorerCore extends Component {
                                     { this.state.asisEnergicalTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisEnergicalTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEnergicalTask._id + "/" + this.state.asisEnergicalTask.files[index]}>
-                                            <i className="material-icons white-text">cloud_download</i>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                         href={"http://" + this.props.host + "/" + this.state.asisEnergicalTask._id + "/" + this.state.asisEnergicalTask.files[index]}>
+                                        <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
                                 </td>
@@ -206,7 +221,8 @@ class FileExplorerCore extends Component {
                                     { this.state.asisSocialTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisSocialTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisSocialTask._id + "/" + this.state.asisSocialTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                         href={"http://" + this.props.host + "/" + this.state.asisSocialTask._id + "/" + this.state.asisSocialTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
@@ -242,7 +258,8 @@ class FileExplorerCore extends Component {
                                     { this.state.asisEnvironmentalTask.files[index] !== "" ? 
                                     <li className="collection-item valign-wrapper" value={this.state.asisEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisEnvironmentalTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisEnvironmentalTask._id + "/" + this.state.asisEnvironmentalTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align tooltipped" data-position="top" data-tooltip="Download"
+                                         href={"http://" + this.props.host + "/" + this.state.asisEnvironmentalTask._id + "/" + this.state.asisEnvironmentalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
@@ -278,7 +295,8 @@ class FileExplorerCore extends Component {
                                 <td>
                                     { this.state.asisComfortTask.files[index] !== "" ?  <li className="collection-item valign-wrapper" value={this.state.asisComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.asisComfortTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.asisComfortTask._id + "/" + this.state.asisComfortTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                        href={"http://" + this.props.host + "/" + this.state.asisComfortTask._id + "/" + this.state.asisComfortTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
@@ -312,23 +330,28 @@ class FileExplorerCore extends Component {
                                     <a className="btn rezbuild col s2 right-align"
                                     style={{position:"absolute", top:"10px", right:"10px"}}
                                     href={"http://" + this.props.host + "/" + this.state.tobeModelTask._id + "/" + this.state.tobeModelTask.values[0]} >
-                                    <i className="material-icons white-text">cloud_download</i>
+                                        <i className="material-icons white-text">cloud_download</i>
                                     </a>
                                 </div> : ""
                             }
                             </div>
-        tobeModelFileExplorer = <ul className="collection black-text">
-                                { this.state.tobeModelTask.files.length ?
-                                    this.state.tobeModelTask.files.map((filename, index) => 
-                                                <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
-                                                    <p className="col s10">{filename} </p>
-                                                    <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeModelTask._id + "/" + filename}>
-                                                        <i className="material-icons white-text">cloud_download</i>
-                                                    </a>
-                                                </li>
-                                    ) : ""
-                                }
-                            </ul>
+        tobeModelFileExplorer = 
+        <div>
+            <h6>ATTACHED FILE</h6>
+            <ul className="collection black-text">
+                { this.state.tobeModelTask.files.length ?
+                    this.state.tobeModelTask.files.map((filename, index) => 
+                                <li className="collection-item row valign-wrapper" value={filename} key={index} style={{padding: '0px 10px'}}>
+                                    <p className="col s10">{filename} </p>
+                                    <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                    href={"http://" + this.props.host + "/" + this.state.tobeModelTask._id + "/" + filename}>
+                                        <i className="material-icons white-text">cloud_download</i>
+                                    </a>
+                                </li>
+                    ) : ""
+                }
+            </ul>
+        </div>
 
        }
        if(this.state.tobeEconomicalTask){
@@ -354,8 +377,9 @@ class FileExplorerCore extends Component {
                                 <td>
                                     { this.state.tobeEconomicalTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeEconomicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeEconomicalTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEconomicalTask._id + "/" + this.state.tobeEconomicalTask.files[index]}>
-                                            <i className="material-icons white-text">cloud_download</i>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                         href={"http://" + this.props.host + "/" + this.state.tobeEconomicalTask._id + "/" + this.state.tobeEconomicalTask.files[index]}>
+                                                <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : '' }
                                 </td>
@@ -390,7 +414,8 @@ class FileExplorerCore extends Component {
                                     
                                     { this.state.tobeEnergicalTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeEnergicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeEnergicalTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEnergicalTask._id + "/" + this.state.tobeEnergicalTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                         href={"http://" + this.props.host + "/" + this.state.tobeEnergicalTask._id + "/" + this.state.tobeEnergicalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
@@ -425,7 +450,8 @@ class FileExplorerCore extends Component {
                                 <td>
                                     { this.state.tobeSocialTask.files[index] !== "" ?  <li className="collection-item valign-wrapper" value={this.state.tobeSocialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeSocialTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeSocialTask._id + "/" + this.state.tobeSocialTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                        href={"http://" + this.props.host + "/" + this.state.tobeSocialTask._id + "/" + this.state.tobeSocialTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
@@ -460,7 +486,8 @@ class FileExplorerCore extends Component {
                                 <td>
                                     { this.state.tobeEnvironmentalTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeEnvironmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeEnvironmentalTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeEnvironmentalTask._id + "/" + this.state.tobeEnvironmentalTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                        href={"http://" + this.props.host + "/" + this.state.tobeEnvironmentalTask._id + "/" + this.state.tobeEnvironmentalTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}
@@ -496,7 +523,8 @@ class FileExplorerCore extends Component {
                                 <td>
                                     {  this.state.tobeComfortTask.files[index] !== "" ? <li className="collection-item valign-wrapper" value={this.state.tobeComfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
                                         <p className="col s10">{this.state.tobeComfortTask.files[index]} </p>
-                                        <a className="btn rezbuild col s2 right-align" href={"http://" + this.props.host + "/" + this.state.tobeComfortTask._id + "/" + this.state.tobeComfortTask.files[index]}>
+                                        <a className="btn rezbuild col s2 right-align  tooltipped" data-position="top" data-tooltip="Download"
+                                         href={"http://" + this.props.host + "/" + this.state.tobeComfortTask._id + "/" + this.state.tobeComfortTask.files[index]}>
                                             <i className="material-icons white-text">cloud_download</i>
                                         </a>
                                     </li> : ''}

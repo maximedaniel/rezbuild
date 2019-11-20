@@ -47,7 +47,12 @@ class NavbarCore extends Component {
       if (prevState.user !== this.state.user) {
         $(".button-collapse").sideNav();
         $('#modal_settings').modal();
+        $('.tooltipped').tooltip({delay:0});
+
       }
+  }
+  componentWillUnmount(){
+    $('.tooltipped').tooltip("remove");
   }
 
   handleSignout(event){
@@ -80,7 +85,7 @@ class NavbarCore extends Component {
                     <div className="col s12" style={{fontWeight:'bold'}}> {this.state.user.firstname} {this.state.user.lastname}</div>
                     <div className="col s12">
                     {
-                      this.state.user.roles.map(role => common.ROLES[role].name).join()
+                      this.state.user.roles.map(role => common.ROLES[role].name).join(', ')
                     }
                     </div>
                 </li>
@@ -90,19 +95,19 @@ class NavbarCore extends Component {
 
               </ul>
             <div className="nav-wrapper">
-              <a href="#!" data-activates="slide-out" className="button-collapse" style={{padding:'0', display:'inline-flex'}} onClick={() => $('.button-collapse').sideNav('show')}> <i className="material-icons">menu</i></a>
+              <a href="#!" data-activates="slide-out" className="button-collapse" style={{padding:'0', display:'inline-flex'}} onClick={() => $('.button-collapse').sideNav('show')}><i className="material-icons">menu</i></a>
 
-              <a href="#!" className="brand-logo center">Welcome <b>{this.state.user.firstname}</b></a>
+              <a href="#!" className="brand-logo center hide-on-med-and-down">Welcome <b>{this.state.user.firstname}</b></a>
               <ul className="right">
                 <li><a href="#!"><img  className="brand-logo right" src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} /></a></li>
               </ul>
               <div className="col s12 left">
                 {pathComponent}
-                <SettingsForm user={this.state.user} update={this.update}/>
               </div>
 
             </div>
            </div>
+           <SettingsForm user={this.state.user} update={this.update}/>
           </nav>
         );
     } else return <div/>;

@@ -3503,12 +3503,14 @@ small {
       height: 100%;
       padding: 0 24px;
       font-size: 14px;
+      font-weight: normal;
       text-overflow: ellipsis;
       overflow: hidden;
       transition: color .28s ease; }
       .tabs .tab a:hover, .tabs .tab a.active {
         background-color: transparent;
-        color: #f7931e; }
+        color: #f7931e;
+        font-weight: bold; }
     .tabs .tab.disabled a,
     .tabs .tab.disabled a:hover {
       color: rgba(247, 147, 30, 0.7);
@@ -3516,7 +3518,7 @@ small {
   .tabs .indicator {
     position: absolute;
     bottom: 0;
-    height: 2px;
+    height: 3px;
     background-color: #fab668;
     will-change: left, right; }
 
@@ -3537,7 +3539,8 @@ small {
   z-index: 2000;
   background-color: transparent;
   border-radius: 2px;
-  color: #fff;
+  color: #f7931e;
+  font-weight: bold;
   min-height: 36px;
   line-height: 120%;
   opacity: 0;
@@ -3556,7 +3559,7 @@ small {
   height: 7px;
   width: 14px;
   border-radius: 0 0 50% 50%;
-  background-color: #323232;
+  background-color: #fff;
   z-index: -1;
   transform-origin: 50% 0%;
   visibility: hidden; }
@@ -3568,7 +3571,7 @@ small {
   display: inline-block;
   height: 36px;
   line-height: 36px;
-  padding: 0 2rem;
+  padding: 0 1rem;
   text-transform: uppercase;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent; }
@@ -3923,6 +3926,7 @@ button.btn-floating {
   width: 90%;
   margin: auto;
   overflow-y: auto;
+  overflow-x: hidden;
   border-radius: 2px;
   will-change: top, opacity; }
   @media only screen and (max-width: 992px) {

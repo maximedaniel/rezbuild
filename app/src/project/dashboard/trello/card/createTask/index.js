@@ -212,11 +212,12 @@ class CreateTaskFormCore extends Component {
                       }
                      <div className="row">
                       <div className="input-field col s6 center">
-                          <button className="btn waves-effect waves-light" type="submit">SUBMIT</button>
+                          <button className="btn waves-effect waves-light" type="submit"><i className="material-icons right">send</i>SUBMIT</button>
                       </div>
                       <div className="input-field col s6 center">
                           <a className="btn waves-effect waves-light rezbuild-text white" href='#!'
                           onClick={() => $('#modal_createtask'+ this.state.id).modal('close')}>
+                            <i className="material-icons left">cancel</i>
                           CANCEL</a>
                       </div>
                      </div>

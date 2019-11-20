@@ -58,12 +58,29 @@ class TodoTaskFormCore extends Component {
             if(res.tasks){
               var filter = {_id: this.props.selectedTask._id}
               var update = { $push: {next: res.tasks._id}}
+              var newTask = res.tasks;
               this.props.socket.emit('/api/task/update', filter, update, res => {
                   if(res.tasks){
+                       /* SEND MAIL */
+                    if(create.user){
+                      this.props.socket.emit('/api/user/get', {_id: create.user}, res => {
+                        if(res.users){
+                          this.props.socket.emit('/api/email/send', {user: res.users[0], task: newTask, project: this.props.project}, res => {
+                              /* CLOSE MODAL */
+                              this.setState({pending:false, error: false}, () => {
+                                $("#modal_todotask").modal('close')
+                                this.props.socket.emit('/api/task/done')
+                              });
+                          });
+                        }
+                      });
+                    } else {
+                      /* CLOSE MODAL */
                       this.setState({pending:false, error: false}, () => {
                         $("#modal_todotask").modal('close')
                         this.props.socket.emit('/api/task/done')
                       })
+                    }
                   }
                   if(res.error){
                       this.setState({pending:false, error: res.error})
@@ -149,10 +166,10 @@ class TodoTaskFormCore extends Component {
                      </div>
                      <div className="row" style={{marginTop:'250px'}}>
                       <div className="input-field col s6 center">
-                          <a className="btn waves-effect waves-light" href='#!' onClick={this.submit}>SUBMIT</a>
+                          <a className="btn waves-effect waves-light" href='#!' onClick={this.submit}><i className="material-icons right">send</i>SUBMIT</a>
                       </div>
                       <div className="input-field col s6 center">
-                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!' onClick={this.cancel}>CANCEL</a>
+                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!' onClick={this.cancel}><i className="material-icons left">cancel</i>CANCEL</a>
                       </div>
                      </div>
                   </form>

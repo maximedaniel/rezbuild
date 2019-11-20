@@ -5,6 +5,7 @@ import SocketContext from '../SocketContext'
 
 axios.defaults.withCredentials = true
 
+var $ = window.$
 
 class SigninFormCore extends Component {
 
@@ -15,9 +16,13 @@ class SigninFormCore extends Component {
   }
 
   componentDidMount() {
-    /* $(document).ready(function() {
-        M.AutoInit()
-     });*/
+     $(document).ready(function() {
+      $('.tooltipped').tooltip({delay:0, html:true});
+        
+     });
+  }
+  componentWillUnmount(){
+    $('.tooltipped').tooltip('remove');
   }
 
   handleSubmit(event){
@@ -56,9 +61,14 @@ class SigninFormCore extends Component {
      return (
     <div className="row" style={{paddingTop:'25vh'}}>
           <div className="col push-l4 l4 push-m3 m6 push-s1 s10 center white z-depth-1" style={{padding:'0rem', fontSize:'0'}}>
-              <div className="col s12 center rezbuild">
+              <div className="col s12 rezbuild white-text">
+                <div className="col s6 left-align">
+                  <h5 className="header">Sign in</h5>
+                </div>
+                <div className="col s6 right-align">
                 <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
-              </div>
+                </div>
+              </div> 
              <form className="col s12" onSubmit={this.handleSubmit}>
                 <div className="input-field col s12">
                       <input id="input_email" name='email' ref="email" type="email" autoComplete="username email" required/>
@@ -92,10 +102,10 @@ class SigninFormCore extends Component {
                 }
                 <div className="row">
                     <div className="col s6">
-                          <button className="btn waves-effect waves-light" type="submit">SIGN IN</button>
+                          <button className="btn waves-effect waves-light">  SUBMIT  <i class="material-icons right">send</i></button>
                     </div>
                     <div className="col s6">
-                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signup')}>SIGN UP</button>
+                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signup')}> <i class="material-icons left">person_add</i> SIGN UP</button>
                           </div>
                 </div>
           </form >

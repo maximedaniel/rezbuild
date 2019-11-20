@@ -144,6 +144,10 @@ class TrelloComponent extends Component {
 
   componentDidMount(){
     this.updateTasks()
+    $('.tooltipped').tooltip({delay:0, html:true});
+  }
+  componentWillUnount(){
+    $('.tooltipped').tooltip('remove');
   }
 
   updateTasks(){
@@ -341,7 +345,7 @@ class TrelloComponent extends Component {
             cardStyle = {normalCardStyle}
             components={components} style= {
                    { backgroundColor:'transparent',
-                   fontFamily: 'Exo 2'}} />;
+                   fontFamily: 'Exo 2', padding:'0'}} />;
             /*
              <Board data={this.state.data} style= {
                     { backgroundColor:'transparent',
@@ -357,14 +361,14 @@ class TrelloComponent extends Component {
                 <CardComponent />
                 </Board>*/
           }
-          if (this.state.task && this.state.cancel){
+          if (this.state.task && this.state.cancel && this.props.project){
             backlogTaskFormComponent =  <BacklogTaskForm  setTask={this.props.setTask} selectedTask={this.props.task} tasks={this.props.tasks} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />
-            todoTaskFormComponent =  <TodoTaskForm  selectedTask={this.props.task} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />
+            todoTaskFormComponent =  <TodoTaskForm  project={this.props.project} selectedTask={this.props.task} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />
             doneTaskFormComponent =  <DoneTaskForm   selectedTask={this.props.task}  task={this.state.task} event={this.state.cancel} cancel={this.cancel} />
          
           }
-          createTaskButtonComponent = <a className="btn-floating waves-effect waves-light modal-trigger" href="#modal_createtask">
-                                          <i className="material-icons">add</i>
+          createTaskButtonComponent = <a className="waves-effect waves-light btn modal-trigger" href="#modal_createtask">
+                                          <i className="material-icons left">add</i> NEW 
                                       </a>
           createTaskFormComponent =  <CreateTaskForm project={this.props.project} />
 

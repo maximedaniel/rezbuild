@@ -67,6 +67,7 @@ class DashboardCore extends Component {
   componentDidMount(){
     $(document).ready(function(){
       $('.tabs').tabs();
+      $('.tooltipped').tooltip({delay:0, html:true});
     });
     this.update()
     this.props.socket.on('/api/task/done', () => {
@@ -75,6 +76,9 @@ class DashboardCore extends Component {
     this.props.socket.on('/api/user/done', () => {
     this.fetchUsers()
     });
+  }
+  componentWillUnmount(){
+    $('.tooltipped').tooltip('remove');
   }
 
   render() {
@@ -94,19 +98,19 @@ class DashboardCore extends Component {
            <div className="row">
                     <div className="col s12 white">
                       <ul className="tabs">
-                        <li className="tab col s2"><a className="active" href="#tab_board">Workspace</a></li>
-                        <li className="tab col s2"><a href="#tab_tools">Tools</a></li>
-                        <li className="tab col s2"><a href="#tab_team">Team</a></li>
-                        <li className="tab col s3"><a href="#tab_project">Project Information</a></li>
+                        <li className="tab col s2 tooltipped" data-position="top" data-tooltip="Manage project tasks, versions and files"><a className="active" href="#tab_board">Workspace</a></li>
+                        <li className="tab col s2 tooltipped" data-position="top" data-tooltip="Make use of project tools"><a href="#tab_tools">Tools</a></li>
+                        <li className="tab col s2 tooltipped" data-position="top" data-tooltip="Invite and communicate with collaborators"><a href="#tab_team">Team</a></li>
+                        <li className="tab col s3 tooltipped" data-position="top" data-tooltip="Update general and specific information"><a href="#tab_project">Project Information</a></li>
                       </ul>
                     </div>
            </div>
 
            <div id="tab_board" className="col s12">
-             <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:'0.2rem'}}>
+             <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:0, marginTop:'1rem'}}>
                  <div className="row transparent"  style={{marginBottom:0}}>
                       <div className="col s12 transparent">
-                                <h5 className="rezbuild-text">Navigation</h5>
+                                <h5 className="rezbuild-text   tooltipped" data-position="top" data-tooltip="Click on a node to select a version of the project"> Navigation </h5>
                                  <div className="section" style={{height:'250px', paddingBottom:0}}>
                                   {(this.state.tasks.length > 0) ?
                                   <ParentSize>
@@ -135,9 +139,11 @@ class DashboardCore extends Component {
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
               <div className='row'>
-                 <div className="col l7 m12 s12 transparent">
-                                <h5 className="rezbuild-text">Tasks</h5>
-                                { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
+                 <div className="col l8 m12 s12 transparent">
+                                <h5 className="rezbuild-text   tooltipped" data-position="top" data-tooltip="Drag-And-Drop cards to assign or perform tasks at this version of the project">Tasks</h5>
+                                
+                                <div className="section">
+                                  { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
                                      <TrelloComponent
                                        project = {this.props.project}
                                        tasks = {this.state.tasks}
@@ -146,11 +152,13 @@ class DashboardCore extends Component {
                                        users = {this.state.users}
                                       />
                                       : loaderComponent}
-                                
+                                </div>
                  </div>
-                 <div className="col l5 m12 s12 transparent">
-                                <h5 className="rezbuild-text">Files</h5>
-                                { (this.state.tasks.length > 0) ?
+                 <div className="col l4 m12 s12 transparent">
+                                <h5 className="rezbuild-text  tooltipped" data-position="top" data-tooltip="Explore the BIM models and KPI data of this version of the project">Files</h5>
+                                
+                                <div className="section">
+                                  { (this.state.tasks.length > 0) ?
                                      <FileExplorerComponent
                                        project = {this.props.project}
                                        tasks = {this.state.tasks}
@@ -158,6 +166,7 @@ class DashboardCore extends Component {
                                        setTask = {this.setTask}
                                       />
                                   : ''}
+                                </div>
                  </div>
               </div>
              </div>
@@ -174,7 +183,7 @@ class DashboardCore extends Component {
                                     <p>Description of OpenBimLibraryTool...</p>
                                   </div>
                                   <div className="card-action">
-                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="/technologies">OPEN IN NEW TAB</a>
+                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="/technologies">OPEN IN NEW TAB <i className="material-icons right">open_in_new</i></a>
                                   </div>
                                 </div>
                               </div>
@@ -185,7 +194,7 @@ class DashboardCore extends Component {
                                     <p>Description of RankingTechnologyTool...</p>
                                   </div>
                                   <div className="card-action">
-                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="http://rezbuild-sorter.herokuapp.com">OPEN IN NEW TAB</a>
+                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="http://rezbuild-sorter.herokuapp.com">OPEN IN NEW TAB <i className="material-icons right">open_in_new</i></a>
                                   </div>
                                 </div>
                               </div>

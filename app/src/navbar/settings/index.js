@@ -20,6 +20,9 @@ class SettingsFormCore extends Component {
       $('#select_settings_roles').material_select();
       Materialize.updateTextFields();
     });
+    this.props.socket.on('/api/user/done', res => {
+      this.props.update()
+   });
   }
   handleSubmit(event){
    event.preventDefault();
@@ -36,7 +39,8 @@ class SettingsFormCore extends Component {
             if (res.users) {
                 this.setState({error : false, pending : false}, () =>{
                     $('#modal_settings').modal('close');
-                    this.props.update()
+                    // this.props.update()
+                    this.props.socket.emit('/api/user/done')
                 })
             }
             if(res.error){
@@ -113,10 +117,10 @@ class SettingsFormCore extends Component {
                              : ''
                         }
                       <div className="input-field col s6 center">
-                          <button className="btn waves-effect waves-light" type="submit">SAVE</button>
+                          <button className="btn waves-effect waves-light" type="submit">SUBMIT<i className="material-icons right" style={{lineHeight:'1.5'}}>send</i></button>
                       </div>
                       <div className="input-field col s6 center">
-                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!' onClick={this.cancel}>CANCEL</a>
+                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!' onClick={this.cancel}><i className="material-icons left" style={{lineHeight:'1.5'}}>cancel</i>CANCEL</a>
                       </div>
                      </div>
                   </form>

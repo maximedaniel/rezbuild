@@ -1,4 +1,50 @@
 var common = {
+    /*PROJECT:{
+        GENERAL: {
+            name: {name: 'Name', type:'String'},
+            country: {name: 'Country', type:'String'},
+            city: {name: 'City', type:'String'},
+            address: {name: 'Address', type:'String'},
+            context: {name: 'Context', type:'String'},
+            degree: {name: 'Degree', type:'String'},
+            climat: {name: 'Climat', type:'String'},
+        },
+
+        NEEDS: {
+            refurbishmentExpectations:      {name: 'Refurbishement Expectations', type:'String'},
+            energyConsumptionExpectations:  {name: 'Energy Consumption Expectations', type:'String'},
+            environmentalExpectations:       {name: 'Environmental Expectations', type:'String'},
+            economicalExpectations:         {name: 'Economical Expectations', type:'String'},
+            socialExpectations:             {name: 'Social Expectations', type:'String'},
+            comfortExpectations:             {name: 'Comfort Expectations', type:'String'},
+            differentLocationDuringRenovation: {name: "Don't leave home during renovation", type:'Boolean'},
+            elevatorInstallation: {type: Boolean, default: false},
+            improvedAccessibility: {type: Boolean, default: false},
+            reductionBillAmount: {type: Boolean, default: false},
+            moreHomeSpaces: {type: Boolean, default: false},
+            brighterEnvironments: {type: Boolean, default: false},
+            extraServiceRoom: {type: Boolean, default: false},
+            heatingUpgrading: {type: Boolean, default: false},
+            coolingUpgrading: {type: Boolean, default: false},
+            ventilationUpgrading: {type: Boolean, default: false},
+            consumptionControl: {type: Boolean, default: false},
+            eliminitationAirInfiltration: {type: Boolean, default: false},
+            shadingUpgrading: {type: Boolean, default: false},
+            airQualityImprovement: {type: Boolean, default: false},
+            noiseReduction: {type: Boolean, default: false},
+
+        },
+        BUILDING: {
+
+        },
+        GEOMETRY: {
+
+        },
+        ENVELOPE: {
+
+        },
+
+    },*/
     LANES: {
         BACKLOG: 'lane_backlog',
         TODO: 'lane_todo',

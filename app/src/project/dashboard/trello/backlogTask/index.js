@@ -100,10 +100,10 @@ class BacklogTaskFormCore extends Component {
                      </div>
                      <div className="row" style={{marginTop:'250px'}}>
                       <div className="input-field col s6 center">
-                          <a className="btn waves-effect waves-light" href='#!' onClick={this.submit}>SUBMIT</a>
+                          <a className="btn waves-effect waves-light" href='#!' onClick={this.submit}><i className="material-icons right">send</i>SUBMIT</a>
                       </div>
                       <div className="input-field col s6 center">
-                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!' onClick={this.cancel}>CANCEL</a>
+                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!' onClick={this.cancel}><i className="material-icons left">cancel</i>CANCEL</a>
                       </div>
                      </div>
                   </form>

@@ -2,6 +2,7 @@
 import express from 'express'
 import db from './models'
 import cors from 'cors'
+import nodemailer from 'nodemailer'
 
 var mongoose = require("mongoose");
 var User = db.User;
@@ -88,6 +89,15 @@ io.use(sharedsession(session));
 var siofu = require("socketio-file-upload");
 app.use(siofu.router)
 
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+         user: 'rezbuildapp@gmail.com',
+         pass: 'estia04081992'
+     }
+ });
+
+
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
     var uploader = new siofu()
@@ -98,6 +108,7 @@ io.on('connection', function(client){
     require('./routes/project')(io, client)
     require('./routes/task')(io, client) // test
     require('./routes/file')(io, client, uploader)
+    require('./routes/email')(io, client, transporter)
 });
 
 module.exports = {http};

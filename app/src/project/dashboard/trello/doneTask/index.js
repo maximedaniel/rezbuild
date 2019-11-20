@@ -207,7 +207,7 @@ class DoneTaskFormCore extends Component {
                                         </div>
                                         :
                                         <div className="input-field col s6">
-                                            <input required id={"values_"+this.props.task._id+'_'+name}  ref={name} type="number" className="validate"  defaultValue={this.props.task.values[index]}/>
+                                            <input required id={"values_"+this.props.task._id+'_'+name}  ref={name} type="number" step="any"  className="validate"  defaultValue={this.props.task.values[index]}/>
                                             <label className="active" htmlFor={"values_"+this.props.task._id+'_'+name}>{name} ({this.props.task.formats[index]})</label>
                                         </div>
                                 }
@@ -266,10 +266,10 @@ class DoneTaskFormCore extends Component {
                     }
                      <div className="row" style={{marginTop:'250px'}}>
                       <div className="input-field col s6 center">
-                          <button className="btn waves-effect waves-light" href='#!' type="submit" id="button_submit_task_done">SUBMIT</button>
+                          <button className="btn waves-effect waves-light" href='#!' type="submit" id="button_submit_task_done"><i className="material-icons right">send</i>SUBMIT</button>
                       </div>
                       <div className="input-field col s6 center">
-                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!'  onClick={this.cancel}>CANCEL</a>
+                          <a className="btn waves-effect waves-light rezbuild-text white" href='#!'  onClick={this.cancel}><i className="material-icons left">cancel</i>CANCEL</a>
                       </div>
                      </div>
                   </form>
