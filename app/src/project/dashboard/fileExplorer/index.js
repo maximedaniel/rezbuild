@@ -90,7 +90,7 @@ class FileExplorerCore extends Component {
                                     title="ASIS MODEL VIEWER"
                                     width="100%"
                                     height="100%"
-                                    src={"http://35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]}
+                                    src={"http://" + this.props.host + "/ifc/viewer/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allowFullScreen
                                     >
