@@ -17,7 +17,21 @@ var fileDir = "./files/"
 var serveIndex = require('serve-index')
 
 var app = express();
+
+var proxy = require('express-http-proxy');
+
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
+
+//"http://35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]
+
+
+
+app.use('/ifc/viewer/', proxy("http://35.189.193.44/Rezbuild/Visualize", {
+  proxyReqPathResolver: function (req) {
+    //console.log(req.url);
+    return "http://35.189.193.44/Rezbuild/Visualize" + req.url;
+  }}));
+
 
 app.use('/ifc/:Id', (req, res, next) => {
   try {
@@ -30,6 +44,8 @@ app.use('/ifc/:Id', (req, res, next) => {
     res.send(err)
   }
 })
+
+
 app.use('/:taskId/:filename', (req, res, next) => {
     try {
       res.sendFile(fileDir + "/" + req.params.taskId + "/" + req.params.filename, { root: __dirname })
