@@ -18,7 +18,9 @@ var serveIndex = require('serve-index')
 
 var app = express();
 
-var proxy = require('express-http-proxy');
+//var proxy = require('express-http-proxy');
+
+var proxy = require('http-proxy-middleware');
 
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
@@ -26,12 +28,15 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
 
 
-app.use('/ifc/viewer/', proxy("http://35.189.193.44/Rezbuild/Visualize", {
+/*app.use('/ifc/viewer/', proxy("http://35.189.193.44/Rezbuild/Visualize", {
   proxyReqPathResolver: function (req) {
     //console.log(req.url);
     return "http://35.189.193.44/Rezbuild/Visualize" + req.url;
-  }}));
-
+  }}));*/
+app.use(
+  '/Rezbuild/Visualize/',
+  proxy({ target: 'http://35.189.193.44/', changeOrigin: true })
+);
 
 app.use('/ifc/:Id', (req, res, next) => {
   try {
