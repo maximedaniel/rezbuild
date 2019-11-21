@@ -102,10 +102,10 @@ class SigninFormCore extends Component {
                 }
                 <div className="row">
                     <div className="col s6">
-                          <button className="btn waves-effect waves-light">  SUBMIT  <i class="material-icons right">send</i></button>
+                          <button className="btn waves-effect waves-light">  SUBMIT  <i className="material-icons right">send</i></button>
                     </div>
                     <div className="col s6">
-                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signup')}> <i class="material-icons left">person_add</i> SIGN UP</button>
+                          <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signup')}> <i className="material-icons left">person_add</i> SIGN UP</button>
                           </div>
                 </div>
           </form >

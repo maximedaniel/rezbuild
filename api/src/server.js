@@ -24,20 +24,19 @@ var proxy = require('http-proxy-middleware');
 
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
-//"http://35.189.193.44/Rezbuild/Visualize/" + this.state.asisModelTask._id + "_" + this.state.asisModelTask.values[0].split('.ifc')[0]
 
-
-
-/*app.use('/ifc/viewer/', proxy("http://35.189.193.44/Rezbuild/Visualize", {
-  proxyReqPathResolver: function (req) {
-    //console.log(req.url);
-    return "http://35.189.193.44/Rezbuild/Visualize" + req.url;
-  }}));*/
+/* HANDLING RIMOND MODULE */
 app.use(
   '/Rezbuild/Visualize/',
   proxy({ target: 'http://35.189.193.44/', changeOrigin: true })
 );
 
+app.use(
+  '/RezBuild/',
+  proxy({ target: 'http://35.189.193.44/', changeOrigin: true })
+);
+
+/* ROUTING FILE DOWNLOAD */
 app.use('/ifc/:Id', (req, res, next) => {
   try {
     var splittedId = req.params.Id.split('_', 2)
