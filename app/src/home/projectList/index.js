@@ -143,28 +143,30 @@ class ProjectListCore extends Component {
           </div>
         }
 
-        return (
-                 <div className='container' style={{marginTop:'2rem'}}>
-                    <div className='row'>
-                      <div className='section col s12'>
-                        <div className= 'section col s12 transparent'  style={{marginBottom:'1rem'}}>
-                                  {actionComponent}
-                        </div>
-                        <div className='section col s12 white z-depth-1' style={{paddingTop:'0.5rem'}}>
-                                {projectListComponent}
-                        </div>
-                        <div className='section col s12 center'>
-                                  {preloaderComponent}
-                        </div>
-                        <div className='section col s12 center'>
-                            {errorComponent}
-                        </div>
-                      </div>
-                    </div>
-                    <CreateProjectForm/>
-                    <JoinProjectForm/>
+        if (this.state.projects){
+          return (
+          <div className='container' style={{marginTop:'2rem'}}>
+              <div className='row'>
+                <div className='section col s12'>
+                  <div className= 'section col s12 transparent'  style={{marginBottom:'1rem'}}>
+                            {actionComponent}
+                  </div>
+                  <div className='section col s12 white z-depth-1' style={{paddingTop:'0.5rem'}}>
+                          {projectListComponent}
+                  </div>
+                  <div className='section col s12 center'>
+                            {preloaderComponent}
+                  </div>
+                  <div className='section col s12 center'>
+                      {errorComponent}
+                  </div>
                 </div>
-        );
+            </div>
+            <CreateProjectForm/>
+            <JoinProjectForm/>
+          </div>
+          )
+        } else return <div/>;
   }
 }
 
