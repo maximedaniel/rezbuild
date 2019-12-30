@@ -12,6 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "cross-env": "^6.0.3",
-    "mongo-express": "^0.53.0"
+    "mongo-express": "^0.54.0"
   }
 }
