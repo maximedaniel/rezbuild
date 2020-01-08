@@ -6,6 +6,7 @@ import TeamComponent from './team'
 import ProjectInformationComponent from './projectInformation'
 import { ParentSize } from '@vx/responsive'
 import SocketContext from '../../SocketContext'
+import CompareVersionForm from './CompareVersion'
 
 var $ = window.$
 
@@ -13,10 +14,10 @@ class DashboardCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {task: null, tasks: [], users: [],  error: false, pending: false}
-    this.setTask = this.setTask.bind(this)
-    this.fetchTasks = this.fetchTasks.bind(this)
-    this.fetchUsers = this.fetchUsers.bind(this)
+    this.state = {task: null, tasks: [], users: [],  error: false, pending: false};
+    this.setTask = this.setTask.bind(this);
+    this.fetchTasks = this.fetchTasks.bind(this);
+    this.fetchUsers = this.fetchUsers.bind(this);
   }
 
   fetchTasks(){
@@ -107,11 +108,42 @@ class DashboardCore extends Component {
            </div>
 
            <div id="tab_board" className="col s12">
+           {this.state.task ? 
+            <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
+                <div className='row'>
+                  <div className="col l12 m12 s12 transparent">
+                      <h5 className="rezbuild-text  tooltipped" data-position="top" data-tooltip="Explore the BIM models and KPI data of this version of the project">Version</h5>  
+                      <div className="section">
+                        { 
+                          this.state.tasks.length ?
+                            <FileExplorerComponent
+                              project = {this.props.project}
+                              tasks = {this.state.tasks}
+                              task = {this.state.task}
+                              setTask = {this.setTask}
+                              />: ''
+                        }
+                      </div>
+                  </div>
+                </div>
+              </div>
+             : ''}
              <div className="section"  style={{marginLeft:'2%', marginRight:'2%', paddingBottom:0, paddingTop:0, marginTop:'1rem'}}>
                  <div className="row transparent"  style={{marginBottom:0}}>
                       <div className="col s12 transparent">
                                 <h5 className="rezbuild-text   tooltipped" data-position="top" data-tooltip="Click on a node to select a version of the project"> Navigation </h5>
-                                 <div className="section" style={{height:'250px', paddingBottom:0}}>
+                                {
+                                  (this.state.tasks.length > 0) ?
+                                    <div>
+                                      <a className="waves-effect waves-light btn modal-trigger" href="#modal_compare_version">
+                                            <i className="material-icons left">add</i> COMPARE 
+                                      </a>
+                                      < CompareVersionForm tasks = {this.state.tasks} />
+                                    </div>
+                                    :''
+                                }
+
+                                <div className="section" style={{height:'250px', paddingBottom:0}}>
                                   {(this.state.tasks.length > 0) ?
                                   <ParentSize>
                                   {
@@ -139,9 +171,8 @@ class DashboardCore extends Component {
              </div>
              <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
               <div className='row'>
-                 <div className="col l8 m12 s12 transparent">
+                 <div className="col l12 m12 s12 transparent">
                                 <h5 className="rezbuild-text   tooltipped" data-position="top" data-tooltip="Drag-And-Drop cards to assign or perform tasks at this version of the project">Tasks</h5>
-                                
                                 <div className="section">
                                   { (this.state.tasks.length > 0 && this.state.users.length > 0) ?
                                      <TrelloComponent
@@ -152,20 +183,6 @@ class DashboardCore extends Component {
                                        users = {this.state.users}
                                       />
                                       : loaderComponent}
-                                </div>
-                 </div>
-                 <div className="col l4 m12 s12 transparent">
-                                <h5 className="rezbuild-text  tooltipped" data-position="top" data-tooltip="Explore the BIM models and KPI data of this version of the project">Files</h5>
-                                
-                                <div className="section">
-                                  { (this.state.tasks.length > 0) ?
-                                     <FileExplorerComponent
-                                       project = {this.props.project}
-                                       tasks = {this.state.tasks}
-                                       task = {this.state.task}
-                                       setTask = {this.setTask}
-                                      />
-                                  : ''}
                                 </div>
                  </div>
               </div>

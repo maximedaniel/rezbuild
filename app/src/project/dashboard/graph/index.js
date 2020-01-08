@@ -1,9 +1,7 @@
     
-import React, { Component } from 'react';
-//import { Graph} from '@vx/network';
-import * as d3 from 'd3';
-//import SocketContext from '../SocketContext'
-
+import React, { Component } from 'react'
+import * as d3 from 'd3'
+import moment from 'moment'
 
 var $ = window.$
 
@@ -12,16 +10,33 @@ class GraphComponent extends Component {
     constructor(props){
         super(props)
         this.did = false
-        this.state = {nodes : [], links : []}
+        this.state = {compareMode: false, selectedTasks: [], nodes : [], links : []}
+        this.toggleCompareMode.bind(this);
     }
 
-
+    toggleCompareMode(){
+      this.setState({compareMode:!this.state.compareMode}, () => {
+        const svg = d3.select($("#svg-tree")[0]);
+        if(this.state.compareMode){
+          svg.selectAll(".triangle")   // change the line
+          .transition()
+          .duration(750)
+          .attr("opacity", 1);
+  
+        } else {
+          svg.selectAll(".triangle")   // change the line
+          .transition()
+          .duration(750)
+          .attr("opacity", 0.5);
+        }
+      });
+    }
 
    update(){
      var childWidth = 200
      var xOrigin = 15
      var yOrigin = 15
-     this.setState({nodes:[], links:[]}, () => {
+     this.setState({compareMode: false, selectedTasks: [], nodes:[], links:[]}, () => {
       var rootTask = this.props.tasks.filter(task => (task.action === 'INIT'))[0]
 
       var iterate = (task, x, y, width, height, nodes, links) => {
@@ -83,81 +98,10 @@ class GraphComponent extends Component {
         });
 
       };
-
-
       iterate(rootTask, xOrigin, yOrigin, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
       this.draw()
      });
    }
-/*
-      var iterate = (task, x, y, width, height, nodes, links) => {
-        var selected = this.props.revision ? (this.props.revision._id === revision._id) : false
-
-        nodes.push({type: type, revision: revision, x: x, y: y, selected: selected})
-
-        var childHeight = height/revision.nextLinks.length
-
-        var startIndex = 0
-        var nextLinksASISMODEL = revision.nextLinks.filter(nextLink => {
-          var task = this.props.tasks.filter(task => (task._id === nextLink.task))[0]
-          return task.actions.filter(action => action.includes('ASIS')).length
-        })
-
-        nextLinksASISMODEL.map((nextLink, index) => {
-          var nextRevision = this.props.revisions.filter ((revision) => (revision._id === nextLink.revision))[0]
-          var newTask = this.props.tasks.filter ((task) => (task._id === nextLink.task))[0]
-          links.push({
-            task: newTask,
-            source: {x: x, y: y},
-            target: {x: x + childWidth, y: y + (index * childHeight)},
-            dashed : ("0, 0"),
-            color: "#f7931e"
-          })
-          ascend('ASIS_MODEL', nextRevision,  x + childWidth, y + (index * childHeight), width, childHeight, nodes, links)
-        });
-
-        startIndex += nextLinksASISMODEL.length
-
-        var nextLinksTOBEMODEL = revision.nextLinks.filter(nextLink => {
-          var task = this.props.tasks.filter(task => (task._id === nextLink.task))[0]
-          return task.actions.filter(action => action.includes('TOBE')).length
-        })
-
-        nextLinksTOBEMODEL.map((nextLink, index) => {
-          var nextRevision = this.props.revisions.filter ((revision) => (revision._id === nextLink.revision))[0]
-          var newTask = this.props.tasks.filter ((task) => (task._id === nextLink.task))[0]
-          links.push({
-            task: newTask,
-            source: {x: x, y: y},
-            target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
-            dashed : ("0, 0"),
-            color: "#f7931e"
-          })
-          ascend('TOBE_MODEL', nextRevision,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
-        });
-
-        startIndex += nextLinksTOBEMODEL.length
-
-        var nextLinksKPI = revision.nextLinks.filter(nextLink => {
-          var task = this.props.tasks.filter(task => (task._id === nextLink.task))[0]
-          return task.actions.filter(action => action.includes('KPI')).length
-        })
-        nextLinksKPI.map((nextLink, index) => {
-          var nextRevision = this.props.revisions.filter ((revision) => (revision._id === nextLink.revision))[0]
-          var newTask = this.props.tasks.filter ((task) => (task._id === nextLink.task))[0]
-          links.push({
-            task: newTask,
-            source: {x: x, y: y},
-            target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
-            dashed : ("3, 3"),
-            color: "#f7931e"
-          })
-          ascend('KPI', nextRevision,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
-        });
-      }
-      ascend('ASIS_MODEL', rootRevision, 15, 15, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
-      
-    });*/
 
    draw(){
         /* DRAWING */
@@ -191,7 +135,8 @@ class GraphComponent extends Component {
         .style("stroke-dasharray", d => d.dashed)
         .attr("fill", "none");
       
-        const sizeLabel = 12
+        const sizeLabel = 12;
+        const sizeSubLabel = 10;
         
         /* LABELS */
         svg.append("g")
@@ -201,13 +146,31 @@ class GraphComponent extends Component {
         .append("text")
         .attr("x", function(d) { return d.target.x - sizeLabel-4; })
         .attr("y", function(d) { return d.target.y + sizeLabel/4; })
-        .html( function (d) { return d.task.name; })
+        .html( function (d) { return d.task.name})
         .attr("fill", "white")
         .attr("text-anchor", "end")
         .attr("font-size", sizeLabel+"px")
         .attr("paint-order", "stroke")
         .attr("stroke","#f7931e")
         .attr("stroke-width",stroke_max)
+        .attr("stroke-linecap", "butt")
+        .attr("stroke-linejoin", "miter")
+        .attr("font-weight", "800");
+        
+        svg.append("g")
+        .selectAll("text")
+        .data(this.state.links)
+        .enter()
+        .append("text")
+        .attr("x", function(d) { return d.target.x - sizeLabel-4; })
+        .attr("y", function(d) { return d.target.y + sizeLabel + 4; })
+        .html( function (d) { return moment(d.task.date).format('LLL'); })
+        .attr("fill", "#f7931e")
+        .attr("text-anchor", "end")
+        .attr("font-size", sizeSubLabel+"px")
+        .attr("paint-order", "stroke")
+        .attr("stroke","#fff")
+        .attr("stroke-width",stroke_min)
         .attr("stroke-linecap", "butt")
         .attr("stroke-linejoin", "miter")
         .attr("font-weight", "800");
@@ -218,6 +181,7 @@ class GraphComponent extends Component {
         .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_ASIS') || d.task.action.includes('INIT')))
         .enter()
         .append("circle")
+        .attr("class", ".circle")
         .attr("stroke", "#f7931e")
         .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
         .attr("r", d => {return (d.selected)?radius_max:radius_min})
@@ -246,45 +210,13 @@ class GraphComponent extends Component {
           }
          });
 
-       /* const circles = svg.append("g")
-           .selectAll("circle")
-           .data(this.state.nodes.filter(d => Object.keys(d.task.actions).filter(key => key.includes('ASIS')).length))
-           .enter()
-           .append("circle")
-           .attr("stroke", "#f7931e")
-           .attr("stroke-width", 2)
-           .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-           .attr("r", d => {return (d.selected)?radius_max:radius_min})
-           .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
-           .attr("fill",  "#fff")
-           .on("click", (d, i, n) => {
-                if(d.selected){
-                  this.props.setTask(null)
-                } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
-            })
-           .on("mouseover", function(d, i) {
-            if(!d.selected){
-                d3.select(this)
-                .transition()
-                .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
-                .duration(transition_duration);
-            }
-            })
-           .on("mouseout", function(d, i) {
-            if(!d.selected){
-                d3.select(this)
-                .transition()
-                .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-                .duration(transition_duration);
-            }
-            });*/
-
         /* RECTS */
             svg.append("g")
             .selectAll("rect")
             .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_TOBE')))
             .enter()
             .append("rect")
+            .attr("class", ".rectangle")
             .attr("stroke", "#f7931e")
             .attr("stroke-width", 2)
             .attr("transform", d => "translate(" + (d.x - ((d.selected)?radius_max:radius_min))+ "," + ( d.y - ((d.selected)?radius_max:radius_min) )+ ")")
@@ -321,6 +253,7 @@ class GraphComponent extends Component {
              .data(this.state.nodes.filter(d => d.task.action.includes('KPI')))
              .enter()
              .append("path")
+             .attr("class", ".triangle")
              .attr("d", d => d3.symbol()
                     .type(d3.symbolTriangle)
                     .size((d.selected?radius_max:radius_min)*14)()
@@ -378,8 +311,24 @@ class GraphComponent extends Component {
         }
 
         return (
-        <svg id='svg-tree' width={this.props.parentWidth} height={this.props.parentHeight} >
-        </svg>
+          <div>
+            <div className='col s12'>
+              <div className="switch">
+                <label>
+                  COMPARE OFF
+                  <input type="checkbox"
+                  checked={this.state.compareMode}
+                  ref="compareMode"
+                  onChange={() => this.toggleCompareMode()}
+                  />
+                  <span class="lever"/>
+                  ON
+                </label>
+              </div>
+            </div>
+            <svg className='col s12' id='svg-tree' width={this.props.parentWidth} height={this.props.parentHeight} >
+            </svg>
+          </div>
         );
     }
 

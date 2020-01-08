@@ -1,19 +1,19 @@
 
-
-
-
 # IMPORTANT
-
+- Visualization KPIs
+- Compare KPIs (How to compute score for each KPI?)
+- Filter role by actions
+- prevent multiple KPI branches
 
 # TODO
 - Add information tooltip to each field of the project information
-- Set the form to blank.
-- After Login a new user doesn’t know where to start from. Something pointing / Highlighting the “edit” button (where I guess you shall start from) could be helpful here. 
+- Set the form to blank
+- After Login a new user doesn’t know where to start from. Something pointing / Highlighting the “edit” button (where I guess you shall start from) could be helpful here
 - Project Information → General Information, not clear what Exposure means. Maybe add details about roof/main entrance/etc.
 - App not multilingual. I think at least language of the 3 demo sites should be provided (Italian, Spanish, Norwegian). 
 - Project Information → General Information: “adjacent to unheated room” not clear what that means. 
 - Project Information → General Information:Clear inter-floor height (m) does not accept decimals (cannot enter 2.5 m). Similar issue for other linear dimensions.
-- Project Information → General Information: when editing/adding values, when click on Save no message is shown (like “Changes Have been saved”, even though they infact are saved)  and the window remains exactly the same, so user doesn’t get any feedback for his action. 
+- Project Information → General Information: when editing/adding values, when click on Save no message is shown (like “Changes Have been saved”, even though they infact are saved)  and the window remains exactly the same, so user doesn’t get any feedback for his action
 
 
 # DONE
