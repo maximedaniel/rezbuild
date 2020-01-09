@@ -5,42 +5,101 @@ import moment from 'moment'
 
 var $ = window.$
 
+const radius_min = 8;
+const radius_max = 12;
+const stroke_min = 2;
+const stroke_max = 4;
+const transition_duration = 150;
+const selectionScale = 1.5;
+const sizeLabel = 12;
+const sizeSubLabel = 10;
+const childWidth = 200
+const xOrigin = 15
+const yOrigin = 15
+
 class GraphComponent extends Component {
 
     constructor(props){
         super(props)
-        this.did = false
-        this.state = {compareMode: false, selectedTasks: [], nodes : [], links : []}
-        this.toggleCompareMode.bind(this);
+        this.did = false;
+        this.state = {selectedTasks: [], nodes : [], links : []}
+        
+    }
+    handleClassName(className, isActive, isMultiple, duration){
+      const svg = d3.select($("#svg-tree")[0]);
+      let extraMax = 0;
+      let extraMin = 0;
+      if(className ==='rectangle'){
+        extraMax = radius_max;
+        extraMin = radius_min;
+      }
+      if(isActive){
+        svg.selectAll('.link-'+className+',.symbol-'+className+',.label-'+className)
+        .transition()
+        .duration(duration)
+        .attr("opacity", 1);
+  
+        svg.selectAll(".symbol-"+className)
+        .on("click", (d, i, n) => {
+          if(d.selected){
+            if(isMultiple){
+              this.props.removeTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0]);
+             } else {
+                this.props.setTask(null);
+            }
+          } else {
+            if(isMultiple){
+              this.props.addTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0]);
+            } else {
+              this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0]);
+            }
+          }
+        })
+        .on("mouseover", function(d, i) {
+          if(!d.selected){
+              d3.select(this)
+              .transition()
+              .attr("transform", d => "translate(" + (d.x - extraMax) + "," + (d.y - extraMax) + ") scale("+selectionScale+")")
+              .duration(transition_duration);
+          }
+        })
+        .on("mouseout", function(d, i) {
+            if(!d.selected){
+                d3.select(this)
+                .transition()
+                .attr("transform", d => "translate(" + (d.x - extraMin) + "," + (d.y - extraMin) + ")")
+                .duration(transition_duration);
+            }
+        })
+      } else {
+        svg.selectAll('.link-'+className+',.symbol-'+className+',.label-'+className)
+        .transition()
+        .duration(duration)
+        .attr("opacity", 0.5);
+  
+        svg.selectAll(".symbol-"+className)
+        .on("click", null)
+        .on("mouseover", null)
+        .on("mouseout", null);
+      }
     }
 
     toggleCompareMode(){
-      this.setState({compareMode:!this.state.compareMode}, () => {
-        const svg = d3.select($("#svg-tree")[0]);
-        if(this.state.compareMode){
-          svg.selectAll(".triangle")   // change the line
-          .transition()
-          .duration(750)
-          .attr("opacity", 1);
-  
-        } else {
-          svg.selectAll(".triangle")   // change the line
-          .transition()
-          .duration(750)
-          .attr("opacity", 0.5);
-        }
-      });
+        this.handleClassName('init', !this.props.compareMode, this.props.compareMode, 0);
+        this.handleClassName('circle', true, this.props.compareMode, 0);
+        this.handleClassName('rectangle', true, this.props.compareMode, 0);
+        this.handleClassName("triangle", !this.props.compareMode, this.props.compareMode, transition_duration);
+        //if(this.props.selectedTasks.filter(selectedTask => selectedTask.action.includes('MODEL')).length !== this.props.selectedTasks.length)
+        this.props.setTask(null);
     }
 
    update(){
-     var childWidth = 200
-     var xOrigin = 15
-     var yOrigin = 15
-     this.setState({compareMode: false, selectedTasks: [], nodes:[], links:[]}, () => {
+     this.setState({selectedTasks: [], nodes:[], links:[]}, () => {
       var rootTask = this.props.tasks.filter(task => (task.action === 'INIT'))[0]
 
       var iterate = (task, x, y, width, height, nodes, links) => {
-        var selected = this.props.task ? (this.props.task._id === task._id) : false
+        
+        var selected = this.props.selectedTasks.length ? this.props.selectedTasks.filter(selectedTask => selectedTask._id === task._id).length : false
         nodes.push({task: task, x: x, y: y, selected: selected})
         var childHeight = height/task.next.length
         var startIndex = 0
@@ -107,12 +166,6 @@ class GraphComponent extends Component {
         /* DRAWING */
         const svg = d3.select($("#svg-tree")[0]);
         svg.selectAll("*").remove();
-        const radius_min = 8
-        const radius_max = 12
-        const stroke_min = 2
-        const stroke_max = 4
-        const transition_duration = 150
-        const selectionScale = 1.5
 
         var curve = d3.line()
         .x( d => d.x)
@@ -125,6 +178,14 @@ class GraphComponent extends Component {
         .data(this.state.links)
         .enter()
         .append("path")
+        .attr('class', function (d) { 
+            let className = '';
+            if(d.task.action.includes('INIT')) className = 'link-init';
+            if(d.task.action.includes('KPI')) className = 'link-triangle';
+            if(d.task.action.includes('MODEL_ASIS')) className = 'link-circle';
+            if(d.task.action.includes('MODEL_TOBE')) className = 'link-rectangle';
+            return className;
+        })
         .attr("d", d => curve([
         {x: d.source.x, y: d.source.y},
         {x: d3.interpolateNumber(d.source.x, d.target.x)(0.2), y: d3.interpolateNumber(d.source.y, d.target.y)(0.1)},
@@ -135,8 +196,6 @@ class GraphComponent extends Component {
         .style("stroke-dasharray", d => d.dashed)
         .attr("fill", "none");
       
-        const sizeLabel = 12;
-        const sizeSubLabel = 10;
         
         /* LABELS */
         svg.append("g")
@@ -144,6 +203,14 @@ class GraphComponent extends Component {
         .data(this.state.links)
         .enter()
         .append("text")
+        .attr('class', function (d) { 
+            let className = '';
+            if(d.task.action.includes('INIT')) className = 'link-init';
+            if(d.task.action.includes('KPI')) className = 'link-triangle';
+            if(d.task.action.includes('MODEL_ASIS')) className = 'link-circle';
+            if(d.task.action.includes('MODEL_TOBE')) className = 'link-rectangle';
+            return className;
+        })
         .attr("x", function(d) { return d.target.x - sizeLabel-4; })
         .attr("y", function(d) { return d.target.y + sizeLabel/4; })
         .html( function (d) { return d.task.name})
@@ -162,6 +229,14 @@ class GraphComponent extends Component {
         .data(this.state.links)
         .enter()
         .append("text")
+        .attr('class', function (d) { 
+            let className = '';
+            if(d.task.action.includes('INIT')) className = 'link-init';
+            if(d.task.action.includes('KPI')) className = 'link-triangle';
+            if(d.task.action.includes('MODEL_ASIS')) className = 'link-circle';
+            if(d.task.action.includes('MODEL_TOBE')) className = 'link-rectangle';
+            return className;
+        })
         .attr("x", function(d) { return d.target.x - sizeLabel-4; })
         .attr("y", function(d) { return d.target.y + sizeLabel + 4; })
         .html( function (d) { return moment(d.task.date).format('LLL'); })
@@ -178,124 +253,79 @@ class GraphComponent extends Component {
         /* CIRCLES */
         svg.append("g")
         .selectAll("circle")
-        .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_ASIS') || d.task.action.includes('INIT')))
+        .data(this.state.nodes.filter(d => d.task.action.includes('INIT')))
         .enter()
         .append("circle")
-        .attr("class", ".circle")
+        .attr("class", "symbol-init")
         .attr("stroke", "#f7931e")
         .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
         .attr("r", d => {return (d.selected)?radius_max:radius_min})
         .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
         .style("stroke-dasharray", d => d.dashed)
-        .attr("fill",  "#fff")
-        .on("click", (d, i, n) => {
-             if(d.selected){
-               this.props.setTask(null)
-             } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
-         })
-        .on("mouseover", function(d, i) {
-          if(!d.selected){
-              d3.select(this)
-              .transition()
-              .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
-              .duration(transition_duration);
-          }
-         })
-        .on("mouseout", function(d, i) {
-          if(!d.selected){
-              d3.select(this)
-              .transition()
-              .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-              .duration(transition_duration);
-          }
-         });
+        .attr("fill",  "#fff");
+
+
+        /* CIRCLES */
+        svg.append("g")
+        .selectAll("circle")
+        .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_ASIS')))
+        .enter()
+        .append("circle")
+        .attr("class", "symbol-circle")
+        .attr("stroke", "#f7931e")
+        .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+        .attr("r", d => {return (d.selected)?radius_max:radius_min})
+        .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
+        .style("stroke-dasharray", d => d.dashed)
+        .attr("fill",  "#fff");
 
         /* RECTS */
-            svg.append("g")
-            .selectAll("rect")
-            .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_TOBE')))
-            .enter()
-            .append("rect")
-            .attr("class", ".rectangle")
-            .attr("stroke", "#f7931e")
-            .attr("stroke-width", 2)
-            .attr("transform", d => "translate(" + (d.x - ((d.selected)?radius_max:radius_min))+ "," + ( d.y - ((d.selected)?radius_max:radius_min) )+ ")")
-            .attr("width", d => {return ((d.selected)?radius_max:radius_min)*2})
-            .attr("height", d => {return ((d.selected)?radius_max:radius_min)*2})
-            .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
-            .attr("fill",  "#fff")
-            .on("click", (d, i, n) => {
-              if(d.selected){
-                this.props.setTask(null)
-              } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
-              
-             })
-            .on("mouseover", function(d, i) {
-              if(!d.selected){
-                  d3.select(this)
-                  .transition()
-                  .attr("transform", d => "translate(" + (d.x - radius_max)+ "," + ( d.y - radius_max)+ ") scale("+selectionScale+")")
-                  .duration(transition_duration);
-              }
-             })
-            .on("mouseout", function(d, i) {
-              if(!d.selected){
-                  d3.select(this)
-                  .transition()
-                  .attr("transform", d => "translate(" + (d.x - radius_min)+ "," + (d.y - radius_min) + ")")
-                  .duration(transition_duration);
-              }
-             });  
+          svg.append("g")
+          .selectAll("rect")
+          .data(this.state.nodes.filter(d => d.task.action.includes('MODEL_TOBE')))
+          .enter()
+          .append("rect")
+          .attr("class", "symbol-rectangle")
+          .attr("stroke", "#f7931e")
+          .attr("stroke-width", 2)
+          .attr("transform", d => "translate(" + (d.x - ((d.selected)?radius_max:radius_min))+ "," + ( d.y - ((d.selected)?radius_max:radius_min) )+ ")")
+          .attr("width", d => {return ((d.selected)?radius_max:radius_min)*2})
+          .attr("height", d => {return ((d.selected)?radius_max:radius_min)*2})
+          .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
+          .attr("fill",  "#fff");
 
         /* TRIANGLES */
         svg.append("g")
-             .selectAll("path")
-             .data(this.state.nodes.filter(d => d.task.action.includes('KPI')))
-             .enter()
-             .append("path")
-             .attr("class", ".triangle")
-             .attr("d", d => d3.symbol()
-                    .type(d3.symbolTriangle)
-                    .size((d.selected?radius_max:radius_min)*14)()
-             )
-             .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-             .attr("stroke", "#f7931e")
-             .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
-             .attr("fill",  "#fff")
-             //.attr("x", d => d.x - ((d.selected)?radius_max:radius_min) )
-             //.attr("y", d => d.y - ((d.selected)?radius_max:radius_min) )
-             //.attr("width", d => {return ((d.selected)?radius_max:radius_min)*2})
-             //.attr("height", d => {return ((d.selected)?radius_max:radius_min)*2})
-             .on("click", (d, i, n) => {
-                if(d.selected){
-                  this.props.setTask(null)
-                } else this.props.setTask(this.props.tasks.filter((task) => (task._id === d.task._id))[0])
-              })
-             .on("mouseover", function(d, i) {
-                if(!d.selected){
-                    d3.select(this)
-                    .transition()
-                    .attr("transform", d => "translate(" + d.x + "," + d.y + ") scale("+selectionScale+")")
-                    .duration(transition_duration);
-                }
-              })
-             .on("mouseout", function(d, i) {
-                if(!d.selected){
-                    d3.select(this)
-                    .transition()
-                    .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
-                    .duration(transition_duration);
-                }
-              });
+        .selectAll("path")
+        .data(this.state.nodes.filter(d => d.task.action.includes('KPI')))
+        .enter()
+        .append("path")
+        .classed("symbol-triangle", true)
+        .attr("d", d => d3.symbol()
+              .type(d3.symbolTriangle)
+              .size((d.selected?radius_max:radius_min)*14)()
+        )
+        .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+        .attr("stroke", "#f7931e")
+        .attr("stroke-width", d => {return (d.selected)?stroke_max:stroke_min})
+        .attr("fill",  "#fff");
+
+        this.handleClassName('init', !this.props.compareMode, this.props.compareMode, 0);
+        this.handleClassName('circle', true, this.props.compareMode, 0);
+        this.handleClassName('rectangle', true, this.props.compareMode, 0);
+        this.handleClassName('triangle', !this.props.compareMode, this.props.compareMode, 0);
    }
 
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.tasks !== this.props.tasks) {
         this.update()
       }
-      if (prevProps.task !== this.props.task) {
+      if (prevProps.selectedTasks !== this.props.selectedTasks) {
         this.update()
-      }
+     }
+     if (prevProps.compareMode !== this.props.compareMode) {
+       this.toggleCompareMode()
+    }
    }
    
    componentDidMount(){
@@ -312,20 +342,6 @@ class GraphComponent extends Component {
 
         return (
           <div>
-            <div className='col s12'>
-              <div className="switch">
-                <label>
-                  COMPARE OFF
-                  <input type="checkbox"
-                  checked={this.state.compareMode}
-                  ref="compareMode"
-                  onChange={() => this.toggleCompareMode()}
-                  />
-                  <span class="lever"/>
-                  ON
-                </label>
-              </div>
-            </div>
             <svg className='col s12' id='svg-tree' width={this.props.parentWidth} height={this.props.parentHeight} >
             </svg>
           </div>

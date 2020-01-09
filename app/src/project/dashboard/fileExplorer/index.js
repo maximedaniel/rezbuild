@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
-import RadarChartComponent from './RadarChart'
+import RadarRechartComponent from '../RadarRechart'
 import {mean} from 'mathjs'
+import moment from 'moment'
 import ComputeVersion from '../ComputeVersion'
+import { ParentSize } from '@vx/responsive'
 var $ = window.$;
 
 
@@ -17,7 +19,8 @@ class FileExplorerCore extends Component {
             energicalTask : null,
             comfortTask : null,
             error: false,
-            pending: false}
+            pending: false
+        }
     }
 
     fetchFiles() {
@@ -276,14 +279,15 @@ class FileExplorerCore extends Component {
             </table>
         </div>
        }
-        var colors = ['#F7931E'];
         var {series, categories} = ComputeVersion.computeScoreOfRelevanTask(this.props.task, this.props.tasks);
-
-        KpiVisualizer = <div>
-                            <div style={{width:"auto", height:'315px', position: 'relative'}}>
-                                <RadarChartComponent size={80} series={series} categories = {categories} colors = {colors}/>
-                            </div>
-                        </div>
+        var data = categories.map( (category, index) => {
+            let row = {}
+            row['category'] = category;
+            row[series[0].id] = series[0].data[index];
+            return row;
+        });
+           
+                                
 
         /*var sectionStyle = {
             borderRadius: '3px',
@@ -323,6 +327,15 @@ class FileExplorerCore extends Component {
         return (
          <div className="section white white-text z-depth-1" style={{paddingTop:0}}>
              <div className= "row" style={{marginBottom:0}}>
+                    <div className="col s12 center rezbuild">
+                        <h6 className="white-text col s12" style={{marginBottom:'0.1rem'}}>
+                            <b>{this.props.task.action}</b>
+                        </h6>
+                        <br/>
+                        <h6 className="white-text col s12" style={{fontSize:'10px', marginTop:'0.1rem'}}>
+                            {moment(this.props.task.date).format('LLL')}
+                        </h6>
+                    </div>
                      <div className="col s12 white grey-text">
                          <div className="col s4">
                          <h6>BIM MODEL</h6>
@@ -331,7 +344,24 @@ class FileExplorerCore extends Component {
                          </div>
                          <div className="col s4">
                          <h6>KPI SCORE</h6>
-                         {KpiVisualizer}
+                         <ParentSize>
+                            {
+                                parent => (
+                                    <RadarRechartComponent 
+                                        key={this.props.task._id}
+                                        highlightedTask = {this.props.task} 
+                                        categories={categories} 
+                                        series={series} 
+                                        data={data} 
+                                        parentWidth={parent.width}
+                                        parentTop={parent.top}
+                                        parentLeft={parent.left}
+                                        parentRef={parent.ref}
+                                        resizeParent={parent.resize}
+                                    />
+                                )
+                            }
+                            </ParentSize>
                          </div>
                          <div className="col s4">
                          <h6>KPI DATA</h6>

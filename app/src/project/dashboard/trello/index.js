@@ -26,6 +26,7 @@ const lanesStyle = {
     minWidth: '220px',
     width: '220px',
     maxWidth: '220px',
+    maxHeight:'100%',
     color:'#fff',
     backgroundColor:  'rgba(247,147,30, .5)',
     fontFamily: 'Exo 2',

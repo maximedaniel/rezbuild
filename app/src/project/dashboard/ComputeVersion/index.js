@@ -180,7 +180,7 @@ class ComputeVersion {
             var state = ComputeVersion.fetchRelevantTasks(task, tasks);
 
             let categories = ['Economical', 'Social', 'Environmental',  'Energical', 'Comfort']; 
-            let series = [{name: task.name + ' (' + moment(task.date).format('LLL') + ')', data: []}];
+            let series = [{name: task.name + ' (' + moment(task.date).format('LLL') + ')', id: task._id, data: []}];
             if(state.economicalTask){
                 series[0].data.push(
                     mean(

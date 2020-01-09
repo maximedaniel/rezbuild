@@ -4,6 +4,8 @@
 - Compare KPIs (How to compute score for each KPI?)
 - Filter role by actions
 - prevent multiple KPI branches
+- fill up online
+- generation automatic files
 
 # TODO
 - Add information tooltip to each field of the project information

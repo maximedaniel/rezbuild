@@ -45,6 +45,7 @@ var common = {
         },
 
     },*/
+    
     LANES: {
         BACKLOG: 'lane_backlog',
         TODO: 'lane_todo',

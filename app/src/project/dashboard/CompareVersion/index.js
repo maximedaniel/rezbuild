@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ComputeVersion from '../ComputeVersion'
-import RadarChartComponent from '../fileExplorer/RadarChart'
+import RadarChartComponent from '../RadarChart'
 import chroma from 'chroma-js'
 import moment from 'moment'
 var $ = window.$
