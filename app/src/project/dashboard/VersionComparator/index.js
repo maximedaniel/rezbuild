@@ -54,22 +54,22 @@ class VersionComparatorCore extends Component {
 
     compareVersions() {
         this.setState((prevState, props) => {
-                let data = [];
-                let allCategories = [];
-                let allSeries = [];
-                props.selectedTasks.forEach(selectedTask=> {
-                let {series, categories} = ComputeVersion.computeScoreOfRelevanTask(selectedTask, props.tasks);
-                    allCategories = categories;
-                    allSeries.push(series[0]);
-                });
-                data = allCategories.map( (category, index) => {
-                    let row = {}
-                    row['category'] = category;
-                    allSeries.forEach(series => row[series.id] = series.data[index]);
-                    return row;
-                });
-                let ans = {data: data, categories:allCategories,  series:allSeries};
-                return ans;
+            let data = [];
+            let allCategories = [];
+            let allSeries = [];
+            props.selectedTasks.forEach(selectedTask=> {
+            let {series, categories} = ComputeVersion.computeScoreOfRelevantTask(selectedTask, props.tasks);
+                allCategories = categories;
+                allSeries.push(series[0]);
+            });
+            data = allCategories.map( (category, index) => {
+                let row = {}
+                row['category'] = category;
+                allSeries.forEach(series => row[series.id] = series.data[index]);
+                return row;
+            });
+            let ans = {data: data, categories:allCategories,  series:allSeries};
+            return ans;
         });
     }
 

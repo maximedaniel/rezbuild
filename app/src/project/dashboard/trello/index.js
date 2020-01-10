@@ -12,7 +12,7 @@ var $ = window.$
 const normalCardStyle = {
     minWidth: '200px',
     width: '200px',
-    maxWidth: '200px',
+    //maxWidth: '200px',
     marginBottom: '10px',
     color:'#000',
     backgroundColor:'#fff',
@@ -24,8 +24,8 @@ const normalCardStyle = {
 /* LANE STYLING */
 const lanesStyle = {
     minWidth: '220px',
-    width: '220px',
-    maxWidth: '220px',
+    //width: '220px',
+    //maxWidth: '220px',
     maxHeight:'100%',
     color:'#fff',
     backgroundColor:  'rgba(247,147,30, .5)',
@@ -121,24 +121,6 @@ class TrelloComponent extends Component {
       task: null
       }, () => {this.state.eventBus.publish(cancel);})
     return
-
-    /*this.setState(
-            {
-            cancel: cancel,
-            task: cardDetails
-            }, () => {
-            if(sourceLaneId === 'lane_done'){
-                this.cancel()
-            }
-            else if(sourceLaneId !== targetLaneId){
-                if(targetLaneId === 'lane_todo'){
-                    $('#modal_todotask').modal('open');
-                }
-                if(targetLaneId === 'lane_done'){
-                    $('#modal_donetask').modal('open');
-                }
-            }
-        })*/
   }
 
   cancel(){this.state.eventBus.publish(this.state.cancel)}

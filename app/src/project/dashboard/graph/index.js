@@ -13,9 +13,10 @@ const transition_duration = 150;
 const selectionScale = 1.5;
 const sizeLabel = 12;
 const sizeSubLabel = 10;
-const childWidth = 200
-const xOrigin = 15
-const yOrigin = 15
+const minWidth = 180;
+const minHeight = 40;
+const xOrigin = 15;
+const yOrigin = 15;
 
 class GraphComponent extends Component {
 
@@ -23,6 +24,9 @@ class GraphComponent extends Component {
         super(props)
         this.did = false;
         this.state = {selectedTasks: [], nodes : [], links : []}
+        this.countNodeAtDepthLevel = this.countNodeAtDepthLevel.bind(this);
+        this.countNodeByDepthLevel = this.countNodeByDepthLevel.bind(this);
+        this.getNodesAtDepthLevel = this.getNodesAtDepthLevel.bind(this);
         
     }
     handleClassName(className, isActive, isMultiple, duration){
@@ -92,23 +96,136 @@ class GraphComponent extends Component {
         //if(this.props.selectedTasks.filter(selectedTask => selectedTask.action.includes('MODEL')).length !== this.props.selectedTasks.length)
         this.props.setTask(null);
     }
+  countNodeAtDepthLevel(rootNode, depthLevel){
+    if(depthLevel <= 0) return 1;
+    if(rootNode!==null && rootNode.next!==null && rootNode.next.length >0){
+        let res = [];
+        rootNode.next.forEach(nextTaskId => {
+          let nextTask = this.props.tasks.filter(task => (task._id === nextTaskId))[0];
+          res.push(this.countNodeAtDepthLevel(nextTask, depthLevel-1));
+        });
+        let ans = res.reduce((a, b) => a + b, 0)
+        return ans;
+    }
+    return 0;  
+  }
+  getNodesAtDepthLevel(rootNode, depthLevel){
+    if(depthLevel <= 0) return [rootNode];
+    if(rootNode!==null && rootNode.next!==null && rootNode.next.length >0){
+        let res = [];
+        rootNode.next.forEach(nextTaskId => {
+          let nextTask = this.props.tasks.filter(task => (task._id === nextTaskId))[0];
+          res.push(this.getNodesAtDepthLevel(nextTask, depthLevel-1));
+        });
+        let ans = res.reduce((a, b) => [...a, ...b], [])
+        return ans;
+    }
+    return [];  
+  }
+
+  countNodeByDepthLevel(rootNode){
+    let bottomHit = false;
+    let depthLevel = 0;
+    let nbNodeByDepthLevel = [];
+    while(!bottomHit){
+      let nbNodeAtDepthLevel = this.countNodeAtDepthLevel(rootNode, depthLevel++);
+      if(nbNodeAtDepthLevel){
+        nbNodeByDepthLevel.push(nbNodeAtDepthLevel);
+      } 
+      else bottomHit = true;
+    }
+    return nbNodeByDepthLevel;
+  }
 
    update(){
      this.setState({selectedTasks: [], nodes:[], links:[]}, () => {
       var rootTask = this.props.tasks.filter(task => (task.action === 'INIT'))[0]
+      var nbNodeByDepthLevel = this.countNodeByDepthLevel(rootTask);
+      /*var iterate = (depth, width, height, nodes, links) => {
+          var tasks = this.getNodesAtDepthLevel(rootTask, depth);
+          if(tasks.length){
+              var asisTasks = tasks.filter(task => task.action.includes('MODEL_ASIS'));
+              var tobeTasks = tasks.filter(task => task.action.includes('MODEL_TOBE'));
+              var kpiTasks = tasks.filter(task => task.action.includes('KPI'));
+              
+              return iterate(depth+1,  width, height, nodes, links);
+          }
+          return 0;
 
-      var iterate = (task, x, y, width, height, nodes, links) => {
+      }
+      iterate(0, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links);*/
+      var computeHeightOfNode = (task, minHeight) => {
+        let ans = minHeight;
+        if(task.next.length > 0){
+          ans = task.next
+                .map(nextTaskId => computeHeightOfNode(this.props.tasks.filter(task => (task._id === nextTaskId))[0], minHeight))
+                .reduce((total, value) => total+value, 0);
+        }
+        return ans;
+      }
+
+      var iterate  = (currTask, x, y, nodes, links) => {
         
+        //console.log('currTask:',currTask.name,'(',moment(currTask.date).format('LLL'),')','x:',x, 'y:', y);
+        var selected = this.props.selectedTasks.length ? this.props.selectedTasks.filter(selectedTask => selectedTask._id === currTask._id).length : false
+        nodes.push({task: currTask, x: x, y: y, selected: selected});
+        //var height = computeHeightOfNode(task, minHeight);
+        //console.log(task, height);
+        var nextX = x  + minWidth;
+        var nextY = y;
+        /*var asisTaskIds = currTask.next.filter(nextTaskId => {
+          var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
+          return task.action.includes('MODEL_ASIS')||task.action.includes('MODEL_TOBE')||task.action.includes('ECONOMICAL')||task.action.includes('SOCIAL')
+        });*/
+        var nextTasks = currTask.next.map(nextTaskId => this.props.tasks.filter(task => task._id === nextTaskId)[0]);
+        var sortedNextTasks = nextTasks.sort( (prevTask, nextTask) => {
+          //MODEL_ASIS > MODEL_TOBE > KPI
+          if( 
+            (prevTask.action.includes('MODEL_ASIS') && nextTask.action.includes('MODEL_TOBE'))
+            ||
+            (prevTask.action.includes('MODEL_TOBE') && nextTask.action.includes('KPI'))
+            ||
+            (prevTask.action.includes('MODEL_ASIS') && nextTask.action.includes('KPI'))
+          ) return -1;
+
+          if( 
+            (nextTask.action.includes('MODEL_ASIS') && prevTask.action.includes('MODEL_TOBE'))
+            ||
+            (nextTask.action.includes('MODEL_TOBE') && prevTask.action.includes('KPI'))
+            ||
+            (nextTask.action.includes('MODEL_ASIS') && prevTask.action.includes('KPI'))
+          ) return 1;
+          return 0;
+        });
+        console.log(sortedNextTasks)
+        sortedNextTasks.forEach(nextTask => {
+          var nextHeight = computeHeightOfNode(nextTask, minHeight);
+         // console.log('nextTask:',nextTask,'nextHeight:',nextHeight);
+          links.push({
+            task: nextTask,
+            source: {x: x, y: y},
+            target: {x:  nextX, y:  nextY},
+            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
+            color: "#f7931e"
+          })
+          iterate(nextTask, nextX, nextY, nodes, links);
+          nextY = nextY + nextHeight;
+        });
+      }
+      iterate(rootTask, xOrigin, yOrigin,  this.state.nodes, this.state.links);
+      this.draw();
+     /* var iterate = (task, x, y, width, height, nodes, links) => {
         var selected = this.props.selectedTasks.length ? this.props.selectedTasks.filter(selectedTask => selectedTask._id === task._id).length : false
         nodes.push({task: task, x: x, y: y, selected: selected})
-        var childHeight = height/task.next.length
+        var childHeight = 40;//height/task.next.length //nbNodeByDepthLevel[depth+1]
         var startIndex = 0
         var asisTaskIds = task.next.filter(nextTaskId => {
           var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
           return task.action.includes('MODEL_ASIS')
-        })
+        });
         asisTaskIds.forEach((asisTaskId, index) => {
           var nextTask = this.props.tasks.filter ((task) => (task._id === asisTaskId))[0]
+
           links.push({
             task: nextTask,
             source: {x: x, y: y},
@@ -116,7 +233,7 @@ class GraphComponent extends Component {
             dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
             color: "#f7931e"
           })
-          iterate(nextTask,  x + childWidth, y + (index * childHeight), width, childHeight, nodes, links)
+          iterate(nextTask, x + childWidth, y + (index * childHeight), width, childHeight, nodes, links)
         });
         startIndex += asisTaskIds.length
 
@@ -134,7 +251,7 @@ class GraphComponent extends Component {
             dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
             color: "#f7931e"
           })
-          iterate(nextTask,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
+          iterate(nextTask, x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
         });
         
         startIndex += tobeTaskIds.length
@@ -158,7 +275,7 @@ class GraphComponent extends Component {
 
       };
       iterate(rootTask, xOrigin, yOrigin, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
-      this.draw()
+      this.draw()*/
      });
    }
 

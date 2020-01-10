@@ -20,7 +20,8 @@ class FileExplorerCore extends Component {
             comfortTask : null,
             error: false,
             pending: false
-        }
+        };
+        this.renderKPIsOfTask = this.renderKPIsOfTask.bind(this);
     }
 
     fetchFiles() {
@@ -39,11 +40,12 @@ class FileExplorerCore extends Component {
          $('.tooltipped').tooltip({delay:0, html:true});
          window.scrollTo(0, 0);
        });
+    }
 
-   }
     componentWillUpdate(){
         window.scrollTo(0, 0);
     }
+
    componentDidUpdate(prevProps, prevState) {
      if (prevProps.task !== this.props.task){
         this.fetchFiles()
@@ -51,14 +53,50 @@ class FileExplorerCore extends Component {
          $('.tooltipped').tooltip({delay:0, html:true});
      }
     }
+
     componentWillUnmount(){
         $('.tooltipped').tooltip('remove');
     }
 
+    renderKPIsOfTask(task){
+        return (
+            <div>
+            <table className="col s12 white center">
+               <thead className='rezbuild-text'>
+                <tr style={{borderBottom: '2px solid #f7931e'}}>
+                    <th className="col s5">Name</th>
+                    <th className="col s3">Value</th>
+                    <th className="col s4">File</th>
+                </tr>
+              </thead>
+              <tbody className='black-text'>
+                  {
+                        task.names.map((name, index) => 
+                            <tr>
+                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
+                                <td className="col s3" style={{paddingTop:'1rem'}}>{task.values[index] + ' ' + task.formats[index]}</td>
+                                <td className="col s4" style={{paddingTop:'1rem'}}>
+                                    {task.files[index] !== "" ? 
+                                    <li className="collection-item valign-wrapper col s12" value={task.files[index]} key={index} style={{padding: '0px 10px'}}>
+                                        {/*<p className="col s10">{this.state.energicalTask.files[index]} </p>*/}
+                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
+                                        href={window.location.protocol + "//" + this.props.host + "/" + task._id + "/" + task.files[index]}>
+                                        <i className="material-icons white-text">cloud_download</i>
+                                        </a>
+                                    </li> : ''}
+                                </td>
+                            </tr>
+                        )
+                  }
+              </tbody>
+            </table>
+            </div>
+        );
+    };
+
     render(){
        let modelViewer;
        let modelFileExplorer;
-       let KpiVisualizer;
        let KpiFileExplorer;
        let economicalKpiViewer;
        let socialKpiViewer;
@@ -108,178 +146,13 @@ class FileExplorerCore extends Component {
             </div>
         } 
        }
-       if(this.state.economicalTask){
-        economicalKpiViewer = 
-        <div>
-            <table className="col s12 white center">
-               <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th className="col s5">Name</th>
-                    <th className="col s3">Value</th>
-                    <th className="col s4">File</th>
-                </tr>
-              </thead>
-              <tbody className='black-text'>
-                  {
-                        this.state.economicalTask.names.map((name, index) => 
-                            <tr>
-                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
-                                <td className="col s3" style={{paddingTop:'1rem'}}>{this.state.economicalTask.values[index] + ' ' + this.state.economicalTask.formats[index]}</td>
-                                <td className="col s4" style={{paddingTop:'1rem'}}>
-                                    { this.state.economicalTask.files[index] !== "" ? 
-                                    <li className="collection-item valign-wrapper col s12" value={this.state.economicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
-                                        {/*<p className="col s10">{this.state.economicalTask.files[index]} </p>*/}
-                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                        href={window.location.protocol + "//" + this.props.host + "/" + this.state.economicalTask._id + "/" + this.state.economicalTask.files[index]}>
-                                        <i className="material-icons white-text">cloud_download</i>
-                                        </a>
-                                    </li> : ''}
-                                </td>
-                            </tr>
-                        )
-                  }
-              </tbody>
-            </table>
-        </div>
-       }
-       if(this.state.energicalTask){
-        energicalKpiViewer = 
-        <div>
-            <table className="col s12 white center">
-               <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th className="col s5">Name</th>
-                    <th className="col s3">Value</th>
-                    <th className="col s4">File</th>
-                </tr>
-              </thead>
-              <tbody className='black-text'>
-                  {
-                        this.state.energicalTask.names.map((name, index) => 
-                            <tr>
-                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
-                                <td className="col s3" style={{paddingTop:'1rem'}}>{this.state.energicalTask.values[index] + ' ' + this.state.energicalTask.formats[index]}</td>
-                                <td className="col s4" style={{paddingTop:'1rem'}}>
-                                    { this.state.energicalTask.files[index] !== "" ? 
-                                    <li className="collection-item valign-wrapper col s12" value={this.state.energicalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
-                                        {/*<p className="col s10">{this.state.energicalTask.files[index]} </p>*/}
-                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                        href={window.location.protocol + "//" + this.props.host + "/" + this.state.energicalTask._id + "/" + this.state.energicalTask.files[index]}>
-                                        <i className="material-icons white-text">cloud_download</i>
-                                        </a>
-                                    </li> : ''}
-                                </td>
-                            </tr>
-                        )
-                  }
-              </tbody>
-            </table>
-            </div>
-       }
-       if(this.state.socialTask){
-        socialKpiViewer = 
-        <div>
-            <table className="col s12 white center">
-               <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th className="col s5">Name</th>
-                    <th className="col s3">Value</th>
-                    <th className="col s4">File</th>
-                </tr>
-              </thead>
-              <tbody className='black-text'>
-                  {
-                        this.state.socialTask.names.map((name, index) => 
-                            <tr>
-                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
-                                <td className="col s3" style={{paddingTop:'1rem'}}>{this.state.socialTask.values[index] + ' ' + this.state.socialTask.formats[index]}</td>
-                                <td className="col s4" style={{paddingTop:'1rem'}}>
-                                    { this.state.socialTask.files[index] !== "" ? 
-                                    <li className="collection-item valign-wrapper col s12" value={this.state.socialTask.files[index]} key={index} style={{padding: '0px 10px'}}>
-                                        {/*<p className="col s10">{this.state.socialTask.files[index]} </p>*/}
-                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                        href={window.location.protocol + "//" + this.props.host + "/" + this.state.socialTask._id + "/" + this.state.socialTask.files[index]}>
-                                        <i className="material-icons white-text">cloud_download</i>
-                                        </a>
-                                    </li> : ''}
-                                </td>
-                            </tr>
-                        )
-                  }
-              </tbody>
-            </table>
-            </div>
-       }
-       if(this.state.environmentalTask){
-        environmentalKpiViewer = 
-        <div>
-            <table className="col s12 white center">
-               <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th className="col s5">Name</th>
-                    <th className="col s3">Value</th>
-                    <th className="col s4">File</th>
-                </tr>
-              </thead>
-              <tbody className='black-text'>
-                  {
-                        this.state.environmentalTask.names.map((name, index) => 
-                            <tr>
-                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
-                                <td className="col s3" style={{paddingTop:'1rem'}}>{this.state.environmentalTask.values[index] + ' ' + this.state.environmentalTask.formats[index]}</td>
-                                <td className="col s4" style={{paddingTop:'1rem'}}>
-                                    { this.state.environmentalTask.files[index] !== "" ? 
-                                    <li className="collection-item valign-wrapper col s12" value={this.state.environmentalTask.files[index]} key={index} style={{padding: '0px 10px'}}>
-                                        {/*<p className="col s10">{this.state.environmentalTask.files[index]} </p>*/}
-                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                        href={window.location.protocol + "//" + this.props.host + "/" + this.state.environmentalTask._id + "/" + this.state.environmentalTask.files[index]}>
-                                        <i className="material-icons white-text">cloud_download</i>
-                                        </a>
-                                    </li> : ''}
-                                </td>
-                            </tr>
-                        )
-                  }
-              </tbody>
-            </table>
-        </div>
-       }
-       
-       if(this.state.comfortTask){
-        comfortKpiViewer = 
-        <div>
-            <table className="col s12 white center">
-               <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th className="col s5">Name</th>
-                    <th className="col s3">Value</th>
-                    <th className="col s4">File</th>
-                </tr>
-              </thead>
-              <tbody className='black-text'>
-                  {
-                        this.state.comfortTask.names.map((name, index) => 
-                            <tr>
-                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
-                                <td className="col s3" style={{paddingTop:'1rem'}}>{this.state.comfortTask.values[index] + ' ' + this.state.comfortTask.formats[index]}</td>
-                                <td className="col s4" style={{paddingTop:'1rem'}}>
-                                    { this.state.comfortTask.files[index] !== "" ? 
-                                    <li className="collection-item valign-wrapper col s12" value={this.state.comfortTask.files[index]} key={index} style={{padding: '0px 10px'}}>
-                                        {/*<p className="col s10">{this.state.comfortTask.files[index]} </p>*/}
-                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                        href={window.location.protocol + "//" + this.props.host + "/" + this.state.comfortTask._id + "/" + this.state.comfortTask.files[index]}>
-                                        <i className="material-icons white-text">cloud_download</i>
-                                        </a>
-                                    </li> : ''}
-                                </td>
-                            </tr>
-                        )
-                  }
-              </tbody>
-            </table>
-        </div>
-       }
-        var {series, categories} = ComputeVersion.computeScoreOfRelevanTask(this.props.task, this.props.tasks);
+       if(this.state.economicalTask) economicalKpiViewer = this.renderKPIsOfTask(this.state.economicalTask);
+       if(this.state.energicalTask) energicalKpiViewer = this.renderKPIsOfTask(this.state.energicalTask);
+       if(this.state.socialTask) socialKpiViewer = this.renderKPIsOfTask(this.state.socialTask);
+       if(this.state.environmentalTask) environmentalKpiViewer = this.renderKPIsOfTask(this.state.environmentalTask);
+       if(this.state.comfortTask) comfortKpiViewer = this.renderKPIsOfTask(this.state.comfortTask);
+
+        var {series, categories} = ComputeVersion.computeScoreOfRelevantTask(this.props.task, this.props.tasks);
         var data = categories.map( (category, index) => {
             let row = {}
             row['category'] = category;
@@ -287,18 +160,6 @@ class FileExplorerCore extends Component {
             return row;
         });
            
-                                
-
-        /*var sectionStyle = {
-            borderRadius: '3px',
-            margin: '5px 5px',
-            padding:'10px', 
-            backgroundColor:  'rgba(247,147,30,.5)'
-        }*/
-        /*var titleStyle = {
-            textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"
-            color: '#000'
-        }*/
         KpiFileExplorer = 
             <div className="col s12">
                 <ul className="collapsible" datacollapsible="accordion">
@@ -307,7 +168,7 @@ class FileExplorerCore extends Component {
                         <div className="collapsible-body"><span>{economicalKpiViewer}</span></div>
                     </li> : ''}
                     {environmentalKpiViewer? <li>
-                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>ECOLOGICAL</div>
+                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>ENVIRONMENTAL</div>
                         <div className="collapsible-body"><span>{environmentalKpiViewer}</span></div>
                      </li> : ''}
                     {socialKpiViewer? <li>

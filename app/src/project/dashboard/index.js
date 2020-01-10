@@ -146,7 +146,7 @@ class DashboardCore extends Component {
                                     :''
                                 }
 
-                                <div className="section" style={{height:'250px', paddingBottom:0}}>
+                                <div className="section" style={{height:'400px', paddingBottom:0}}>
                                   { this.state.tasks.length > 0  ?
                                   <ParentSize>
                                   {
@@ -175,13 +175,12 @@ class DashboardCore extends Component {
                       </div>
                  </div>
                 {!this.state.compareMode ?
+                  ((this.state.tasks.length > 0 && this.state.selectedTasks.length > 0)?
                   <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
                       <div className='row'>
                         <div className="col l12 m12 s12 transparent">
                             {/*<h5 className="rezbuild-text  tooltipped" data-position="top" data-tooltip="Explore the BIM models and KPI data of this version of the project">Version</h5>  */}
                             <div className="section">
-                              { 
-                                (this.state.tasks.length > 0 && this.state.selectedTasks.length > 0) ?
                                   <FileExplorerComponent
                                     project = {this.props.project}
                                     tasks = {this.state.tasks}
@@ -190,19 +189,18 @@ class DashboardCore extends Component {
                                     setTask={this.setTask}
                                     addTask={this.addTask}
                                     removeTask={this.removeTask}
-                                    />: ''
-                              }
+                                    />
                             </div>
                         </div>
                       </div>
-                    </div>
-                  :<div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
+                    </div> : '')
+                  :
+                  ((this.state.tasks.length > 0 && this.state.selectedTasks.length > 0)?
+                  <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
                       <div className='row'>
                         <div className="col l12 m12 s12 transparent">
                             {/*<h5 className="rezbuild-text  tooltipped" data-position="top" data-tooltip="Explore the BIM models and KPI data of this version of the project">Version</h5>  */}
                             <div className="section">
-                              { 
-                                (this.state.tasks.length > 0 && this.state.selectedTasks.length > 0) ?
                                   <VersionComparatorComponent
                                   project = {this.props.project}
                                   tasks = {this.state.tasks}
@@ -210,12 +208,11 @@ class DashboardCore extends Component {
                                   setTask={this.setTask}
                                   addTask={this.addTask}
                                   removeTask={this.removeTask}
-                                  />: ''
-                              }
+                                  />
                             </div>
                         </div>
                       </div>
-                    </div>
+                    </div>:'')
                   }
              </div>
               <div className="section" style={{display:this.state.compareMode?'none':'block', marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>

@@ -25,10 +25,11 @@ class RadarRechartComponent extends Component {
                                   name={serie.id}
                                   dataKey={serie.id} 
                                   stroke="#f7931e" 
+                                  strokeWidth= {2}
                                   fill="#f7931e" 
                                   fillOpacity={(this.props.highlightedTask._id === serie.id)?0.6:0.3} 
                                   strokeOpacity={(this.props.highlightedTask._id === serie.id)?1:0.5}
-                                  dot={{fill:"white", stroke: "#f7931e", strokeWidth: 2 }}
+                                  dot={{fill:"white", stroke: "#f7931e", strokeWidth: 2, fillOpacity:(this.props.highlightedTask._id === serie.id)?1:0.5 }}
                                   key={serie.id}
                               >
                                   <LabelList  

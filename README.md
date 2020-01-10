@@ -6,6 +6,7 @@
 - prevent multiple KPI branches
 - fill up online
 - generation automatic files
+- adjust graph div's height automatically
 
 # TODO
 - Add information tooltip to each field of the project information

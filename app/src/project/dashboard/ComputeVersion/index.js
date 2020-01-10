@@ -176,7 +176,7 @@ class ComputeVersion {
                     error: false, pending: true};
             }
         }
-        static computeScoreOfRelevanTask(task, tasks) {
+        static computeScoreOfRelevantTask(task, tasks) {
             var state = ComputeVersion.fetchRelevantTasks(task, tasks);
 
             let categories = ['Economical', 'Social', 'Environmental',  'Energical', 'Comfort']; 
@@ -199,11 +199,11 @@ class ComputeVersion {
                 );
             } else series[0].data.push(0);
 
-            if(state.EnvironmentalTask){
+            if(state.environmentalTask){
                 series[0].data.push(
                     mean(
-                        state.EnvironmentalTask.names.filter((name, index) => state.EnvironmentalTask.values[index] !== 0)
-                        .map((name, index) =>  state.EnvironmentalTask.values[index])
+                        state.environmentalTask.names.filter((name, index) => state.environmentalTask.values[index] !== 0)
+                        .map((name, index) =>  state.environmentalTask.values[index])
                     ).toFixed(2)
                 );
             } else series[0].data.push(0);
