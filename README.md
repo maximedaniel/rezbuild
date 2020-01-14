@@ -1,12 +1,12 @@
 
 # IMPORTANT
-- Visualization KPIs
-- Compare KPIs (How to compute score for each KPI?)
-- Filter role by actions
-- prevent multiple KPI branches
-- fill up online
-- generation automatic files
-- adjust graph div's height automatically
+? - Visualizer as card refurbishment technologies list
+V - Visualize and Compare KPIs (How to compute score for each KPI?)
+V - Task of decision making Visualizing the models not choose (adjust opacity?)
+X- generation automatic 3d models & files
+V - Filter role by actions (What terminology for roles? What action?)
+V - adjust graph div's height automatically
+V - prevent multiple KPI branches
 
 # TODO
 - Add information tooltip to each field of the project information

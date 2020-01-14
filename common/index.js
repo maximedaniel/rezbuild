@@ -52,9 +52,9 @@ var common = {
         DONE: 'lane_done',
     },
     ROLES: {
-        CUSTOMER: {name: 'Customer', description: 'The customer is...'},
-        DESIGNER: {name: 'Designer', description: 'The designer is...'},
-        ARCHITECT: {name: 'Architect', description: 'The architect is...'},
+        CUSTOMER: {name: 'Customer', description: 'The customer is...', actions: []},
+        DESIGNER: {name: 'Designer', description: 'The designer is...', actions: ['KPI_ECONOMICAL_ASIS', 'KPI_ENVIRONMENTAL_ASIS', 'KPI_SOCIAL_ASIS', 'KPI_ENERGICAL_ASIS', 'KPI_COMFORT_ASIS', 'KPI_ECONOMICAL_TOBE', 'KPI_ENVIRONMENTAL_TOBE', 'KPI_SOCIAL_TOBE', 'KPI_ENERGICAL_TOBE', 'KPI_COMFORT_TOBE']},
+        ARCHITECT: {name: 'Architect', description: 'The architect is...', actions: ['MODEL_ASIS', 'MODEL_TOBE']},
     },
     STATUS: {
         INIT: ['MODEL_ASIS'],

@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import {Radar, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, LabelList, PolarRadiusAxis} from 'recharts';
+import {Radar,  RadarChart, PolarGrid, PolarAngleAxis, LabelList, PolarRadiusAxis} from 'recharts';
 
 class RadarRechartComponent extends Component {
   render() {
@@ -7,7 +7,6 @@ class RadarRechartComponent extends Component {
     let maxMark = Math.max(...this.props.series.map(serie => Math.max(...serie.data)));
     let height = 300;
     let outerRadius = Math.round(height/3.);
-    console.log(this.props)
     return (
                 <RadarChart  
                   outerRadius={outerRadius}

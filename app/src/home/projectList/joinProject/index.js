@@ -54,10 +54,13 @@ class JoinProjectFormCore extends Component {
                 }
            });
        }
-
-
    })
   };
+
+
+  componentWillUnmount() {
+    this.props.socket.off('/api/project/done', () => {this.update()})
+  }
 
   render() {
     let preloaderComponent;

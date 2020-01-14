@@ -103,9 +103,9 @@ class CreateTaskFormCore extends Component {
     });
   }
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps !== this.props){
+    /*if(prevProps !== this.props){
     this.forceUpdate()
-    }
+    }*/
   }
 
   render() {

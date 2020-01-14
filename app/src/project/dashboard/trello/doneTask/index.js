@@ -117,8 +117,7 @@ class DoneTaskFormCore extends Component {
                             file = sanitize(this.refs['files_'+name].files[0].name)
                             update.files.push(file)
                         }
-
-            
+                        
                         if(this.refs[name].files && this.refs[name].files.length){
                             console.log("this.refs[name].files[0]:", this.refs[name].files[0])
                             allAttachedFiles.push(this.refs[name].files[0])
@@ -133,8 +132,10 @@ class DoneTaskFormCore extends Component {
                             var update = { $push: {next: this.state.newTaskId}}
                             this.props.socket.emit('/api/task/update', filter, update, res => {
                                 if(res.tasks){
-                                    $("#modal_donetask").modal('close')
-                                    this.props.socket.emit('/api/task/done')
+                                    this.setState({pending:false, error: false}, () => {
+                                        $("#modal_donetask").modal('close')
+                                        this.props.socket.emit('/api/task/done')
+                                    })
                                 }
                                 if(res.error){
                                     this.setState({pending:false, error: res.error})
@@ -190,7 +191,7 @@ class DoneTaskFormCore extends Component {
         formBody =  <div>
                         {  
                             this.props.task.names.map((name, index) => 
-                                <div className="row">
+                                <div className="row" key={index}>
                                 {
                                     this.props.task.formats[index].startsWith('.') ? 
                                         <div className="file-field input-field col s6" style={{marginTop:'0'}}>

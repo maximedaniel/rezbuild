@@ -36,7 +36,7 @@ class NavbarCore extends Component {
                 }
             }
         });
-    })
+    });
   }
 
   componentDidMount() {

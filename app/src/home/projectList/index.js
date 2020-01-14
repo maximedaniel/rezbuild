@@ -46,8 +46,9 @@ class ProjectListCore extends Component {
       }
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     $('.tooltipped').tooltip('remove');
+    this.props.socket.off('/api/project/done', () => {this.update()})
   }
 
   render() {
@@ -89,7 +90,7 @@ class ProjectListCore extends Component {
              {
                 this.state.projects.map((project, index) => {
                     return (
-                      <div className="col s12" style={{marginBottom:'1rem', padding:'0'}}>
+                      <div className="col s12" style={{marginBottom:'1rem', padding:'0'}} key={index}>
                         <div  className="col s3  l3 left-align">{project.name}</div>
                         <div  className="col s5  l4 left-align">{new Date(project.date).toString().split('GMT')[0]}</div>
                         <div  className="col s4  l5 right-align">

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 import RadarRechartComponent from '../RadarRechart'
-import {mean} from 'mathjs'
 import moment from 'moment'
 import ComputeVersion from '../ComputeVersion'
 import { ParentSize } from '@vx/responsive'
@@ -72,7 +71,7 @@ class FileExplorerCore extends Component {
               <tbody className='black-text'>
                   {
                         task.names.map((name, index) => 
-                            <tr>
+                            <tr key={index}>
                                 <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
                                 <td className="col s3" style={{paddingTop:'1rem'}}>{task.values[index] + ' ' + task.formats[index]}</td>
                                 <td className="col s4" style={{paddingTop:'1rem'}}>

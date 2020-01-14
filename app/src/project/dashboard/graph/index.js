@@ -23,12 +23,12 @@ class GraphComponent extends Component {
     constructor(props){
         super(props)
         this.did = false;
-        this.state = {selectedTasks: [], nodes : [], links : []}
+        this.state = {height:0, width:0, selectedTasks: [], nodes : [], links : []}
         this.countNodeAtDepthLevel = this.countNodeAtDepthLevel.bind(this);
         this.countNodeByDepthLevel = this.countNodeByDepthLevel.bind(this);
         this.getNodesAtDepthLevel = this.getNodesAtDepthLevel.bind(this);
-        
     }
+
     handleClassName(className, isActive, isMultiple, duration){
       const svg = d3.select($("#svg-tree")[0]);
       let extraMax = 0;
@@ -96,6 +96,7 @@ class GraphComponent extends Component {
         //if(this.props.selectedTasks.filter(selectedTask => selectedTask.action.includes('MODEL')).length !== this.props.selectedTasks.length)
         this.props.setTask(null);
     }
+
   countNodeAtDepthLevel(rootNode, depthLevel){
     if(depthLevel <= 0) return 1;
     if(rootNode!==null && rootNode.next!==null && rootNode.next.length >0){
@@ -109,6 +110,7 @@ class GraphComponent extends Component {
     }
     return 0;  
   }
+
   getNodesAtDepthLevel(rootNode, depthLevel){
     if(depthLevel <= 0) return [rootNode];
     if(rootNode!==null && rootNode.next!==null && rootNode.next.length >0){
@@ -138,45 +140,40 @@ class GraphComponent extends Component {
   }
 
    update(){
-     this.setState({selectedTasks: [], nodes:[], links:[]}, () => {
-      var rootTask = this.props.tasks.filter(task => (task.action === 'INIT'))[0]
-      var nbNodeByDepthLevel = this.countNodeByDepthLevel(rootTask);
-      /*var iterate = (depth, width, height, nodes, links) => {
-          var tasks = this.getNodesAtDepthLevel(rootTask, depth);
-          if(tasks.length){
-              var asisTasks = tasks.filter(task => task.action.includes('MODEL_ASIS'));
-              var tobeTasks = tasks.filter(task => task.action.includes('MODEL_TOBE'));
-              var kpiTasks = tasks.filter(task => task.action.includes('KPI'));
-              
-              return iterate(depth+1,  width, height, nodes, links);
-          }
-          return 0;
-
+     var rootTask = this.props.tasks.filter(task => (task.action === 'INIT'))[0];
+     var computeHeightOfNode = (task, minHeight) => {
+      let ans = minHeight;
+      if(task.next.length > 0){
+        ans = task.next
+              .map(nextTaskId => computeHeightOfNode(this.props.tasks.filter(task => (task._id === nextTaskId))[0], minHeight))
+              .reduce((total, value) => total+value, 0);
       }
-      iterate(0, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links);*/
-      var computeHeightOfNode = (task, minHeight) => {
-        let ans = minHeight;
-        if(task.next.length > 0){
-          ans = task.next
-                .map(nextTaskId => computeHeightOfNode(this.props.tasks.filter(task => (task._id === nextTaskId))[0], minHeight))
-                .reduce((total, value) => total+value, 0);
-        }
-        return ans;
+      return ans;
+    }
+    var computeWidthOfGraph = (task, minWidth, totalWidth) => {
+      let ans = totalWidth;
+      if(task.next.length > 0){
+        return Math.max(
+          ...task.next.map(nextTaskId =>
+            computeWidthOfGraph(this.props.tasks.filter(task => (task._id === nextTaskId))[0], minWidth, totalWidth + minWidth)
+          )
+        );
       }
+      return ans;
+    }
+    var height = computeHeightOfNode(rootTask, minHeight);
+    var width = computeWidthOfGraph(rootTask, minWidth, minWidth);
+     this.setState({height:height, width: width, selectedTasks: [], nodes:[], links:[]}, () => {
+     
 
       var iterate  = (currTask, x, y, nodes, links) => {
         
-        //console.log('currTask:',currTask.name,'(',moment(currTask.date).format('LLL'),')','x:',x, 'y:', y);
         var selected = this.props.selectedTasks.length ? this.props.selectedTasks.filter(selectedTask => selectedTask._id === currTask._id).length : false
         nodes.push({task: currTask, x: x, y: y, selected: selected});
         //var height = computeHeightOfNode(task, minHeight);
         //console.log(task, height);
         var nextX = x  + minWidth;
         var nextY = y;
-        /*var asisTaskIds = currTask.next.filter(nextTaskId => {
-          var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
-          return task.action.includes('MODEL_ASIS')||task.action.includes('MODEL_TOBE')||task.action.includes('ECONOMICAL')||task.action.includes('SOCIAL')
-        });*/
         var nextTasks = currTask.next.map(nextTaskId => this.props.tasks.filter(task => task._id === nextTaskId)[0]);
         var sortedNextTasks = nextTasks.sort( (prevTask, nextTask) => {
           //MODEL_ASIS > MODEL_TOBE > KPI
@@ -197,7 +194,6 @@ class GraphComponent extends Component {
           ) return 1;
           return 0;
         });
-        console.log(sortedNextTasks)
         sortedNextTasks.forEach(nextTask => {
           var nextHeight = computeHeightOfNode(nextTask, minHeight);
          // console.log('nextTask:',nextTask,'nextHeight:',nextHeight);
@@ -214,68 +210,6 @@ class GraphComponent extends Component {
       }
       iterate(rootTask, xOrigin, yOrigin,  this.state.nodes, this.state.links);
       this.draw();
-     /* var iterate = (task, x, y, width, height, nodes, links) => {
-        var selected = this.props.selectedTasks.length ? this.props.selectedTasks.filter(selectedTask => selectedTask._id === task._id).length : false
-        nodes.push({task: task, x: x, y: y, selected: selected})
-        var childHeight = 40;//height/task.next.length //nbNodeByDepthLevel[depth+1]
-        var startIndex = 0
-        var asisTaskIds = task.next.filter(nextTaskId => {
-          var task = this.props.tasks.filter(task => (task._id === nextTaskId))[0]
-          return task.action.includes('MODEL_ASIS')
-        });
-        asisTaskIds.forEach((asisTaskId, index) => {
-          var nextTask = this.props.tasks.filter ((task) => (task._id === asisTaskId))[0]
-
-          links.push({
-            task: nextTask,
-            source: {x: x, y: y},
-            target: {x: x + childWidth, y: y + (index * childHeight)},
-            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
-            color: "#f7931e"
-          })
-          iterate(nextTask, x + childWidth, y + (index * childHeight), width, childHeight, nodes, links)
-        });
-        startIndex += asisTaskIds.length
-
-        var tobeTaskIds = task.next.filter(tobeTaskId => {
-          var task = this.props.tasks.filter(task => (task._id === tobeTaskId))[0]
-          return task.action.includes('MODEL_TOBE')
-        })
-
-        tobeTaskIds.forEach((tobeTaskId, index) => {
-          var nextTask = this.props.tasks.filter ((task) => (task._id === tobeTaskId))[0]
-          links.push({
-            task: nextTask,
-            source: {x: x, y: y},
-            target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
-            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
-            color: "#f7931e"
-          })
-          iterate(nextTask, x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
-        });
-        
-        startIndex += tobeTaskIds.length
-        
-        var kpiTaskIds = task.next.filter(kpiTaskId => {
-          var task = this.props.tasks.filter(task => (task._id === kpiTaskId))[0]
-          return task.action.includes('KPI')
-        })
-
-        kpiTaskIds.forEach((kpiTaskId, index) => {
-          var nextTask = this.props.tasks.filter ((task) => (task._id === kpiTaskId))[0]
-          links.push({
-            task: nextTask,
-            source: {x: x, y: y},
-            target: {x: x + childWidth, y: y + ((startIndex + index) * childHeight)},
-            dashed : (nextTask.lane==="lane_todo")?("3, 3"): ("0, 0"),
-            color: "#f7931e"
-          })
-          iterate(nextTask,  x + childWidth, y + ((startIndex + index) * childHeight), width, childHeight, nodes, links)
-        });
-
-      };
-      iterate(rootTask, xOrigin, yOrigin, this.props.parentWidth, this.props.parentHeight, this.state.nodes, this.state.links)
-      this.draw()*/
      });
    }
 
@@ -434,10 +368,10 @@ class GraphComponent extends Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
-      if (prevProps.tasks !== this.props.tasks) {
+     if (prevProps.tasks !== this.props.tasks) {
         this.update()
       }
-      if (prevProps.selectedTasks !== this.props.selectedTasks) {
+     if (prevProps.selectedTasks !== this.props.selectedTasks) {
         this.update()
      }
      if (prevProps.compareMode !== this.props.compareMode) {
@@ -447,20 +381,17 @@ class GraphComponent extends Component {
    
    componentDidMount(){
      this.update()
-
    }
 
     render(){
-
-        if(this.props.parentWidth && this.props.parentHeight && !this.did){
+        if(!this.did){
             this.did = true
             this.update()
         }
-
+        // className='col s12'
         return (
           <div>
-            <svg className='col s12' id='svg-tree' width={this.props.parentWidth} height={this.props.parentHeight} >
-            </svg>
+            <svg id='svg-tree' width={this.state.width} height={this.state.height} />
           </div>
         );
     }

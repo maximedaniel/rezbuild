@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
-import {mean} from 'mathjs'
 import ComputeVersion from '../ComputeVersion'
 import { ParentSize } from '@vx/responsive'
-import chroma from 'chroma-js'
 import moment from 'moment'
 import RadarRechartComponent from '../RadarRechart'
 var $ = window.$;
@@ -101,28 +99,6 @@ class VersionComparatorCore extends Component {
         if (prevProps.selectedTasks.length !== this.props.selectedTasks.length){
             this.compareVersions();
             $('#carousel-version-comparator').carousel({noWrap:true});
-            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-        
-            $.fn.attrchange = function(callback) {
-                if (MutationObserver) {
-                    var options = {
-                        subtree: false,
-                        attributes: true
-                    };
-        
-                    var observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(e) {
-                            callback.call(e.target, e.attributeName);
-                        });
-                    });
-        
-                    return this.each(function() {
-                        observer.observe(this, options);
-                    });
-        
-                }
-            }
-            
             $('.carousel-item').attrchange((attrName) => {
                 if(attrName === 'class'){
                         let ans = $('.carousel-item.active');

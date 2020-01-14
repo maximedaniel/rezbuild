@@ -5,9 +5,9 @@ class ComputeVersion {
     static getFirstParentTaskWithAction = (tasks, taskId, action) => {
         var currTask = tasks.filter((task) => task._id === taskId)[0];
         var prevTasks = currTask.prev.map((prevTaskId) => tasks.filter((task) => task._id === prevTaskId)[0]);
-        if (prevTasks.length){
+        if (prevTasks.length > 0){
             var resTasks = prevTasks.filter((prevTask) => (prevTask.action.includes(action) && prevTask.lane !=='lane_todo'));
-            if(resTasks.length){
+            if(resTasks.length > 0){
                 return resTasks[0];
             } else return ComputeVersion.getFirstParentTaskWithAction(tasks, prevTasks[0]._id, action);
         } else return null;
@@ -15,16 +15,15 @@ class ComputeVersion {
     static getLastChildTaskWithAction = (tasks, taskId, action) => {
         var currTask = tasks.filter((task) => task._id === taskId)[0];
         var nextTasks = currTask.next.map((nextTaskId) => tasks.filter((task) => task._id === nextTaskId)[0]);
-        var resTasks = nextTasks.filter((nextTask) => (nextTask.action.includes(action)));
-        if (resTasks.length){
-            if(resTasks[0].lane === 'lane_todo') return currTask;
+        var resTasks = nextTasks.filter((nextTask) => (nextTask.action.includes(action) && nextTask.lane !=='lane_todo'));
+        if (resTasks.length > 0){
             if(resTasks[0].next.length) return ComputeVersion.getLastChildTaskWithAction(tasks, resTasks[0]._id, action);
             else return resTasks[0];
         } else return null;
     }
     static fetchRelevantTasks = (task, tasks) => {
         if(task.action.includes('MODEL_ASIS')){
-            let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_ASIS'):task;
+            let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_ASIS')||task:task;
             return {
                 modelTask : refTask,
                 environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENVIRONMENTAL_ASIS'),
@@ -35,7 +34,7 @@ class ComputeVersion {
                 error: false, pending: false};
             } 
             else if(task.action.includes('KPI_ENVIRONMENTAL_ASIS')){
-                    let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENVIRONMENTAL_ASIS'):task;
+                    let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENVIRONMENTAL_ASIS')||task:task;
                     let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                     return {
                             modelTask : modelTask,
@@ -47,7 +46,7 @@ class ComputeVersion {
                             error: false, pending: false};
             } 
             else if(task.action.includes('KPI_ECONOMICAL_ASIS')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_ASIS'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
@@ -59,7 +58,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_SOCIAL_ASIS')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_SOCIAL_ASIS'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_SOCIAL_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
@@ -71,7 +70,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_ENERGICAL_ASIS')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGICAL_ASIS'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGICAL_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
@@ -83,7 +82,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_COMFORT_ASIS')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_COMFORT_ASIS'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_COMFORT_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
@@ -95,7 +94,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('MODEL_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_TOBE'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_TOBE')||task:task;
                 return {
                     modelTask : refTask,
                     environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENVIRONMENTAL_TOBE'),
@@ -106,7 +105,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_ENVIRONMENTAL_TOBE')){
-                    let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENVIRONMENTAL_TOBE'):task;
+                    let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENVIRONMENTAL_TOBE')||task:task;
                     let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                     return {
                             modelTask : modelTask,
@@ -118,7 +117,7 @@ class ComputeVersion {
                             error: false, pending: false};
             } 
             else if(task.action.includes('KPI_ECONOMICAL_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_TOBE'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
@@ -130,7 +129,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_SOCIAL_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_SOCIAL_TOBE'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_SOCIAL_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
@@ -142,7 +141,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_ENERGICAL_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGICAL_TOBE'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGICAL_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
@@ -154,7 +153,7 @@ class ComputeVersion {
                     error: false, pending: false};
             } 
             else if(task.action.includes('KPI_COMFORT_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_COMFORT_TOBE'):task;
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_COMFORT_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,

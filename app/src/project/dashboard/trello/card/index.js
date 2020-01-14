@@ -15,7 +15,7 @@ class CardComponent extends Component {
   onIn(){
     this.setState({hover: true})
     $("#content_"+this.props.id).css('opacity', '1');
-    $("#content_"+this.props.id).css('max-height', '400px');
+    $("#content_"+this.props.id).css('max-height', '15em');
 
 }
  onOut(){
@@ -27,7 +27,7 @@ class CardComponent extends Component {
   }
 
   componentDidUpdate() {
-    $('.rXSjd').css('min-width', '50px');
+    $('.rXSjd').css('min-width', '4em');
     $('#textarea_'+this.props.id).trigger('autoresize');
   }
 
@@ -37,9 +37,9 @@ class CardComponent extends Component {
         onMouseOver={ this.props.draggable?this.onIn:null}
         onMouseOut={this.props.draggable?this.onOut:null} 
         style={{
-        minWidth: '200px',
-        width: '200px',
-        maxWidth: '200px',
+        minWidth: '15em',
+        width: '15em',
+        maxWidth: '15em',
         color:'#000',
         backgroundColor:'#fff',
         fontFamily: 'Exo 2',
