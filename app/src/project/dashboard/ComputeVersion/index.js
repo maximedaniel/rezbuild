@@ -1,3 +1,8 @@
+/**
+ * @class ComputeVersion
+ * @extends Component
+ * @description Define a set of static functions for version graph exploration
+ */
 import {mean} from 'mathjs'
 import moment from 'moment'
 

@@ -1,4 +1,9 @@
     
+/**
+ * @class Graph
+ * @extends Component
+ * @description Create the exploration graph part of the dashboard
+ */
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 import moment from 'moment'

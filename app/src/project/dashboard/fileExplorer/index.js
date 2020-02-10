@@ -1,3 +1,8 @@
+/**
+ * @class FileExplorer
+ * @extends Component
+ * @description Create the file explorer part of the dashboard
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 import RadarRechartComponent from '../RadarRechart'

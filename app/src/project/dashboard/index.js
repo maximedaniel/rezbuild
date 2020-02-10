@@ -1,3 +1,8 @@
+/**
+ * @class Dashboard
+ * @extends Component
+ * @description Create the dashboard part of the project page
+ */
 import React, { Component } from 'react'
 import TrelloComponent from './trello'
 import FileExplorerComponent from './fileExplorer'

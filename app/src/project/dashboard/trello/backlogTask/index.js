@@ -1,3 +1,8 @@
+/**
+ * @class BacklogTaskForm
+ * @extends Component
+ * @description Create the form for a BACKLOG task
+ */
 import React, { Component } from 'react'
 import axios from 'axios'
 import SocketContext from '../../../../SocketContext'

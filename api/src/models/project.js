@@ -1,8 +1,12 @@
-var mongoose = require('mongoose'),
+/**
+ * @module ProjectModel
+ * @description Define a project with MongoDB schema
+ */
+
+ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ProjectSchema = new Schema({
-  //_id: {type: Schema.Types.ObjectId, index:true, required:true, auto:true},
   date: {type: Date, default: Date.now},
   name: {type: String, default: ""},
   country: {type: String, default: ""},

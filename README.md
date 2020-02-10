@@ -1,9 +1,14 @@
 
 # IMPORTANT
+X - TRANSFERT TO GITLAB ESTIA (DM Admin)
+X - Add a NEW SERVER ESTIA for TESTING
+X - Test the BIMServer for conversion from IFC2X4 to IFC4
+X - Write JS documentation
+
 ? - Visualizer as card refurbishment technologies list
 V - Visualize and Compare KPIs (How to compute score for each KPI?)
 V - Task of decision making Visualizing the models not choose (adjust opacity?)
-X- generation automatic 3d models & files
+X - generation automatic 3d models & files
 V - Filter role by actions (What terminology for roles? What action?)
 V - adjust graph div's height automatically
 V - prevent multiple KPI branches
@@ -17,7 +22,6 @@ V - prevent multiple KPI branches
 - Project Information → General Information: “adjacent to unheated room” not clear what that means. 
 - Project Information → General Information:Clear inter-floor height (m) does not accept decimals (cannot enter 2.5 m). Similar issue for other linear dimensions.
 - Project Information → General Information: when editing/adding values, when click on Save no message is shown (like “Changes Have been saved”, even though they infact are saved)  and the window remains exactly the same, so user doesn’t get any feedback for his action
-
 
 # DONE
 - Invite user remove '#field'

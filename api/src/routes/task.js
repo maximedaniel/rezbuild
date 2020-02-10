@@ -1,3 +1,9 @@
+/**
+ * @module TaskRouting
+ * @description Handle the routes (create, get, update, delete, done) for tasks
+ * @param {object} io WebsocketServer
+ * @param {object} client WebsocketClient
+ */
 module.exports = function(io, client, bim){
 
    var Task = require('../models').Task

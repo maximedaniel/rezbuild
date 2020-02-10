@@ -1,3 +1,8 @@
+/**
+ * @class Project
+ * @extends Component
+ * @description Create the project page
+ */
 import React, { Component } from 'react'
 import SocketContext from '../SocketContext'
 import NavbarComponent from '../navbar'

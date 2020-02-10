@@ -1,3 +1,9 @@
+    
+/**
+ * @class RadarRechart
+ * @extends Component
+ * @description Create the KPIs radar rechart part of the dashboard
+ */
 import React, { Component} from 'react';
 import {Radar,  RadarChart, PolarGrid, PolarAngleAxis, LabelList, PolarRadiusAxis} from 'recharts';
 

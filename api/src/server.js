@@ -1,5 +1,8 @@
-//importing dependencies
-import express from 'express'
+/**
+ * @module API
+ */
+
+ import express from 'express'
 import db from './models'
 import cors from 'cors'
 import nodemailer from 'nodemailer'
@@ -13,30 +16,35 @@ var handshake = require('socket.io-handshake');
 var fs = require('fs');
 
 var fileDir = "./files/"
+var zipDir = "./zips/"
 
 var serveIndex = require('serve-index')
 
 var app = express();
-
-//var proxy = require('express-http-proxy');
 
 var proxy = require('http-proxy-middleware');
 
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
 
-/* HANDLING RIMOND MODULE */
+
+
+/**
+ * @description Serve RIMOND module
+ */
 app.use(
   '/Rezbuild/Visualize/',
   proxy({ target: 'http://35.189.193.44/', changeOrigin: true })
 );
-
 app.use(
   '/RezBuild/',
   proxy({ target: 'http://35.189.193.44/', changeOrigin: true })
 );
 
-/* ROUTING FILE DOWNLOAD */
+
+/**
+ * @description Serve IFC files
+ */
 app.use('/ifc/:Id', (req, res, next) => {
   try {
     var splittedId = req.params.Id.split('_', 2)
@@ -49,7 +57,24 @@ app.use('/ifc/:Id', (req, res, next) => {
   }
 })
 
+/**
+ * @description Serve zip files
+ */
+app.use('/zip/:filename', (req, res, next) => {
+  try {
+    var zipFilename = req.params.filename
+    res.sendFile(zipDir + "/" + zipFilename, { root: __dirname })
+  }
+  catch(err){
+    res.send(err)
+  }
+})
 
+/**
+ * @description Serving file given its name and its associated task
+ * @param {string} taskId - The id of the task
+ * @return {string} filename - The name of the file
+ */
 app.use('/:taskId/:filename', (req, res, next) => {
     try {
       res.sendFile(fileDir + "/" + req.params.taskId + "/" + req.params.filename, { root: __dirname })
@@ -58,42 +83,11 @@ app.use('/:taskId/:filename', (req, res, next) => {
       res.send(err)
     }
 })
-/*app.use('/:taskId/', (req, res, next) => {
-  var dirPath = fileDir+'/'+ req.params.taskId
-  fs.readdir(dirPath, function (err, files) {
-    //handling error
-    if (err) {
-      res.send(err);
-    } 
-    //listing all files using forEach
-    var ans = {}
-    if(files)files.map(file => ans[file] = fs.statSync(dirPath + '/' + file))
-    res.send(ans)
-  });
-});*/
-
-/*app.use('/file/:name', (req, res, next) => {
-    var options = {
-        root: fileDir,
-        dotfiles: 'deny',
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true
-        }
-      };
-    var fileName = req.params.name;
-      res.sendFile(fileName, options, function (err) {
-        if (err) {
-          next(err);
-        } else {
-          console.log('Sent:', fileName);
-        }
-      });
-});*/
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+// Configure user session 
 var session = require('express-session')({
     secret: "estia",
     resave: true,
@@ -106,9 +100,12 @@ io.set('origins',  '*:*');
 io.use(sharedsession(session));
 
 
+
+// Configure file upload 
 var siofu = require("socketio-file-upload");
 app.use(siofu.router)
 
+// Configuring mail communication
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -118,6 +115,7 @@ var transporter = nodemailer.createTransport({
  });
 
 
+// Configure and route websocket clients
 io.on('connection', function(client){
     console.log(client.id, ' is connected.')
     var uploader = new siofu()
@@ -126,9 +124,12 @@ io.on('connection', function(client){
     require('./routes/auth')(io, client)
     require('./routes/user')(io, client)
     require('./routes/project')(io, client)
-    require('./routes/task')(io, client) // test
+    require('./routes/task')(io, client)
     require('./routes/file')(io, client, uploader)
     require('./routes/email')(io, client, transporter)
 });
 
+/**
+ * HTTP server
+ */
 module.exports = {http};

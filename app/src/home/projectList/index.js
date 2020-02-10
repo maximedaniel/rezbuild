@@ -1,4 +1,9 @@
-import React, { Component } from 'react'
+/**
+ * @class ProjectList
+ * @extends Component
+ * @description Create the project list
+ */
+ import React, { Component } from 'react'
 import CreateProjectForm from './createProject'
 import JoinProjectForm from './joinProject'
 import RemoveProjectForm from './removeProject'

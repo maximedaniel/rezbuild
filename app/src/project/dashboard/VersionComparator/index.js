@@ -1,3 +1,9 @@
+    
+/**
+ * @class VersionComparator
+ * @extends Component
+ * @description Create the version comparator tool part of the dashboard
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 import ComputeVersion from '../ComputeVersion'

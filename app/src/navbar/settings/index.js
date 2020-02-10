@@ -1,4 +1,10 @@
-import React, { Component } from 'react'
+/**
+ * @class SettingsForm
+ * @extends Component
+ * @description Create the form for account settings
+ */
+
+ import React, { Component } from 'react'
 import SocketContext from '../../SocketContext'
 import common from 'common'
 

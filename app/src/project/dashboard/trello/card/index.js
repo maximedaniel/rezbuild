@@ -1,5 +1,9 @@
+/**
+ * @class Card
+ * @extends Component
+ * @description Create the card part of the trello
+ */
 import React, { Component } from 'react'
-
 import RemoveTaskForm from './removeTask'
 import CreateTaskForm from './createTask'
 var $ = window.$

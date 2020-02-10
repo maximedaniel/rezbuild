@@ -1,12 +1,13 @@
+/**
+ * @module AuthentificationRouting
+ * @description Handle the routes (signin, signup, signout, token, done) for user authentification
+ * @param {object} io WebsocketServer
+ * @param {object} client WebsocketClient
+ */
+
 module.exports = function(io, client){
 
     var User = require('../models').User
-
-    /*client.on('/api/token', function (filter, res) {
-        console.log(args)
-        if(client.sock.handshake.session.user) res({token: client.sock.handshake.session.user._id});
-        else res({error: 'User not signed in'});
-    });*/
 
     client.on('/api/user/done',  () => io.emit('/api/user/done', {}))
 

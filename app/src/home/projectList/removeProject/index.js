@@ -1,4 +1,10 @@
-import React, { Component } from 'react'
+/**
+ * @class RemoveProjectForm
+ * @extends Component
+ * @description Create the form for removing a project
+ */
+
+ import React, { Component } from 'react'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js";
 import axios from 'axios'

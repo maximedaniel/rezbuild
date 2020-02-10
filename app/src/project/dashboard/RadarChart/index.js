@@ -1,4 +1,9 @@
     
+/**
+ * @class RadarChart
+ * @extends Component
+ * @description Create the KPIs radar chart part of the dashboard
+ */
 import React, { Component } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import chroma from 'chroma-js';

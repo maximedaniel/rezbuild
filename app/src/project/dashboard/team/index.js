@@ -1,8 +1,12 @@
+/**
+ * @class Team
+ * @extends Component
+ * @description Create the team part of the dashboard
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 import AddUserForm from './addUser'
 import common from 'common'
-
 
 class TeamCore extends Component {
 

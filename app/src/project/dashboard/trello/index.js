@@ -1,3 +1,8 @@
+/**
+ * @class Trello
+ * @extends Component
+ * @description Create the trello part of the dashboard
+ */
 import React, { Component } from 'react'
 import Board from 'react-trello'
 import CardComponent from './card'

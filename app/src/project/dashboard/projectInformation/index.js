@@ -1,3 +1,8 @@
+/**
+ * @class ProjectInformation
+ * @extends Component
+ * @description Create the project information part of the dashboard
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 

@@ -1,3 +1,8 @@
+/**
+ * @class AddUserForm
+ * @extends Component
+ * @description Create the form for adding a user to the project
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../../SocketContext'
 

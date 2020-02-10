@@ -1,3 +1,8 @@
+/**
+ * @class JoinProjectForm
+ * @extends Component
+ * @description Create the form for joining a project
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 
