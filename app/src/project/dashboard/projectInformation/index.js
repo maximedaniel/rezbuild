@@ -15,6 +15,8 @@ class ProjectInformationCore extends Component {
     this.submit = this.submit.bind(this);
     this.state = {project : null,  error : false, pending : false}
   }
+  
+   // Update the project
   submit(event){
     event.preventDefault();
      this.setState({error : false, pending : true}, () => {

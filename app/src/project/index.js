@@ -16,6 +16,7 @@ class ProjectCore extends Component {
     this.state = {project : null, error : false, pending : false}
   }
 
+   // Fetch the project
   componentDidMount(){
     this.setState({project: null, error : false, pending : false}, () => {
         var filter = { _id: this.props.params._id }

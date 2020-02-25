@@ -2,8 +2,8 @@
 # IMPORTANT
 X - TRANSFERT TO GITLAB ESTIA (DM Admin)
 X - Add a NEW SERVER ESTIA for TESTING
-X - Test the BIMServer for conversion from IFC2X4 to IFC4
-X - Write JS documentation
+? - Test the BIMServer for conversion from IFC2X4 to IFC4
+? - Write JS documentation
 
 ? - Visualizer as card refurbishment technologies list
 V - Visualize and Compare KPIs (How to compute score for each KPI?)

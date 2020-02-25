@@ -86,7 +86,6 @@ class TechnologyLibraryCore extends Component {
   componentDidMount() {
       this.fetch();
       $(document).ready(function() {
-        //M.FormSelect.init($('#roles'), {});
         $('select').material_select();
       });
   }

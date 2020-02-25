@@ -19,6 +19,7 @@ class CreateProjectFormCore extends Component {
    this.state = {error : false, pending : false}
   }
 
+  // Create a new project of the user
   submit(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {

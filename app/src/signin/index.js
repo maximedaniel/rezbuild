@@ -30,6 +30,7 @@ class SigninFormCore extends Component {
     $('.tooltipped').tooltip('remove');
   }
 
+   // Sign in the user
   handleSubmit(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {

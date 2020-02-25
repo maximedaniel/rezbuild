@@ -28,6 +28,7 @@ class FileExplorerCore extends Component {
         this.renderKPIsOfTask = this.renderKPIsOfTask.bind(this);
     }
 
+   // Fetch the files of the tasks
     fetchFiles() {
         if(this.props.task){
                this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
@@ -207,7 +208,7 @@ class FileExplorerCore extends Component {
                          {modelViewer}
                          {modelFileExplorer}
                          </div>
-                         <div className="col s4">
+                         {/*<div className="col s4">
                          <h6>KPI SCORE</h6>
                          <ParentSize>
                             {
@@ -227,7 +228,7 @@ class FileExplorerCore extends Component {
                                 )
                             }
                             </ParentSize>
-                         </div>
+                        </div>*/}
                          <div className="col s4">
                          <h6>KPI DATA</h6>
                          {KpiFileExplorer}

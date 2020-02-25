@@ -15,45 +15,6 @@ class RadarChartComponent extends Component {
               chart: {
                 type: 'radar',
               },
-              /*dataLabels: {
-                enabled: true,
-                style: {
-                    offsetY: '100px',
-                    offsetX: '100px',
-                    fontSize: '12px',
-                    fontFamily: "'Exo 2', sans-serif",
-                    cssClass: 'apexcharts-xaxis-label',
-                },
-                formatter: function (val, opts) {
-                  return val.toFixed(2);
-                }
-              },
-              grid: {
-              padding: {
-                  top:0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-              }, 
-              },
-              plotOptions: {
-                radar: {
-                  size: this.props.size,
-                }
-              },
-              colors:  this.props.colors, 
-              tooltip: {
-                enabled: true,
-                y: {
-                  formatter: function(val) {
-                    return val
-                  }
-                },
-                style: {
-                  fontSize: '12px',
-                  fontFamily: "'Exo 2', sans-serif",
-                },
-              },*/
               xaxis: {
                 categories: this.props.categories,
                 labels: {

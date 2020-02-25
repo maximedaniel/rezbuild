@@ -15,6 +15,8 @@ class TeamCore extends Component {
     this.state = {users : null,  error : false, pending : false}
   }
 
+  
+   // Fetch the users of the project
   update(){
     this.setState({users : null, error : false, pending : true}, () => {
         var filter = {_id: this.props.project._id }

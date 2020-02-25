@@ -175,8 +175,6 @@ class GraphComponent extends Component {
         
         var selected = this.props.selectedTasks.length ? this.props.selectedTasks.filter(selectedTask => selectedTask._id === currTask._id).length : false
         nodes.push({task: currTask, x: x, y: y, selected: selected});
-        //var height = computeHeightOfNode(task, minHeight);
-        //console.log(task, height);
         var nextX = x  + minWidth;
         var nextY = y;
         var nextTasks = currTask.next.map(nextTaskId => this.props.tasks.filter(task => task._id === nextTaskId)[0]);
@@ -201,7 +199,6 @@ class GraphComponent extends Component {
         });
         sortedNextTasks.forEach(nextTask => {
           var nextHeight = computeHeightOfNode(nextTask, minHeight);
-         // console.log('nextTask:',nextTask,'nextHeight:',nextHeight);
           links.push({
             task: nextTask,
             source: {x: x, y: y},
@@ -393,7 +390,6 @@ class GraphComponent extends Component {
             this.did = true
             this.update()
         }
-        // className='col s12'
         return (
           <div>
             <svg id='svg-tree' width={this.state.width} height={this.state.height} />
