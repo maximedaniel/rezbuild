@@ -1,3 +1,8 @@
+/**
+ * @class AddUserForm
+ * @extends Component
+ * @description Create the form for adding a user to the project
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../../SocketContext'
 
@@ -12,6 +17,8 @@ class AddUserFormCore extends Component {
    this.state = {users: null, error : false, pending : false}
   }
 
+  
+  // Add a user to the project
   update(){
     this.setState({users : null, error : false, pending : true}, () => {
         var filter = {_id: this.props.project._id }

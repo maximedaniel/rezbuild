@@ -1,3 +1,10 @@
+
+/**
+ * @class Home
+ * @extends Component
+ * @description Create the home page
+ */
+
 import React, { Component } from 'react'
 import SocketContext from '../SocketContext'
 import NavbarComponent from '../navbar'

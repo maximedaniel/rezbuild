@@ -20,6 +20,7 @@
     "foreman": "^2.0.0",
     "forever": "^1.0.0",
     "http-proxy-middleware": "^0.20.0",
+    "jsdoc": "^3.6.3",
     "mongoose": "^5.4.13",
     "mongoose-visual": "^0.1.0",
     "nodemailer": "^6.3.1",
@@ -49,7 +50,8 @@
     "react-scripts": "1.0.7"
   },
   "scripts": {
-    "start": "npm link ../common && nodemon src",
-    "start": "npm link ../common && forever start src/index.js"
+    "start": "npm link ../common && forever start src/index.js",
+    "comment": "npm link ../common && nodemon src",
+    "docs": "jsdoc2md src/*.js > docs.md && jsdoc2md src/**/*.js >> docs.md"
   }
 }

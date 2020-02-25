@@ -1,3 +1,8 @@
+/**
+ * @class CreateTaskForm
+ * @extends Component
+ * @description Create the form for creating a task
+ */
 import React, { Component } from 'react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
@@ -103,9 +108,9 @@ class CreateTaskFormCore extends Component {
     });
   }
   componentDidUpdate(prevProps, prevState) {
-    if(prevProps !== this.props){
+    /*if(prevProps !== this.props){
     this.forceUpdate()
-    }
+    }*/
   }
 
   render() {

@@ -1,10 +1,13 @@
-var common = require('common')
+/**
+ * @module TaskModel
+ * @description Define a task with MongoDB schema
+ */
+
+ var common = require('common')
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
-
-var body = {
+var TaskSchema = new Schema({
   project: { type: Schema.Types.ObjectId, ref: 'Project'},
-  
   lane:   {type: String, default: 'lane_backlog'},
   name: {type: String, default: 'Task0'},
   content:  {type: String, default: '##### Description\n\nA simple task for testing\n\n##### Input\n\nN/A\n\n##### Output\n\nN/A\n'},
@@ -12,7 +15,6 @@ var body = {
   endDate: {type: Date, default: Date.now},
   date: {type: Date, default: Date.now},
   user: { type: Schema.Types.ObjectId, ref: 'User'},
-
   roles: [String],
   action: String,
   names: [String],
@@ -21,15 +23,7 @@ var body = {
   files: [String],
   prev: [{type: Schema.Types.ObjectId, ref: 'Task'}],
   next: [{type: Schema.Types.ObjectId, ref: 'Task'}]
-}
-/*
-var actions = {}
-Object.entries(common.ACTIONS).map(([key, value]) => {
-  actions[key] = value
-})
-body['actions'] = new Schema(actions, {noId: true})*/
+});
 
-
-var TaskSchema = new Schema(body)
 var Task = mongoose.model('Task', TaskSchema);
 module.exports = Task;

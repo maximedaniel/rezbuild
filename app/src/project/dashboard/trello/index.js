@@ -1,3 +1,8 @@
+/**
+ * @class Trello
+ * @extends Component
+ * @description Create the trello part of the dashboard
+ */
 import React, { Component } from 'react'
 import Board from 'react-trello'
 import CardComponent from './card'
@@ -10,9 +15,9 @@ var $ = window.$
 
 /* CARD STYLING */
 const normalCardStyle = {
-    minWidth: '200px',
-    width: '200px',
-    maxWidth: '200px',
+    minWidth: '15em',
+    width: '15em',
+    maxWidth: '15em',
     marginBottom: '10px',
     color:'#000',
     backgroundColor:'#fff',
@@ -21,11 +26,13 @@ const normalCardStyle = {
     textShadow:"-1px -1px 0 #fff, 1px -1px 0 #fff,  -1px 1px 0 #fff, 1px 1px 0 #fff"
 }
 
+
 /* LANE STYLING */
 const lanesStyle = {
-    minWidth: '220px',
-    width: '220px',
-    maxWidth: '220px',
+    minWidth: '18em',
+    width: '18em',
+    maxWidth: '18em',
+    maxHeight:'100%',
     color:'#fff',
     backgroundColor:  'rgba(247,147,30, .5)',
     fontFamily: 'Exo 2',
@@ -65,7 +72,7 @@ class TrelloComponent extends Component {
             {
             cancel: cancel,
             task: cardDetails
-            }, () => {$('#modal_todotask').modal('open');})
+            }, () => $('#modal_todotask').modal('open'))
           return
         }
         if(targetLaneId === 'lane_done'){
@@ -73,7 +80,7 @@ class TrelloComponent extends Component {
             {
             cancel: cancel,
             task: cardDetails
-            }, () => {$('#modal_donetask').modal('open');})
+            }, () => $('#modal_donetask').modal('open'))
           return
         }
       }
@@ -83,7 +90,7 @@ class TrelloComponent extends Component {
             {
             cancel: cancel,
             task: cardDetails
-            }, () => {$('#modal_backlogtask').modal('open');})
+            }, () => $('#modal_backlogtask').modal('open'))
           return
         }
         if(targetLaneId === 'lane_done'){
@@ -91,7 +98,7 @@ class TrelloComponent extends Component {
             {
             cancel: cancel,
             task: cardDetails
-            }, () => {$('#modal_donetask').modal('open');})
+            }, () => $('#modal_donetask').modal('open'))
           return
         }
       }
@@ -101,7 +108,7 @@ class TrelloComponent extends Component {
             {
             cancel: null,
             task: null
-            }, () => {this.state.eventBus.publish(cancel);})
+            }, () => this.state.eventBus.publish(cancel))
           return
         }
         if(targetLaneId === 'lane_backlog'){
@@ -109,7 +116,7 @@ class TrelloComponent extends Component {
             {
             cancel: cancel,
             task: cardDetails
-            }, () => {$('#modal_backlogtask').modal('open');})
+            }, () => $('#modal_backlogtask').modal('open'))
           return
         }
       }
@@ -118,42 +125,30 @@ class TrelloComponent extends Component {
       {
       cancel: null,
       task: null
-      }, () => {this.state.eventBus.publish(cancel);})
+      }, () => {this.state.eventBus.publish(cancel);});
     return
-
-    /*this.setState(
-            {
-            cancel: cancel,
-            task: cardDetails
-            }, () => {
-            if(sourceLaneId === 'lane_done'){
-                this.cancel()
-            }
-            else if(sourceLaneId !== targetLaneId){
-                if(targetLaneId === 'lane_todo'){
-                    $('#modal_todotask').modal('open');
-                }
-                if(targetLaneId === 'lane_done'){
-                    $('#modal_donetask').modal('open');
-                }
-            }
-        })*/
   }
 
   cancel(){this.state.eventBus.publish(this.state.cancel)}
 
   componentDidMount(){
-    this.updateTasks()
+    this.update()
     $('.tooltipped').tooltip({delay:0, html:true});
   }
   componentWillUnount(){
     $('.tooltipped').tooltip('remove');
   }
 
-  updateTasks(){
+  update(){
      /* REMOVE INIT TASK */
-     var notInitTasks = this.props.tasks.filter(task => task.action !== 'INIT')
 
+     var notInitTasks = this.props.tasks.filter(task => task.action !== 'INIT')
+    
+     var getRolesForTask = (task) => 
+      Object.keys( common.ROLES)
+      .filter((key, index)  =>  common.ROLES[key].actions.filter(action => action === task.action).length > 0);
+      ///.map((key, index) => key);
+     
      /* DONE TASKS */
      var doneTasks = notInitTasks.filter(task => task.lane === 'lane_done')
      var doneCards = doneTasks.map(doneTask => {
@@ -162,7 +157,9 @@ class TrelloComponent extends Component {
       doneTask.focused = false
       doneTask.dashed = false
       doneTask.userDetails = doneTask.user?this.props.users.filter(user => user._id === doneTask.user)[0]: ''
-      doneTask.style = normalCardStyle
+      doneTask.style = normalCardStyle;
+
+      doneTask.roles = getRolesForTask(doneTask);
       if(this.props.task){
         /* if task selected then get previous tasks */
         var prevTaskIds = [] 
@@ -189,6 +186,7 @@ class TrelloComponent extends Component {
       todoTask.dashed = false
       todoTask.userDetails = todoTask.user?this.props.users.filter(user => user._id === todoTask.user)[0]: ''
       todoTask.style = normalCardStyle
+      todoTask.roles = getRolesForTask(todoTask);
       if(this.props.task){
         /* if task selected then get previous tasks */
         var prevTaskIds = [] 
@@ -215,6 +213,7 @@ class TrelloComponent extends Component {
       backlogTask.dashed = false
       backlogTask.userDetails = backlogTask.user?this.props.users.filter(user => user._id === backlogTask.user)[0]: ''
       backlogTask.style = normalCardStyle
+      backlogTask.roles = getRolesForTask(backlogTask);
       if(this.props.task){
         /* if task selected then get previous tasks */
         var prevTaskIds = [] 
@@ -228,8 +227,29 @@ class TrelloComponent extends Component {
         /* BACKLOG LANE */
          /* Is there a todo card draggable ? */
          var aTodoCardIsDraggable = !todoCards.filter(todoCard => todoCard.draggable === true).length;
-         if(aTodoCardIsDraggable && common.STATUS[this.props.task.action].includes(backlogTask.action)){
+         
+         // Check is the user can perform the task according to his roles
+         var actionIsAvailableForUser = this.props.user.roles
+          .map(role => common.ROLES[role].actions)
+          .reduce( (accumulator, currentValue) => accumulator.concat(currentValue), [])
+          .filter(action => action === backlogTask.action)
+          .length > 0;
+
+         if(aTodoCardIsDraggable
+            && common.STATUS[this.props.task.action].includes(backlogTask.action)
+            && actionIsAvailableForUser
+         ){
           backlogTask.draggable = true
+          // prevent multiple branches of KPI
+          if(this.props.task.action.includes('MODEL') && backlogTask.action.includes('KPI')){
+           var nextTasks = this.props.task.next.map(nextTaskId => this.props.tasks.filter((task) => task._id === nextTaskId)[0]);
+           if(nextTasks.length > 0) {
+             console.log(nextTasks)
+             //console.log(backlogTask)
+            var nextKpiTasks = nextTasks.filter(nextTask => nextTask.action === backlogTask.action);
+            if(nextKpiTasks.length > 0) backlogTask.draggable = false;
+           }
+          }
          }
       }
       return backlogTask;
@@ -259,67 +279,25 @@ class TrelloComponent extends Component {
           style: lanesStyle
         }
     ]
-     /* 
-     lanes.forEach(lane => {
-        this.props.tasks.forEach(task => {
-          if(task.action === 'INIT') return
-          if(lane.id === task.lane){
-            task.id = task._id
-            task.draggable = false
-
-            task.focused = false
-            task.dashed = false
-            task.userDetails = task.user?this.props.users.filter(user => user._id === task.user)[0]: ''
-            task.style = normalCardStyle
-            if(this.props.task){
-              var prevTaskIds = [] 
-              var ascend = (taskId, prevTaskIds) => {
-                prevTaskIds.push(taskId)
-                var currTask = this.props.tasks.filter((task) => task._id === taskId)[0];
-                currTask.prev.forEach((prevTaskId) => ascend(prevTaskId, prevTaskIds))
-              }
-              ascend(this.props.task._id, prevTaskIds)
-
-              if(lane.id === 'lane_backlog'){
-                if(common.STATUS[this.props.task.action].includes(task.action)){
-                  task.draggable = true
-                }
-
-              }
-              if(lane.id === 'lane_todo'){
-                task.draggable = prevTaskIds.includes(task._id)
-                task.focused = task.dashed =  this.props.task._id === task._id
-                
-              }
-              if(lane.id === 'lane_done'){
-                task.draggable = prevTaskIds.includes(task._id)
-                task.focused = this.props.task._id === task._id
-              }
-            }
-            lane.cards.push(task);
-          }
-        })
-     })*/
-
     const data = {lanes: lanes}
     this.setState({data:data});
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.tasks !== this.props.tasks){
-            this.updateTasks()
+    if (prevProps.tasks !== this.props.tasks) {
+        this.update();
+      }
+    if (prevProps.task !== this.props.task) {
+        this.update();
     }
-    if (prevProps.task !== this.props.task){
-            this.updateTasks()
-    }
+
     $('#modal_task').modal({
-      dismissible: false, // Modal can be dismissed by clicking outside of the modal
+      dismissible: false, 
     });
     $('#modal_createtask').modal({
-      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+      dismissible: true,
     });
    }
-
 
   render() {
         let trelloComponent;
@@ -329,7 +307,7 @@ class TrelloComponent extends Component {
         let createTaskFormComponent;
         let createTaskButtonComponent;
 
-        if (this.props.tasks){
+        if (this.props.tasks.length > 0){
           if (this.state.data){
             const components = {
               Card: CardComponent,
@@ -346,20 +324,6 @@ class TrelloComponent extends Component {
             components={components} style= {
                    { backgroundColor:'transparent',
                    fontFamily: 'Exo 2', padding:'0'}} />;
-            /*
-             <Board data={this.state.data} style= {
-                    { backgroundColor:'transparent',
-                    fontFamily: 'Exo 2'}
-                }
-                onDataChange={this.onTaskChange}
-                handleDragEnd={this.handleDragEnd}
-                eventBusHandle={this.setEventBus}
-                onCardClick={this.onCardClick}
-                customCardLayout
-                laneDraggable={false}
-                >
-                <CardComponent />
-                </Board>*/
           }
           if (this.state.task && this.state.cancel && this.props.project){
             backlogTaskFormComponent =  <BacklogTaskForm  setTask={this.props.setTask} selectedTask={this.props.task} tasks={this.props.tasks} task={this.state.task} users={this.props.users} event={this.state.cancel} cancel={this.cancel} />
@@ -371,10 +335,9 @@ class TrelloComponent extends Component {
                                           <i className="material-icons left">add</i> NEW 
                                       </a>
           createTaskFormComponent =  <CreateTaskForm project={this.props.project} />
-
         }
         return  (
-         <div className="section">
+         <div>
                 {createTaskButtonComponent}
                 {createTaskFormComponent}
                 {trelloComponent}

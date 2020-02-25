@@ -1,3 +1,9 @@
+/**
+ * @module UserRouting
+ * @description Handle the routes (create, get, update, delete, done) for users
+ * @param {object} io WebsocketServer
+ * @param {object} client WebsocketClient
+ */
 module.exports = function(io, client){
 
     var User = require('../models').User

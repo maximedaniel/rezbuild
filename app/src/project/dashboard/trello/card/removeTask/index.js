@@ -1,3 +1,8 @@
+/**
+ * @class RemoveTaskForm
+ * @extends Component
+ * @description Create the form for removing a task
+ */
 import React, { Component } from 'react'
 //import $ from 'jquery'
 //import M from "materialize-css/dist/js/materialize.js";

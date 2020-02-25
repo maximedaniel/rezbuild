@@ -1,7 +1,13 @@
 
 
+/**
+ * @module FileRouting
+ * @description Handle the routes (save) for file upload
+ * @param {object} io WebsocketServer
+ * @param {object} client WebsocketClient
+ * @param {object} uploader FileUploader
+ */
 import sanitize from 'sanitize-filename'
-
 module.exports = function(io, client, uploader){
    var File = require('../models').File
    var fs = require('fs');
@@ -10,10 +16,7 @@ module.exports = function(io, client, uploader){
         fs.mkdir(uploader.dir+'/'+event.file.meta.taskId, { recursive: true }, (err) => {
             if (err)  console.log('ERROR: ' + err);
           });
-
-        //console.log('Filename:', event.file.name);
         var newFilename = sanitize(event.file.name);
-        //console.log('newFilename:', newFilename);
         fs.rename(uploader.dir+ '/' + event.file.name, uploader.dir+'/'+event.file.meta.taskId + '/' + newFilename, function(err) {
             if ( err ) console.log('ERROR: ' + err);
         });
@@ -25,12 +28,9 @@ module.exports = function(io, client, uploader){
             var dirPath = uploader.dir + '/' + taskId
             fs.readdir(dirPath, function (error, files) {
                 console.log(error, files)
-                //handling error
                 if (error) {
                 res({error: error});
                 } 
-
-                //listing all files using forEach
                 var ans = {}
                 if(files) files.map(file => ans[file] = fs.statSync(dirPath + '/' + file))
                 res(ans);

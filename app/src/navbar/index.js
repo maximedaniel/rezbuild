@@ -1,3 +1,8 @@
+/**
+ * @class Navbar
+ * @extends Component
+ * @description Create the navigation bar
+ */
 import React, { Component } from 'react'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router'
@@ -19,6 +24,7 @@ class NavbarCore extends Component {
     this.state = {user: null, error : false, pending : false}
   }
 
+  // Fetch the user
   update(){
     $('.button-collapse').sideNav('hide')
     this.setState({user : null, error : false, pending : true}, () => {
@@ -36,7 +42,7 @@ class NavbarCore extends Component {
                 }
             }
         });
-    })
+    });
   }
 
   componentDidMount() {
@@ -55,6 +61,7 @@ class NavbarCore extends Component {
     $('.tooltipped').tooltip("remove");
   }
 
+ // Sign out the user
   handleSignout(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {

@@ -1,3 +1,9 @@
+/**
+ * @module ProjectRouting
+ * @description Handle the routes (create, get, update, delete, done) for projects
+ * @param {object} io WebsocketServer
+ * @param {object} client WebsocketClient
+ */
 module.exports = function(io, client, bim){
 
    var Project = require('../models').Project

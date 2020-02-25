@@ -1,3 +1,8 @@
+/**
+ * @class BacklogTaskForm
+ * @extends Component
+ * @description Create the form for a BACKLOG task
+ */
 import React, { Component } from 'react'
 import axios from 'axios'
 import SocketContext from '../../../../SocketContext'
@@ -49,7 +54,8 @@ class BacklogTaskFormCore extends Component {
                     if(res.tasks){
                         this.setState({pending:false, error: false}, () => {
                             $("#modal_backlogtask").modal('close')
-                            this.props.setTask(this.props.tasks.filter(task => task._id === this.props.task.prev[0])[0])
+                            console.log('[BacklogTask] delete and set task : ', this.props.tasks.filter(task => task._id === this.props.task.prev[0])[0])
+                            //this.props.setTask(this.props.tasks.filter(task => task._id === this.props.task.prev[0])[0])
                             this.props.socket.emit('/api/task/done')
                         })
                     }
