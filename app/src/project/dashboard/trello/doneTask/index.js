@@ -28,7 +28,7 @@ class DoneTaskFormCore extends Component {
 
   submit(event){
    event.preventDefault()
-   this.setState({newTaskId: this.props.task._id, pending:true, error: false}, () => {
+   this.setState({newTaskId: this.props.task._id, pending:true, error: false, progress: 0}, () => {
     if(this.props.task.lane === "lane_todo"){
         var filter = {_id: this.props.task._id}
         var update = {
@@ -49,7 +49,7 @@ class DoneTaskFormCore extends Component {
             
             var file = ""
             if(this.refs['files_'+name].files.length)  {
-                console.log("this.refs['files_'+name].files[0]:", this.refs['files_'+name].files[0])
+                //console.log("this.refs['files_'+name].files[0]:", this.refs['files_'+name].files[0])
                 allAttachedFiles.push(this.refs['files_'+name].files[0])
 
                 file = sanitize(this.refs['files_'+name].files[0].name)
@@ -57,7 +57,7 @@ class DoneTaskFormCore extends Component {
             }
 
             if(this.refs[name].files && this.refs[name].files.length){
-                console.log("this.refs[name].files[0]:", this.refs[name].files[0])
+                //console.log("this.refs[name].files[0]:", this.refs[name].files[0])
                 allAttachedFiles.push(this.refs[name].files[0])
             }
         })
@@ -116,7 +116,7 @@ class DoneTaskFormCore extends Component {
                         var file = ""
                         //console.log("this.refs['files_'+name].files.length : ", this.refs['files_'+name].files.length)
                         if(this.refs['files_'+name].files.length)  {
-                            console.log("this.refs['files_'+name].files[0]:", this.refs['files_'+name].files[0])
+                            //console.log("this.refs['files_'+name].files[0]:", this.refs['files_'+name].files[0])
                             allAttachedFiles.push(this.refs['files_'+name].files[0])
 
                             file = sanitize(this.refs['files_'+name].files[0].name)
@@ -124,21 +124,20 @@ class DoneTaskFormCore extends Component {
                         }
                         
                         if(this.refs[name].files && this.refs[name].files.length){
-                            console.log("this.refs[name].files[0]:", this.refs[name].files[0])
+                            //console.log("this.refs[name].files[0]:", this.refs[name].files[0])
                             allAttachedFiles.push(this.refs[name].files[0])
                         }
                     })
                     
                     this.props.uploader.submitFiles(allAttachedFiles)
 
-                    this.props.socket.emit('/api/task/update', filter, update, res => {
+                   this.props.socket.emit('/api/task/update', filter, update, res => {
                         if(res.tasks){
                             var filter = {_id: this.props.selectedTask._id}
                             var update = { $push: {next: this.state.newTaskId}}
                             this.props.socket.emit('/api/task/update', filter, update, res => {
                                 if(res.tasks){
                                     this.setState({pending:false, error: false}, () => {
-                                        $("#modal_donetask").modal('close')
                                         this.props.socket.emit('/api/task/done')
                                     })
                                 }
@@ -150,7 +149,7 @@ class DoneTaskFormCore extends Component {
                         if(res.error){
                             this.setState({pending:false, error: res.error})
                         }
-                    }) 
+                    })
                 })
             }
             if(res.error){
@@ -176,9 +175,14 @@ class DoneTaskFormCore extends Component {
         $('#modal_donetask').modal({dismissible: false});
         this.props.uploader.addEventListener("progress", (event) => {
             this.setState({progress: (event.bytesLoaded / event.file.size * 100).toFixed(0)}, () => {
+                //console.log(this.state.progress)
             })
         });
         this.props.uploader.addEventListener("complete", (event) => {
+            this.setState({progress: 0}, () => {
+                //console.log(this.state.progress)
+                $("#modal_donetask").modal('close');
+            })
         });
     })
   }
@@ -265,12 +269,12 @@ class DoneTaskFormCore extends Component {
                     </div> : ''
                     }
 
-                    { this.state.progress ?
+                    {
+                    this.state.progress?
                     <div className="progress">
                       <div className="determinate" style={{width: this.state.progress+"%"}}></div>
-                    </div> : ''
-                    }
-                     <div className="row" style={{marginTop:'250px'}}>
+                    </div>
+                    :<div className="row" style={{marginTop:'250px'}}>
                       <div className="input-field col s6 center">
                           <button className="btn waves-effect waves-light" href='#!' type="submit" id="button_submit_task_done"><i className="material-icons right">send</i>SUBMIT</button>
                       </div>
@@ -278,6 +282,7 @@ class DoneTaskFormCore extends Component {
                           <a className="btn waves-effect waves-light rezbuild-text white" href='#!'  onClick={this.cancel}><i className="material-icons left">cancel</i>CANCEL</a>
                       </div>
                      </div>
+                    }
                   </form>
             </div>
         </div>
