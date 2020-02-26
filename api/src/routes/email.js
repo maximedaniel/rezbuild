@@ -9,7 +9,7 @@
 import dateFormat from 'dateformat'
 module.exports = function(io, client, transporter){
     client.on('/api/email/send', function (request, res) {
-        console.log('/api/email/send', request)
+        console.info('/api/email/send')
         if(request.user && request.task && request.project){
             const mailOptions = {
                 from: 'rezbuildapp@gmail.com',
@@ -20,6 +20,7 @@ module.exports = function(io, client, transporter){
             
             transporter.sendMail(mailOptions, function (err, info) {
                 if(err) {
+                    console.error(err);
                     res({ok: false}) 
                 }
                 else {
