@@ -1,5 +1,6 @@
 
 # IMPORTANT
+X - Update 
 X - TRANSFERT TO GITLAB ESTIA (DM Admin)
 X - Add a NEW SERVER ESTIA for TESTING
 ? - Test the BIMServer for conversion from IFC2X4 to IFC4
