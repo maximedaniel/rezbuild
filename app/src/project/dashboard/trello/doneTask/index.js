@@ -67,7 +67,7 @@ class DoneTaskFormCore extends Component {
         this.props.socket.emit('/api/task/update', filter, update, res => {
             if(res.tasks){
                 this.setState({pending:false, error: false}, () => {
-                    $("#modal_donetask").modal('close')
+                    if(allAttachedFiles.length === 0) $('#modal_donetask').modal('close');
                     this.props.socket.emit('/api/task/done')
                 })
             }
@@ -138,6 +138,7 @@ class DoneTaskFormCore extends Component {
                             this.props.socket.emit('/api/task/update', filter, update, res => {
                                 if(res.tasks){
                                     this.setState({pending:false, error: false}, () => {
+                                        if(allAttachedFiles.length === 0) $('#modal_donetask').modal('close');
                                         this.props.socket.emit('/api/task/done')
                                     })
                                 }
@@ -163,6 +164,7 @@ class DoneTaskFormCore extends Component {
 
   cancel(){
     this.props.cancel()
+
     $('#modal_donetask').modal('close');
   }
 

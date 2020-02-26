@@ -2,11 +2,12 @@
  * @module API
  */
 
- import express from 'express'
+import logger from './logger'
+var path = require('path');
+import express from 'express'
 import db from './models'
 import cors from 'cors'
 import nodemailer from 'nodemailer'
-
 var mongoose = require("mongoose");
 var User = db.User;
 var Project = db.Project;
@@ -17,8 +18,7 @@ var fs = require('fs');
 
 var fileDir = "./files/"
 var zipDir = "./zips/"
-
-var serveIndex = require('serve-index')
+var logDir = "./logs/"
 
 var app = express();
 
@@ -27,7 +27,24 @@ var proxy = require('http-proxy-middleware');
 app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
 
 
+const json2html = require('node-json2html');
 
+var template = {'<>':'div','html':'<span style="font:message-box; font-size:14px"><span style="color:${color}">${timestamp}</span> <span style="background-color:${color};color:white;font-weight:bold">&nbsp;${level}&nbsp;</span>&nbsp;${message}</span>'}
+
+app.use('/log', (req, res, next) => {
+  try {
+    var content = fs.readFileSync(path.resolve(__dirname, logDir + 'out.log'), 'utf8').split('\r\n');
+    var content = ('['+content.slice(0, -1).join(',') + content.slice(-1)+']');
+    var json = JSON.parse(content);
+    var html = json2html.transform(json,template);
+    res.send(html);
+
+  }
+  catch(err){
+    console.error(err.message)
+    res.send(err)
+  }
+})
 
 /**
  * @description Serve RIMOND module
@@ -51,8 +68,10 @@ app.use('/ifc/:Id', (req, res, next) => {
     var taskId = splittedId[0]
     var filename = splittedId[1] + '.ifc'
     res.sendFile(fileDir + "/" + taskId + "/" + filename, { root: __dirname })
+    console.log('Request recieved');
   }
   catch(err){
+    console.log('Request failed');
     res.send(err)
   }
 })

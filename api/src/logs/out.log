@@ -1,0 +1,8 @@
+{"level":"verbose","message":"Connecting to db...","color":"purple","timestamp":"2020-02-26T16:12:39.822Z"}
+{"level":"info","message":"[HPM] Proxy created: /  -> http://35.189.193.44/","color":"green","timestamp":"2020-02-26T16:12:40.762Z"}
+{"level":"info","message":"[HPM] Proxy created: /  -> http://35.189.193.44/","color":"green","timestamp":"2020-02-26T16:12:40.765Z"}
+{"level":"verbose","message":"api running on 0.0.0.0:3001","color":"purple","timestamp":"2020-02-26T16:12:40.883Z"}
+{"level":"verbose","message":"Connected to db.","color":"purple","timestamp":"2020-02-26T16:12:40.916Z"}
+{"level":"error","message":"(node:11624) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.","color":"red","timestamp":"2020-02-26T16:12:40.928Z"}
+{"level":"verbose","message":"ULXBSYQ1q86eKxkmAAAA","color":"purple","timestamp":"2020-02-26T16:12:42.217Z"}
+{"level":"info","message":"[/api/signup] Signin up re.zef@fdgr.com","color":"green","timestamp":"2020-02-26T16:13:00.602Z"}

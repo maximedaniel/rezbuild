@@ -11,11 +11,12 @@ module.exports = function(io, client, bim){
    client.on('/api/project/done',  () => io.emit('/api/project/done', {}))
 
    client.on('/api/project/create', function (create, res) {
-        console.log('/api/project/create', create)
+        console.info('/api/project/create')
         if(client.handshake.session.user) {
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
             var createdProject = new Project(create).save((error, projects) => {
                    if(error) {
+                    console.error( error.message)
                     res({error: error.message})
                    }
                    else {
@@ -34,11 +35,12 @@ module.exports = function(io, client, bim){
     });
 
    client.on('/api/project/get', function (filter, res) {
-        console.log('/api/project/get', filter)
+        console.info('/api/project/get')
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             Project.find(filter, (error, projects) => {
                    if(error) {
+                    console.error( error.message)
                        res({error: error.message})
                    }
                    else {
@@ -51,12 +53,13 @@ module.exports = function(io, client, bim){
     });
 
    client.on('/api/project/update', function (filter, update, res) {
-        console.log('/api/project/update', filter, update)
+        console.info('/api/project/update')
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             update = JSON.parse(JSON.stringify(update).split('token').join(client.handshake.session.user._id))
             Project.updateMany(filter, update, {}, (error, projects) => {
                    if(error) {
+                        console.error( error.message)
                        res({error: error.message})
                    }
                    else {
@@ -71,11 +74,12 @@ module.exports = function(io, client, bim){
 
 
    client.on('/api/project/delete', function (filter, res) {
-        console.log('/api/project/delete', filter)
+        console.info('/api/project/delete')
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             Project.deleteMany(filter, (error, projects) => {
                    if(error) {
+                        console.error( error.message)
                        res({error: error.message})
                    }
                    else {

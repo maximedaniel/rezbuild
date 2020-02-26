@@ -11,11 +11,12 @@ module.exports = function(io, client){
     client.on('/api/user/done',  () => io.emit('/api/user/done', {}))
 
     client.on('/api/user/create', function (create, res) {
-        console.log('/api/user/create', create)
+        console.info('/api/user/create')
         if(client.handshake.session.user) {
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
             var createdUser = new User(create).save((error, users) => {
                    if(error) {
+                    console.error( error.message)
                     res({error: error.message})
                    }
                    else {
@@ -31,11 +32,12 @@ module.exports = function(io, client){
     });
 
    client.on('/api/user/get', function (filter, res) {
-        console.log('/api/user/get', filter)
+        console.info('/api/user/get')
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             User.find(filter, (error, users) => {
                    if(error) {
+                        console.error( error.message)
                        res({error: error.message})
                    }
                    else {
@@ -51,12 +53,13 @@ module.exports = function(io, client){
     });
 
    client.on('/api/user/update', function (filter, update, res) {
-        console.log('/api/user/update', filter, update)
+        console.info('/api/user/update')
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             update = JSON.parse(JSON.stringify(update).split('token').join(client.handshake.session.user._id))
             User.updateMany(filter, update, {}, (error, users) => {
                    if(error) {
+                        console.error( error.message)
                        res({error: error.message})
                    }
                    else {
@@ -73,11 +76,12 @@ module.exports = function(io, client){
 
 
    client.on('/api/user/delete', function (filter, res) {
-        console.log('/api/user/delete', filter)
+        console.info('/api/user/delete')
         if(client.handshake.session.user) {
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             User.deleteMany(filter, (error, users) => {
                    if(error) {
+                        console.error( error.message)
                        res({error: error.message})
                    }
                    else {
