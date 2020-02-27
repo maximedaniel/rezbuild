@@ -16,6 +16,7 @@ app/package-lock.json
 api/node_modules
 api/package-lock.json
 api/src/files
+api/src/logs
 db/node_modules
 db/package-lock.json
 
