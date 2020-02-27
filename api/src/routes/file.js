@@ -8,6 +8,7 @@
  * @param {object} uploader FileUploader
  */
 import sanitize from 'sanitize-filename'
+
 module.exports = function(io, client, uploader){
    var File = require('../models').File
    var fs = require('fs');

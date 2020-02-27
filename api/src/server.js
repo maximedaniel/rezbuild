@@ -16,9 +16,9 @@ var Task = db.Task;
 var handshake = require('socket.io-handshake');
 var fs = require('fs');
 
-var fileDir = "./files/"
-var zipDir = "./zips/"
-var logDir = "./logs/"
+var fileDir = "./files"
+var zipDir = "./zips"
+var logDir = "./logs"
 
 var app = express();
 
@@ -33,7 +33,8 @@ var template = {'<>':'div','html':'<span style="font:message-box; font-size:14px
 
 app.use('/log', (req, res, next) => {
   try {
-    var content = fs.readFileSync(path.resolve(__dirname, logDir + 'out.log'), 'utf8').split('\r\n');
+    var content = fs.readFileSync(path.resolve(__dirname, logDir + '/out.log'), 'utf8').split('\r\n');
+    content.map(c => console.log(c))
     var content = ('['+content.slice(0, -1).join(',') + content.slice(-1)+']');
     var json = JSON.parse(content);
     var html = json2html.transform(json,template);
@@ -48,9 +49,8 @@ app.use('/log', (req, res, next) => {
 
 app.use('/raw', (req, res, next) => {
   try {
-    var content = fs.readFileSync(path.resolve(__dirname, logDir + 'out.log'), 'utf8');
+    var content = fs.readFileSync(path.resolve(__dirname, logDir + '/out.log'), 'utf8');
     res.send(content);
-
   }
   catch(err){
     console.error(err.message)
@@ -78,11 +78,11 @@ app.use('/ifc/:Id', (req, res, next) => {
     var splittedId = req.params.Id.split('_', 2)
     var taskId = splittedId[0]
     var filename = splittedId[1] + '.ifc'
+    console.info('[api/ifc/'+ req.params.Id + '] Sending file ' + fileDir + "/" + taskId + "/" + filename);
     res.sendFile(fileDir + "/" + taskId + "/" + filename, { root: __dirname })
-    console.log('Request recieved');
   }
   catch(err){
-    console.log('Request failed');
+    console.error('[api/ifc/'+ req.params.Id + ']' + err);
     res.send(err)
   }
 })
@@ -93,9 +93,11 @@ app.use('/ifc/:Id', (req, res, next) => {
 app.use('/zip/:filename', (req, res, next) => {
   try {
     var zipFilename = req.params.filename
+    console.info('[api/zip/'+ req.params.filename + '] Sending zip ' + zipDir + "/" + zipFilename);
     res.sendFile(zipDir + "/" + zipFilename, { root: __dirname })
   }
   catch(err){
+    console.error('[api/zip/'+ req.params.filename + '] ' + err);
     res.send(err)
   }
 })
@@ -107,9 +109,11 @@ app.use('/zip/:filename', (req, res, next) => {
  */
 app.use('/:taskId/:filename', (req, res, next) => {
     try {
+      console.info('[api/' + req.params.taskId + '/'+ req.params.filename + '] Sending file ' + fileDir + "/" + req.params.taskId + "/" + req.params.filename);
       res.sendFile(fileDir + "/" + req.params.taskId + "/" + req.params.filename, { root: __dirname })
     }
     catch(err){
+      console.error('[api/' + req.params.taskId + '/'+ req.params.filename + '] ' + err);
       res.send(err)
     }
 })

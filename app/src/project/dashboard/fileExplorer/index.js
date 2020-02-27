@@ -16,12 +16,18 @@ class FileExplorerCore extends Component {
     constructor(props){
         super(props)
         this.state = {
+
             modelTask : null,
             environmentalTask : null,
+            environmentalMode :false,
             economicalTask :null,
+            economicalMode :false,
             socialTask : null,
+            socialMode :false,
             energicalTask : null,
+            energicalMode :false,
             comfortTask : null,
+            comfortMode :false,
             error: false,
             pending: false
         };
@@ -34,27 +40,25 @@ class FileExplorerCore extends Component {
                this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
             }
     }
-   componentWillMount(){
+   /*componentWillMount(){
     window.scrollTo(0, 0);
-   }
+   }*/
 
    componentDidMount(){
        this.fetchFiles()
-       $(document).ready(function(){
-        $('.collapsible').collapsible();
+       $(document).ready(() => {
          $('.tooltipped').tooltip({delay:0, html:true});
-         window.scrollTo(0, 0);
+        // window.scrollTo(0, 0);
        });
     }
 
-    componentWillUpdate(){
+    /*componentWillUpdate(){
         window.scrollTo(0, 0);
-    }
+    }*/
 
    componentDidUpdate(prevProps, prevState) {
      if (prevProps.task !== this.props.task){
         this.fetchFiles()
-        $('.collapsible').collapsible();
          $('.tooltipped').tooltip({delay:0, html:true});
      }
     }
@@ -65,37 +69,27 @@ class FileExplorerCore extends Component {
 
     renderKPIsOfTask(task){
         return (
-            <div>
-            <table className="col s12 white center">
-               <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th className="col s5">Name</th>
-                    <th className="col s3">Value</th>
-                    <th className="col s4">File</th>
-                </tr>
-              </thead>
-              <tbody className='black-text'>
+            <span className="col s12"> 
                   {
                         task.names.map((name, index) => 
-                            <tr key={index}>
-                                <td className="col s5" style={{paddingTop:'1rem'}}>{name}</td>
-                                <td className="col s3" style={{paddingTop:'1rem'}}>{task.values[index] + ' ' + task.formats[index]}</td>
-                                <td className="col s4" style={{paddingTop:'1rem'}}>
-                                    {task.files[index] !== "" ? 
-                                    <li className="collection-item valign-wrapper col s12" value={task.files[index]} key={index} style={{padding: '0px 10px'}}>
-                                        {/*<p className="col s10">{this.state.energicalTask.files[index]} </p>*/}
-                                        <a className="btn rezbuild col s12 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                        href={window.location.protocol + "//" + this.props.host + "/" + task._id + "/" + task.files[index]}>
+                        <div key={index}>
+                            <div className="col s10 left-align" style={{padding:0}}>
+                                <h6 className="black-text">{name}</h6>
+                                <h6>{task.values[index] + ' ' + task.formats[index]}</h6>
+                            </div>
+                            {task.files[index] ? 
+                                 <a className="col s2 btn rezbuild right-align tooltipped secondary-content" 
+                                 data-position="top" 
+                                 data-tooltip="Download" 
+                                 style={{marginTop:'0.5rem'}}
+                                href={window.location.protocol + "//" + this.props.host + "/" + task._id + "/" + task.files[index]}>
                                         <i className="material-icons white-text">cloud_download</i>
-                                        </a>
-                                    </li> : ''}
-                                </td>
-                            </tr>
+                                </a>
+                             : ''}
+                        </div>
                         )
                   }
-              </tbody>
-            </table>
-            </div>
+            </span>
         );
     };
 
@@ -167,28 +161,64 @@ class FileExplorerCore extends Component {
            
         KpiFileExplorer = 
             <div className="col s12">
-                <ul className="collapsible" datacollapsible="accordion">
-                    {economicalKpiViewer? <li>
-                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>ECONOMICAL</div>
-                        <div className="collapsible-body"><span>{economicalKpiViewer}</span></div>
-                    </li> : ''}
-                    {environmentalKpiViewer? <li>
-                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>ENVIRONMENTAL</div>
-                        <div className="collapsible-body"><span>{environmentalKpiViewer}</span></div>
-                     </li> : ''}
-                    {socialKpiViewer? <li>
-                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>SOCIAL</div>
-                        <div className="collapsible-body"><span>{socialKpiViewer}</span></div>
-                    </li> : ''}
-                    {energicalKpiViewer? <li>
-                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>ENERGICAL</div>
-                        <div className="collapsible-body"><span>{energicalKpiViewer}</span></div>
-                    </li> : ''}
-                    {comfortKpiViewer? <li>
-                        <div className="collapsible-header rezbuild-text"><i className="material-icons rezbuild-text">whatshot</i>COMFORT</div>
-                        <div className="collapsible-body"><span>{comfortKpiViewer}</span></div>
-                    </li> : ''}
-                </ul>
+                {this.state.economicalTask?
+                    <div className='col s12'>
+                    <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                    <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>ECONOMICAL</h6>
+                    <button className="btn-flat center col s2 waves-effect waves-light" 
+                    onClick={(e) => {e.preventDefault();this.setState({economicalMode:!this.state.economicalMode})}}
+                    >
+                    <i className="material-icons rezbuild-text">{this.state.economicalMode?"expand_less":"expand_more"}</i></button>
+                    </div>
+                     { this.state.economicalMode?economicalKpiViewer: ''}
+                </div> : ''}
+                {this.state.environmentalTask?
+                <div className='col s12'>
+                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENVIRONMENTAL</h6>
+                    <button className="btn-flat center col s2 waves-effect waves-light"
+                    onClick={(e) => {e.preventDefault();this.setState({environmentalMode:!this.state.environmentalMode})}}
+                    >
+                    <i className="material-icons rezbuild-text">{this.state.environmentalMode?"expand_less":"expand_more"}</i></button>
+                    </div>
+                     { this.state.environmentalMode?environmentalKpiViewer: ''}
+                </div>:''}
+
+                {this.state.socialTask?
+                <div className='col s12'>
+                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>SOCIAL</h6>
+                    <button className="btn-flat center col s2 waves-effect waves-light"
+                    onClick={(e) => {e.preventDefault();this.setState({socialMode:!this.state.socialMode})}}
+                    >
+                    <i className="material-icons rezbuild-text">{this.state.socialMode?"expand_less":"expand_more"}</i></button>
+                    </div>
+                     { this.state.socialMode?socialKpiViewer: ''}
+                </div>:''}
+
+                {this.state.energicalTask?
+                <div className='col s12'>
+                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENERGICAL</h6>
+                    <button className="btn-flat center col s2 waves-effect waves-light"
+                    onClick={(e) => {e.preventDefault();this.setState({energicalMode:!this.state.energicalMode})}}
+                    >
+                    <i className="material-icons rezbuild-text">{this.state.energicalMode?"expand_less":"expand_more"}</i></button>
+                    </div>
+                     { this.state.energicalMode?energicalKpiViewer: ''}
+                </div>:''}
+
+                {this.state.comfortTask?
+                <div className='col s12'>
+                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>COMFORT</h6>
+                    <button className="btn-flat center col s2 waves-effect waves-light"
+                    onClick={(e) => {e.preventDefault();this.setState({comfortMode:!this.state.comfortMode})}}
+                    >
+                    <i className="material-icons rezbuild-text">{this.state.comfortMode?"expand_less":"expand_more"}</i></button>
+                    </div>
+                     { this.state.comfortMode?comfortKpiViewer: ''}
+                </div> : ''}
             </div>;
         return (
          <div className="section white white-text z-depth-1" style={{paddingTop:0}}>
