@@ -125,27 +125,27 @@ class FileExplorerCore extends Component {
                                     height="100%"
                                     style={
                                         (this.state.modelMode)?
-                                        {backgroundColor:'white', position:"fixed", top:0, left:0, bottom:0, right:0, width:'100%', height:'100%', border:'none', margin:0, padding:0, overflow:'hidden', zIndex:999998}
-                                        :{backgroundColor:'white', position:"absolute", top:"10px", right:"10px"}
+                                        {backgroundColor:'white', position:"fixed", top:0, left:0, bottom:0, right:0, width:'100%', height:'100%', border:'none', margin:0, padding:0, overflow:'hidden'}
+                                        :{backgroundColor:'white', position:"absolute", top:0, right:0}
                                     }
                                     src={window.location.protocol + "//" + this.props.host + "/Rezbuild/Visualize/" + this.state.modelTask._id + "_" + this.state.modelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allowFullScreen
                                     >
                                     </iframe>
-                                    <a className="btn rezbuild right-align tooltipped" data-position="top" data-tooltip="Download"
+                                    <a className="btn rezbuild right-align tooltipped" data-position="left" data-tooltip="Download"
                                      style={
                                         (this.state.modelMode)?
-                                        {position:"fixed", top:"10px", right:"10px", zIndex:999999}
+                                        {position:"fixed", top:"10px", right:"10px"}
                                         :{position:"absolute", top:"10px", right:"10px"}
                                     }
                                     href={window.location.protocol + "//" + this.props.host + "/" + this.state.modelTask._id + "/" + this.state.modelTask.values[0]} >
                                     <i className=" material-icons white-text">cloud_download</i>
                                     </a>
-                                    <button className="btn rezbuild right-align tooltipped" data-position="top" data-tooltip="Download"
+                                    <button className="btn rezbuild right-align tooltipped" data-position="left" data-tooltip={(this.state.modelMode)?'Normalscreen':'Fullscren'}
                                     style={
                                         (this.state.modelMode)?
-                                        {position:"fixed", bottom:"10px", right:"10px", zIndex:999999}
+                                        {position:"fixed", bottom:"10px", right:"10px"}
                                         :{position:"absolute", bottom:"10px", right:"10px"}
                                     }
                                     onClick={  (e) => {
