@@ -18,6 +18,7 @@ class FileExplorerCore extends Component {
         this.state = {
 
             modelTask : null,
+            modelMode :false,
             environmentalTask : null,
             environmentalMode :false,
             economicalTask :null,
@@ -33,7 +34,17 @@ class FileExplorerCore extends Component {
         };
         this.renderKPIsOfTask = this.renderKPIsOfTask.bind(this);
     }
-
+    openFullscreen = (elem) => {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+          elem.msRequestFullscreen();
+        }
+      }
    // Fetch the files of the tasks
     fetchFiles() {
         if(this.props.task){
@@ -112,17 +123,50 @@ class FileExplorerCore extends Component {
                                     title="ASIS MODEL VIEWER"
                                     width="100%"
                                     height="100%"
+                                    style={
+                                        (this.state.modelMode)?
+                                        {backgroundColor:'white', position:"fixed", top:0, left:0, bottom:0, right:0, width:'100%', height:'100%', border:'none', margin:0, padding:0, overflow:'hidden', zIndex:999998}
+                                        :{backgroundColor:'white', position:"absolute", top:"10px", right:"10px"}
+                                    }
                                     src={window.location.protocol + "//" + this.props.host + "/Rezbuild/Visualize/" + this.state.modelTask._id + "_" + this.state.modelTask.values[0].split('.ifc')[0]}
                                     frameBorder="0"
                                     allowFullScreen
                                     >
                                     </iframe>
-                                    <a className="btn rezbuild col s2 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                    style={{position:"absolute", top:"10px", right:"10px"}}
-                                    
+                                    <a className="btn rezbuild right-align tooltipped" data-position="top" data-tooltip="Download"
+                                     style={
+                                        (this.state.modelMode)?
+                                        {position:"fixed", top:"10px", right:"10px", zIndex:999999}
+                                        :{position:"absolute", top:"10px", right:"10px"}
+                                    }
                                     href={window.location.protocol + "//" + this.props.host + "/" + this.state.modelTask._id + "/" + this.state.modelTask.values[0]} >
-                                    <i className="material-icons white-text">cloud_download</i>
+                                    <i className=" material-icons white-text">cloud_download</i>
                                     </a>
+                                    <button className="btn rezbuild right-align tooltipped" data-position="top" data-tooltip="Download"
+                                    style={
+                                        (this.state.modelMode)?
+                                        {position:"fixed", bottom:"10px", right:"10px", zIndex:999999}
+                                        :{position:"absolute", bottom:"10px", right:"10px"}
+                                    }
+                                    onClick={  (e) => {
+                                        e.preventDefault();
+                                        if(this.state.modelMode){
+                                            $('html, body').css({
+                                                overflow: 'auto',
+                                                height: 'auto'
+                                            });
+                                        }else {
+                                            $('html, body').css({
+                                                overflow: 'hidden',
+                                                height: '100%'
+                                            });
+                                        }
+                                        this.setState({modelMode:!this.state.modelMode});
+
+                                    }}
+                                    >
+                                    <i className=" material-icons white-text">{(this.state.modelMode)?'fullscreen_exit':'fullscreen'}</i>
+                                    </button>
                                 </div> : ""
                             }
                             </div>
@@ -161,6 +205,14 @@ class FileExplorerCore extends Component {
            
         KpiFileExplorer = 
             <div className="col s12">
+                {/*
+                !(this.state.economicalTask 
+                || this.state.environmentalTask 
+                || this.state.socialTask 
+                || this.state.energicalTask
+                || this.state.comfortTask)?
+                <i className="material-icons rezbuild-text center">block</i>: ''*/
+                }
                 {this.state.economicalTask?
                     <div className='col s12'>
                     <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
