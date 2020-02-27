@@ -46,6 +46,17 @@ app.use('/log', (req, res, next) => {
   }
 })
 
+app.use('/raw', (req, res, next) => {
+  try {
+    var content = fs.readFileSync(path.resolve(__dirname, logDir + 'out.log'), 'utf8');
+    res.send(content);
+
+  }
+  catch(err){
+    console.error(err.message)
+    res.send(err)
+  }
+})
 /**
  * @description Serve RIMOND module
  */

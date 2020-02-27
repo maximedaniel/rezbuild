@@ -12,6 +12,8 @@ module.exports = function(io, client, uploader){
    var File = require('../models').File
    var fs = require('fs');
    uploader.on("saved", (event) => {
+        if (event.error) console.info('[/api/file/save] Receiving file with error ' + event.error);
+        else console.info('[/api/file/save] Receiving file ' + event.file.name  + ' with state ' + event.file.success);
         console.info('[/api/file/save] creating directory ' + uploader.dir + event.file.meta.taskId)
         fs.mkdir(uploader.dir+'/'+event.file.meta.taskId, { recursive: true }, (err) => {
             if (err)  console.error('[/api/file/save] ' + err);
