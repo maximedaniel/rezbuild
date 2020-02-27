@@ -11,12 +11,12 @@ module.exports = function(io, client, bim){
    client.on('/api/task/done',  () => io.emit('/api/task/done', {}))
 
    client.on('/api/task/create', function (create, res) {
-        console.info('/api/task/create')
         if(client.handshake.session.user) {
+            console.info('[/api/task/create] Creating a task for user<' + client.handshake.session.user._id + '>')
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
             var createdTask = new Task(create).save((error, tasks) => {
                    if(error) {
-                    console.error( error.message)
+                    console.error('[/api/task/create] ' + error.message)
                     res({error: error.message})
                    }
                    else {
@@ -24,17 +24,18 @@ module.exports = function(io, client, bim){
                    }
             });
         } else {
+            console.error('[/api/task/create] User not signed in')
             res({error: 'User not signed in'})
         }
     });
 
    client.on('/api/task/get', function (filter, res) {
-        console.info('/api/task/get')
         if(client.handshake.session.user) {
+            console.info('[/api/task/get] Getting task(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             Task.find(filter, (error, tasks) => {
                    if(error) {
-                        console.error( error.message)
+                        console.error('[/api/task/get] ' + error.message)
                        res({error: error.message})
                    }
                    else {
@@ -42,18 +43,19 @@ module.exports = function(io, client, bim){
                    }
             });
         } else {
+            console.error('[/api/task/get] User not signed in')
             res({error: 'User not signed in'})
         }
     });
 
    client.on('/api/task/update', function (filter, update, res) {
-        console.info('/api/task/update')
         if(client.handshake.session.user) {
+            console.info('[/api/task/update] Updating task(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             update = JSON.parse(JSON.stringify(update).split('token').join(client.handshake.session.user._id))
             Task.updateMany(filter, update, {}, (error, tasks) => {
                    if(error) {
-                        console.error( error.message)
+                       console.error('[/api/task/update] ' + error.message)
                        res({error: error.message})
                    }
                    else {
@@ -61,6 +63,7 @@ module.exports = function(io, client, bim){
                    }
             });
         } else {
+            console.error('[/api/task/update] User not signed in')
             res({error: 'User not signed in'})
         }
     });
@@ -69,10 +72,11 @@ module.exports = function(io, client, bim){
    client.on('/api/task/delete', function (filter, res) {
         console.info('/api/task/delete')
         if(client.handshake.session.user) {
+            console.info('[/api/task/delete] Deleting task(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
             Task.deleteMany(filter, (error, tasks) => {
                    if(error) {
-                        console.error( error.message)
+                        console.error('[/api/task/delete] ' + error.message)
                        res({error: error.message})
                    }
                    else {
@@ -80,6 +84,7 @@ module.exports = function(io, client, bim){
                    }
             });
         } else {
+            console.error('[/api/task/delete] User not signed in')
             res({error: 'User not signed in'})
         }
     });

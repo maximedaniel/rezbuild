@@ -116,6 +116,9 @@ class TodoTaskFormCore extends Component {
     let formBody;
     let body;
     if(this.props.task){
+        this.props.users.map(user => 
+            console.log(this.props.task.roles, user.roles)
+        )
         formBody =  <div>
                           <div className="input-field col s6">
                               <select  defaultValue="" id="user" ref="user">
@@ -123,7 +126,7 @@ class TodoTaskFormCore extends Component {
                                   {
                                     this.props.users
                                     .filter(user => {
-                                      return this.props.task.roles.includes(...user.roles)
+                                      return user.roles.includes(...this.props.task.roles)
                                       }
                                     )
                                     .map((user, index) => 
