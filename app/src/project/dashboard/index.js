@@ -147,7 +147,7 @@ class DashboardCore extends Component {
                  <div className="row transparent"  style={{marginBottom:0}}>
                       <div className="col s12 transparent">
                                 <h5 className="rezbuild-text   tooltipped" data-position="top" data-tooltip="Click on a node to select a version of the project"> Navigation </h5>
-                                {/*
+                                {
                                   (this.state.tasks.length > 0) ?
                                     <div className='col s12'>
                                       <div className="switch">
@@ -164,7 +164,7 @@ class DashboardCore extends Component {
                                       </div>
                                     </div>
                                     :''
-                                */}
+                                }
 
                                 <div className="section" style={{paddingBottom:0, width:'100%', overflowX: 'auto', whiteSpace: 'nowrap'}}>
                                   { this.state.tasks.length > 0 && this.state.users.length > 0  ?

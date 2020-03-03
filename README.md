@@ -1,6 +1,8 @@
 
 # IMPORTANT
-X - Update 
+V - Changer roles to Customer, Analyst, Designer
+X - Integrate new KPI list
+X - add export PDF / EXCEL of KPI/Model/Radar
 X - TRANSFERT TO GITLAB ESTIA (DM Admin)
 X - Add a NEW SERVER ESTIA for TESTING
 ? - Test the BIMServer for conversion from IFC2X4 to IFC4
@@ -25,6 +27,7 @@ V - prevent multiple KPI branches
 - Project Information → General Information: when editing/adding values, when click on Save no message is shown (like “Changes Have been saved”, even though they infact are saved)  and the window remains exactly the same, so user doesn’t get any feedback for his action
 
 # DONE
+- changer roles (Customer, Designer, Analyst)
 - Invite user remove '#field'
 - add float value to every fields
 - After Login could be useful to have somewhere indication of user, like “Welcome <username> 

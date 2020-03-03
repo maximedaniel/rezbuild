@@ -16,7 +16,7 @@ mongoose.connection.on('connected', () =>{
     console.log('Connected to db.')
 })
 mongoose.connection.on('error', (error) =>{
-    console.log(error)
+    console.error(error)
     setTimeout(init, 5000)
 })
 

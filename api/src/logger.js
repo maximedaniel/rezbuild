@@ -45,11 +45,11 @@ var logger = createLogger({
     exitOnError: false
   })
 
-console.log = (message) => logger.log({level: 'verbose', message:sanitize(message), color:'purple'});
-console.debug = (message) => logger.log({level: 'debug', message:sanitize(message), color:'blue'});
-console.info = (message) => logger.log({level: 'info', message:sanitize(message), color:'green'});
-console.warn = (message) => logger.log({level: 'warn', message:sanitize(message), color:'orange'});
-console.error = (message) => logger.log({level: 'error', message:sanitize(message), color:'red'});
+console.log = (message) => logger.log({level: 'verbose', message:message, color:'purple'});
+console.debug = (message) => logger.log({level: 'debug', message:message, color:'blue'});
+console.info = (message) => logger.log({level: 'info', message:message, color:'green'});
+console.warn = (message) => logger.log({level: 'warn', message:message, color:'orange'});
+console.error = (message) => logger.log({level: 'error', message:message, color:'red'});
 
 process.on('uncaughtException', function (error) {
     console.error(error);

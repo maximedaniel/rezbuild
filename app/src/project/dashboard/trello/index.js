@@ -6,9 +6,9 @@
 import React, { Component } from 'react'
 import Board from 'react-trello'
 import CardComponent from './card'
-import BacklogTaskForm from './backlogTask'
-import TodoTaskForm from './todoTask'
-import DoneTaskForm from './doneTask'
+import BacklogTaskForm from './backlogTaskForm'
+import TodoTaskForm from './todoTaskForm'
+import DoneTaskForm from './doneTaskForm'
 import CreateTaskForm from './card/createTask'
 import common from 'common'
 var $ = window.$
@@ -214,6 +214,7 @@ class TrelloComponent extends Component {
       backlogTask.userDetails = backlogTask.user?this.props.users.filter(user => user._id === backlogTask.user)[0]: ''
       backlogTask.style = normalCardStyle
       backlogTask.roles = getRolesForTask(backlogTask);
+
       if(this.props.task){
         /* if task selected then get previous tasks */
         var prevTaskIds = [] 
@@ -230,6 +231,7 @@ class TrelloComponent extends Component {
          
          // Check is the user can perform the task according to his roles
          var actionIsAvailableForUser = this.props.user.roles
+          .filter(role => common.ROLES.hasOwnProperty(role))
           .map(role => common.ROLES[role].actions)
           .reduce( (accumulator, currentValue) => accumulator.concat(currentValue), [])
           .filter(action => action === backlogTask.action)
@@ -244,8 +246,6 @@ class TrelloComponent extends Component {
           if(this.props.task.action.includes('MODEL') && backlogTask.action.includes('KPI')){
            var nextTasks = this.props.task.next.map(nextTaskId => this.props.tasks.filter((task) => task._id === nextTaskId)[0]);
            if(nextTasks.length > 0) {
-             console.log(nextTasks)
-             //console.log(backlogTask)
             var nextKpiTasks = nextTasks.filter(nextTask => nextTask.action === backlogTask.action);
             if(nextKpiTasks.length > 0) backlogTask.draggable = false;
            }
