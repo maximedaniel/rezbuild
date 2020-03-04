@@ -55,7 +55,7 @@
   },
   "scripts": {
     "start": "npm link ../common && forever start src/index.js",
-    "comment": "npm link ../common && nodemon src",
+    "dev": "npm link ../common && nodemon src",
     "docs": "jsdoc2md src/*.js > docs.md && jsdoc2md src/**/*.js >> docs.md"
   }
 }

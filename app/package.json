@@ -51,7 +51,7 @@
   "scripts": {
     "start": "serve -l 3000 -s build",
     "build": "react-scripts build",
-    "common": "npm link ../common && node-sass public/sass -o public/css && react-scripts start",
+    "dev": "npm link ../common && node-sass public/sass -o public/css && react-scripts start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "docs": "jsdoc2md src/*.js > docs.md && jsdoc2md src/**/*.js > docs.md && jsdoc2md src/**/**/*.js > docs.md && jsdoc2md src/**/**/**/*.js > docs.md && jsdoc2md src/**/**/**/**/*.js > docs.md"

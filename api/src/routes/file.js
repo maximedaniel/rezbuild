@@ -2,16 +2,20 @@
 
 /**
  * @module FileRouting
- * @description Handle the routes (save) for file upload
+ * @description Handle the routes (save, get) for file upload
  * @param {object} io WebsocketServer
  * @param {object} client WebsocketClient
  * @param {object} uploader FileUploader
  */
 import sanitize from 'sanitize-filename'
+import fs from 'fs'
 
 module.exports = function(io, client, uploader){
+   // import File model
    var File = require('../models').File
-   var fs = require('fs');
+   /**
+    * @description Route file save request
+    */
    uploader.on("saved", (event) => {
         if (event.error) console.info('[/api/file/save] Receiving file with error ' + event.error);
         else console.info('[/api/file/save] Receiving file ' + event.file.name  + ' with state ' + event.file.success);
@@ -25,7 +29,9 @@ module.exports = function(io, client, uploader){
             if ( err ) console.error('[/api/file/save] ' + err);
         });
    });
-
+   /**
+    * @description Route file get request
+    */
    client.on('/api/files', function (taskId, res) {
         if(client.handshake.session.user) {
             var dirPath = uploader.dir + '/' + taskId

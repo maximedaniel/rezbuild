@@ -3,9 +3,9 @@
  * @module FileModel
  * @description Define a file with MongoDB schema
  */
+import mongoose from 'mongoose'
 
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 var FileSchema = new Schema({
   name: String,
