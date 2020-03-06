@@ -43,6 +43,7 @@ COPY app/package.json .
 RUN npm install
 RUN npm link common
 COPY app/ .
+RUN npm run build
 
 WORKDIR /usr/src/api
 COPY api/package.json .
