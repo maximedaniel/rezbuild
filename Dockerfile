@@ -42,6 +42,7 @@ WORKDIR /usr/src/app
 COPY app/package.json .
 RUN npm install
 RUN npm link common
+RUN npm run build
 COPY app/ .
 
 WORKDIR /usr/src/api

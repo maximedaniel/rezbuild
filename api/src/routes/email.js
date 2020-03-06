@@ -6,8 +6,13 @@
  * @param {object} client WebsocketClient
  * @param {object} transporter  NodeMailerClient
  */
+
 import dateFormat from 'dateformat'
 module.exports = function(io, client, transporter){
+    
+    /**
+     * @description Route email send request
+     */
     client.on('/api/email/send', function (request, res) {
         console.info('[/api/email/send] Sending mail')
         if(request.user && request.task && request.project){

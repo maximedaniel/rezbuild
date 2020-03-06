@@ -2,9 +2,10 @@
  * @module UserModel
  * @description Define a user with MongoDB schema
  */
+import mongoose from 'mongoose'
 
- var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
+
 var UserSchema = new Schema({
   firstname: {type: String, required: [true, "can't be blank"]},
   lastname: {type: String, required: [true, "can't be blank"]},

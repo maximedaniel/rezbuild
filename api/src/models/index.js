@@ -1,5 +1,5 @@
 
-var mongoose = require("mongoose");
+import mongoose from 'mongoose'
 
 var init = () => {
     mongoose.connect("mongodb://127.0.0.1:27017/rezbuild", {
@@ -16,7 +16,7 @@ mongoose.connection.on('connected', () =>{
     console.log('Connected to db.')
 })
 mongoose.connection.on('error', (error) =>{
-    console.log(error)
+    console.error(error)
     setTimeout(init, 5000)
 })
 

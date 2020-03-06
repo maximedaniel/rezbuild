@@ -10,6 +10,7 @@ import ComputeVersion from '../ComputeVersion'
 import { ParentSize } from '@vx/responsive'
 import moment from 'moment'
 import RadarRechartComponent from '../RadarRechart'
+import ModelViewerComponent from '../ModelViewer'
 var $ = window.$;
 
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -57,24 +58,14 @@ class VersionComparatorCore extends Component {
     }
 
     compareVersions() {
-        this.setState((prevState, props) => {
-            let data = [];
-            let allCategories = [];
-            let allSeries = [];
-            props.selectedTasks.forEach(selectedTask=> {
-            let {series, categories} = ComputeVersion.computeScoreOfRelevantTask(selectedTask, props.tasks);
-                allCategories = categories;
-                allSeries.push(series[0]);
+        if(this.props.tasks 
+            && this.props.tasks.length > 0 
+            && this.props.selectedTasks 
+            && this.props.selectedTasks.length > 0){
+            this.setState({
+                data: ComputeVersion.computeScoreOfRelevantTask(this.props.tasks, ...this.props.selectedTasks)
             });
-            data = allCategories.map( (category, index) => {
-                let row = {}
-                row['category'] = category;
-                allSeries.forEach(series => row[series.id] = series.data[index]);
-                return row;
-            });
-            let ans = {data: data, categories:allCategories,  series:allSeries};
-            return ans;
-        });
+        }
     }
 
    componentWillMount(){
@@ -143,21 +134,7 @@ class VersionComparatorCore extends Component {
                                                 </h6>
                                             </div>
                                             <div className='col s12 center white'>
-                                                <iframe
-                                                title="ASIS MODEL VIEWER"
-                                                width="100%"
-                                                height="352px"
-                                                src={window.location.protocol + "//" + this.props.host + "/Rezbuild/Visualize/" + selectedTask._id + "_" + selectedTask.values[0].split('.ifc')[0]}
-                                                frameBorder="0"
-                                                allowFullScreen
-                                                >
-                                                </iframe>
-                                                {/*<a className="btn rezbuild col s2 right-align tooltipped" data-position="top" data-tooltip="Download"
-                                                style={{position:"absolute", top:"10px", right:"10px"}}
-                                                
-                                                href={window.location.protocol + "//" + this.props.host + "/" + selectedTask._id + "/" + selectedTask.values[0]} >
-                                                <i className="material-icons white-text">cloud_download</i>
-                                                </a>*/}
+                                                <ModelViewerComponent modelTask={selectedTask} allowFullScreen={false}/>
                                             </div>
                                         </div>
 
@@ -166,16 +143,39 @@ class VersionComparatorCore extends Component {
                             }
                      </div>
                      <div className="col s5 transparent grey-text">
-                         <div className='col s10 white push-s1 z-depth-1' style={{marginTop:'175px'}}>
-                            <h6 className='col s12 center'>KPI SCORE COMPARATOR</h6>
-                            <ParentSize>
+                         <div className='col s10 white push-s1 z-depth-1' > {/*style={{marginTop:'175px'}}>*/}
+                            <h6 className='col s12 center'>KPI CHART COMPARATOR</h6>
+                        {
+                            (this.state.data.length > 0)?
+                            this.state.data.map((datum, index) => 
+                                <ParentSize key={index}>
+                                {
+                                    parent => (
+                                        <div>
+                                        <h6 className="rezbuild-text col s12 center-align"  style={{padding:0}}>{datum.category} SCORE</h6>
+                                        <RadarRechartComponent 
+                                            key={datum.category+'-'+new Date().getTime()}
+                                            highlightedTask = {this.state.highlightedTask} 
+                                            data={datum.data}
+                                            parentWidth={parent.width}
+                                            parentTop={parent.top}
+                                            parentLeft={parent.left}
+                                            parentRef={parent.ref}
+                                            resizeParent={parent.resize}
+                                        />
+                                        </div>
+                                    )
+                                }
+                                </ParentSize>
+                                )
+                            : ''
+                            }
+                           {/* <ParentSize>
                                 {
                                     parent => (
                                         <RadarRechartComponent
                                             key={'radar-rechart-'+new Date().getTime()}
                                             highlightedTask = {this.state.highlightedTask}
-                                            categories={this.state.categories}
-                                            series={this.state.series}
                                             data={this.state.data}
                                             parentWidth={parent.width}
                                             parentHeight={parent.height}
@@ -186,7 +186,7 @@ class VersionComparatorCore extends Component {
                                         />
                                     )
                                 }
-                            </ParentSize>
+                            </ParentSize> */}
                         </div>
                      </div>
              </div>

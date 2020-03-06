@@ -3,8 +3,9 @@
  * @extends Component
  * @description Define a set of static functions for version graph exploration
  */
-import {mean} from 'mathjs'
-import moment from 'moment'
+//import {mean} from 'mathjs'
+//import moment from 'moment'
+import common from 'common'
 
 class ComputeVersion {
     static getFirstParentTaskWithAction = (tasks, taskId, action) => {
@@ -31,31 +32,17 @@ class ComputeVersion {
             let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_ASIS')||task:task;
             return {
                 modelTask : refTask,
-                environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENVIRONMENTAL_ASIS'),
                 economicalTask :ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ECONOMICAL_ASIS'),
                 socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_SOCIAL_ASIS'),
                 energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENERGICAL_ASIS'),
                 comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_COMFORT_ASIS'),
                 error: false, pending: false};
-            } 
-            else if(task.action.includes('KPI_ENVIRONMENTAL_ASIS')){
-                    let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENVIRONMENTAL_ASIS')||task:task;
-                    let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
-                    return {
-                            modelTask : modelTask,
-                            environmentalTask : refTask,
-                            economicalTask :ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
-                            socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),
-                            energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
-                            comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_ASIS'),
-                            error: false, pending: false};
-            } 
+            }
             else if(task.action.includes('KPI_ECONOMICAL_ASIS')){
                 let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_ASIS'),
                     economicalTask :refTask,
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
@@ -67,7 +54,6 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_ASIS'),
                     economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
                     socialTask :refTask, 
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
@@ -79,7 +65,6 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_ASIS'),
                     economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),  
                     energicalTask : refTask,
@@ -91,7 +76,6 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_ASIS'),
                     economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),  
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
@@ -102,31 +86,17 @@ class ComputeVersion {
                 let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_TOBE')||task:task;
                 return {
                     modelTask : refTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENVIRONMENTAL_TOBE'),
                     economicalTask :ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ECONOMICAL_TOBE'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_SOCIAL_TOBE'),
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENERGICAL_TOBE'),
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_COMFORT_TOBE'),
                     error: false, pending: false};
-            } 
-            else if(task.action.includes('KPI_ENVIRONMENTAL_TOBE')){
-                    let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENVIRONMENTAL_TOBE')||task:task;
-                    let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
-                    return {
-                            modelTask : modelTask,
-                            environmentalTask : refTask,
-                            economicalTask :ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
-                            socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_TOBE'),
-                            energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_TOBE'),
-                            comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_TOBE'),
-                            error: false, pending: false};
-            } 
+            }
             else if(task.action.includes('KPI_ECONOMICAL_TOBE')){
                 let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_TOBE'),
                     economicalTask :refTask,
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks,modelTask._id, 'KPI_SOCIAL_TOBE'),
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks,modelTask._id, 'KPI_ENERGICAL_TOBE'),
@@ -138,7 +108,6 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_TOBE'),
                     economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
                     socialTask :refTask, 
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_TOBE'),
@@ -150,7 +119,6 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_TOBE'),
                     economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_TOBE'),  
                     energicalTask : refTask,
@@ -162,7 +130,6 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    environmentalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENVIRONMENTAL_TOBE'),
                     economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_TOBE'),  
                     energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_TOBE'),
@@ -172,7 +139,6 @@ class ComputeVersion {
             else {
                 return {
                     modelTask : null,
-                    environmentalTask : null,
                     economicalTask :null,
                     socialTask : null,
                     energicalTask : null,
@@ -180,57 +146,67 @@ class ComputeVersion {
                     error: false, pending: true};
             }
         }
-        static computeScoreOfRelevantTask(task, tasks) {
-            var state = ComputeVersion.fetchRelevantTasks(task, tasks);
-
-            let categories = ['Economical', 'Social', 'Environmental',  'Energical', 'Comfort']; 
-            let series = [{name: task.name + ' (' + moment(task.date).format('LLL') + ')', id: task._id, data: []}];
-            if(state.economicalTask){
-                series[0].data.push(
-                    mean(
-                        state.economicalTask.names.filter((name, index) => state.economicalTask.values[index] !== 0)
-                        .map((name, index) => state.economicalTask.values[index])
-                    ).toFixed(2)
-                );
-            } else series[0].data.push(0);
-
-            if(state.socialTask){
-                series[0].data.push(
-                    mean(
-                        state.socialTask.names.filter((name, index) => state.socialTask.values[index] !== 0)
-                        .map((name, index) =>  state.socialTask.values[index])
-                    ).toFixed(2)
-                );
-            } else series[0].data.push(0);
-
-            if(state.environmentalTask){
-                series[0].data.push(
-                    mean(
-                        state.environmentalTask.names.filter((name, index) => state.environmentalTask.values[index] !== 0)
-                        .map((name, index) =>  state.environmentalTask.values[index])
-                    ).toFixed(2)
-                );
-            } else series[0].data.push(0);
-
-            if(state.energicalTask){
-                series[0].data.push(
-                    mean(
-                        state.energicalTask.names.filter((name, index) => state.energicalTask.values[index] !== 0)
-                        .map((name, index) =>  state.energicalTask.values[index])
-                    ).toFixed(2)
-                );
-            } else series[0].data.push(0);
-
-            if(state.comfortTask){
-                    series[0].data.push(
-                        mean(
-                            state.comfortTask.names.filter((name, index) => state.comfortTask.values[index] !== 0)
-                            .map((name, index) =>  state.comfortTask.values[index])
-                        ).toFixed(2)
-                    );
-            } else series[0].data.push(0);
-
-            return {series: series, categories: categories};
+        static computeScoreOfRelevantTask(tasks, ...taskList) {
+            var data = [];
+            var economicalDatum = {
+                //id: task._id,
+                //name: task.name + ' (' + moment(task.date).format('LLL') + ')', 
+                category: 'ECONOMICAL',
+                data: [],
+            }
+            var energicalDatum = {
+                //id: task._id,
+               // name: task.name + ' (' + moment(task.date).format('LLL') + ')', 
+                category: 'ENERGY',
+                data: [],
+            }
+            taskList.forEach(task => {
+                var state = ComputeVersion.fetchRelevantTasks(task, tasks);
+                if(state.economicalTask){
+                    for (let i = 0; i < state.economicalTask.names.length; i++){
+                        if(common.ACTIONS[state.economicalTask.action].priorities[i]){
+                            let indicator = state.economicalTask.names[i];
+                            let minValue = common.ACTIONS[state.economicalTask.action].minValues[i];
+                            let maxValue = common.ACTIONS[state.economicalTask.action].maxValues[i];
+                            let currValue = state.economicalTask.values[i];
+                            let score = (currValue-minValue) / (maxValue-minValue);
+                            let datum = {indicator:indicator, [task._id]:score.toFixed(2)}
+                            // look for indicator
+                            if(economicalDatum.data.filter(datum => datum.indicator === indicator).length > 0){
+                                economicalDatum.data = economicalDatum.data.map(prevDatum =>
+                                    (prevDatum.indicator === datum.indicator)? {...prevDatum, ...datum}: prevDatum
+                                );
+                            } else {
+                                economicalDatum.data.push(datum);
+                            }
+                            
+                        }
+                    }
+                }
+                if(state.energicalTask){
+                    for (let i = 0; i < state.energicalTask.names.length; i++){
+                        if(common.ACTIONS[state.energicalTask.action].priorities[i]){
+                            let indicator = state.energicalTask.names[i];
+                            let minValue = common.ACTIONS[state.energicalTask.action].minValues[i];
+                            let maxValue = common.ACTIONS[state.energicalTask.action].maxValues[i];
+                            let currValue = state.energicalTask.values[i];
+                            let score = (currValue-minValue) / (maxValue-minValue);
+                            let datum = {indicator:indicator, [task._id]:score.toFixed(2)}
+                            // look for indicator
+                            if(energicalDatum.data.filter(datum => datum.indicator === indicator).length > 0){
+                                energicalDatum.data = energicalDatum.data.map(prevDatum =>
+                                    (prevDatum.indicator === datum.indicator)? {...prevDatum, ...datum}: prevDatum
+                                );
+                            } else {
+                                energicalDatum.data.push(datum);
+                            }
+                        }
+                    }
+                }
+            } );
+            data.push(economicalDatum);
+            data.push(energicalDatum);
+            return data;
         }
 } 
 export default ComputeVersion;

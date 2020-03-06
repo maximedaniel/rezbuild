@@ -54,7 +54,6 @@ class NavbarCore extends Component {
         $(".button-collapse").sideNav();
         $('#modal_settings').modal();
         $('.tooltipped').tooltip({delay:0});
-
       }
   }
   componentWillUnmount(){
@@ -92,7 +91,10 @@ class NavbarCore extends Component {
                     <div className="col s12" style={{fontWeight:'bold'}}> {this.state.user.firstname} {this.state.user.lastname}</div>
                     <div className="col s12">
                     {
-                      this.state.user.roles.map(role => common.ROLES[role].name).join(', ')
+                      this.state.user.roles
+                      .filter(role => common.ROLES.hasOwnProperty(role))
+                      .map(role => common.ROLES[role].name)
+                      .join(', ')
                     }
                     </div>
                 </li>

@@ -35,7 +35,7 @@ class CreateProjectFormCore extends Component {
                     project: res.projects._id,
                     name: key,
                     lane:  'lane_backlog',
-                    content:  key,
+                    content:  action.description,
                     roles:  Object.keys(common.ROLES),
                     action: key,
                     names: action.names,

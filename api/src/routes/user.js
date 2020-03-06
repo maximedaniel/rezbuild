@@ -5,11 +5,15 @@
  * @param {object} client WebsocketClient
  */
 module.exports = function(io, client){
-
+    // import User model
     var User = require('../models').User
-
+    /**
+     * @description Route done request
+     */
     client.on('/api/user/done',  () => io.emit('/api/user/done', {}))
-
+    /**
+     * @description Route create request
+     */
     client.on('/api/user/create', function (create, res) {
         if(client.handshake.session.user) {
             console.info('[/api/user/create] Creating a user for user<' + client.handshake.session.user._id + '>')
@@ -33,6 +37,9 @@ module.exports = function(io, client){
         }
     });
 
+    /**
+     * @description Route get request
+     */
    client.on('/api/user/get', function (filter, res) {
         if(client.handshake.session.user) {
             console.info('[/api/user/get] Getting user(s) for user<' + client.handshake.session.user._id + '>')
@@ -55,6 +62,9 @@ module.exports = function(io, client){
         }
     });
 
+    /**
+     * @description Route update request
+     */
    client.on('/api/user/update', function (filter, update, res) {
         if(client.handshake.session.user) {
             console.info('[/api/user/update] Updating user(s) for user<' + client.handshake.session.user._id + '>')
@@ -77,8 +87,9 @@ module.exports = function(io, client){
             res({error: 'User not signed in'})
         }
     });
-
-
+    /**
+     * @description Route delete request
+     */
    client.on('/api/user/delete', function (filter, res) {
         if(client.handshake.session.user) {
             console.info('[/api/user/delete] Deleting user(s) for user<' + client.handshake.session.user._id + '>')

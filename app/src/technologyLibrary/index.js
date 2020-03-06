@@ -6,7 +6,6 @@
 import React, { Component } from 'react'
 import SocketContext from '../SocketContext'
 import Select from 'react-select'
-import chroma from 'chroma-js'
 var $ = window.$;
 
 const customStyles = {

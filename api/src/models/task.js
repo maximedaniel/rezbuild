@@ -2,10 +2,11 @@
  * @module TaskModel
  * @description Define a task with MongoDB schema
  */
+import common from 'common'
+import mongoose from 'mongoose'
 
- var common = require('common')
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
+
 var TaskSchema = new Schema({
   project: { type: Schema.Types.ObjectId, ref: 'Project'},
   lane:   {type: String, default: 'lane_backlog'},

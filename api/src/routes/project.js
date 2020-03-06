@@ -5,11 +5,16 @@
  * @param {object} client WebsocketClient
  */
 module.exports = function(io, client, bim){
-
+   // import Project model
    var Project = require('../models').Project
 
+   /**
+    * @description Route done request and broadcast it
+    */
    client.on('/api/project/done',  () => io.emit('/api/project/done', {}))
-
+   /**
+    * @description Route create request
+    */
    client.on('/api/project/create', function (create, res) {
         if(client.handshake.session.user) {
             console.info('[/api/project/create] Creating a project for user<' + client.handshake.session.user._id + '>')
@@ -35,6 +40,9 @@ module.exports = function(io, client, bim){
         }
     });
 
+   /**
+    * @description Route get request
+    */
    client.on('/api/project/get', function (filter, res) {
         if(client.handshake.session.user) {
             console.info('[/api/project/get] Getting project(s) for user<' + client.handshake.session.user._id + '>')
@@ -53,7 +61,9 @@ module.exports = function(io, client, bim){
             res({error: 'User not signed in'})
         }
     });
-
+   /**
+    * @description Route update request
+    */
    client.on('/api/project/update', function (filter, update, res) {
         if(client.handshake.session.user) {
             console.info('[/api/project/update] Updating project(s) for user<' + client.handshake.session.user._id + '>')
@@ -74,8 +84,9 @@ module.exports = function(io, client, bim){
             res({error: 'User not signed in'})
         }
     });
-
-
+   /**
+    * @description Route delete request
+    */
    client.on('/api/project/delete', function (filter, res) {
         if(client.handshake.session.user) {
             console.info('[/api/project/delete] Deleting project(s) for user<' + client.handshake.session.user._id + '>')
