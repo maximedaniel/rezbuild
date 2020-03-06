@@ -49,10 +49,9 @@
     "styled-components": "^4.2.0"
   },
   "scripts": {
-    "start": "npm link ../common && node-sass public/sass -o public/css && react-scripts start",
+    "start": "npm link ../common && serve -l 3000 -s build",
     "build": "react-scripts build",
     "dev": "npm link ../common && node-sass public/sass -o public/css && react-scripts start",
-    "comment": "serve -l 3000 -s build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "docs": "jsdoc2md src/*.js > docs.md && jsdoc2md src/**/*.js >> docs.md && jsdoc2md src/**/**/*.js >> docs.md && jsdoc2md src/**/**/**/*.js >> docs.md && jsdoc2md src/**/**/**/**/*.js >> docs.md"
