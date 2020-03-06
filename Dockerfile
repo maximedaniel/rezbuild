@@ -33,30 +33,34 @@ RUN npm config set strict-ssl false
 RUN npm cache clean --force
 
 WORKDIR /usr/src/common
-COPY common/package.json .
+COPY common/ .
+#COPY common/package.json .
 RUN npm install
 RUN npm link
-COPY common/ .
+#COPY common/ .
 
 WORKDIR /usr/src/app
-COPY app/package.json .
+COPY app/ .
+#COPY app/package.json .
 RUN npm install
 RUN npm link common
 RUN npm run build
-COPY app/ .
+#COPY app/ .
 
 WORKDIR /usr/src/api
-COPY api/package.json .
+COPY api/ .
+#COPY api/package.json .
 RUN npm install
 RUN npm link common
-COPY api/ .
+#COPY api/ .
 
 
 WORKDIR /usr/src/db
-COPY db/package.json .
+COPY db/ .
+#COPY db/package.json .
 RUN npm install
 RUN npm link common
-COPY db/ .
+#COPY db/ .
 
 EXPOSE 3000
 EXPOSE 3001
