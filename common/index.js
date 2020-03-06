@@ -24,7 +24,7 @@ var common = {
     },
     ACTIONS: {
         MODEL_ASIS: {
-            description: ['Upload the 3D model of the building as it.'],
+            description: 'Upload the 3D model of the building as it.',
             names: ['ASIS model'],
             formats: ['.ifc'],
             typeValues: [Object],
@@ -34,7 +34,7 @@ var common = {
             priorities: [true],
         },
         KPI_ECONOMICAL_ASIS: {
-            description: ['Assess the economical quality of the 3D model of the building as it is.'],
+            description: 'Assess the economical quality of the 3D model of the building as it is.',
             names: [
                 'Payback period',
                 'Internal rate of return',
@@ -121,7 +121,7 @@ var common = {
             ],
         },
         KPI_ENERGICAL_ASIS: {
-            description: ['Assess the energy quality of the 3D model of the building as it is.'],
+            description: 'Assess the energy quality of the 3D model of the building as it is.',
             names:[
                 "Primary electric energy demand",
                 "Primary thermal energy demand",
@@ -272,7 +272,7 @@ var common = {
                 ],
         },
         KPI_SOCIAL_ASIS: {
-            description: ['Assess the social quality of the 3D model of the building as it is.'],
+            description: 'Assess the social quality of the 3D model of the building as it is.',
             names:[
                 "Occupant satisfaction",
                 "Arrears on utility bills",
@@ -387,7 +387,7 @@ var common = {
                 ]
         },
         KPI_COMFORT_ASIS: {
-            description: ['Assess the comfort quality of the 3D model of the building as it is.'],
+            description: 'Assess the comfort quality of the 3D model of the building as it is.',
             names:[
                 "Room temperature",
                 "Thermal comfort / Humidity",
@@ -446,7 +446,7 @@ var common = {
                 ]
         },
         MODEL_TOBE: {
-            description: ['Upload the 3D model of the building as it will be.'],
+            description: 'Upload the 3D model of the building as it will be.',
             names: ['TOBE model'],
             formats: ['.ifc'],
             typeValues: [Object],
@@ -457,7 +457,7 @@ var common = {
         },
         
         KPI_ECONOMICAL_TOBE: {
-            description: ['Assess the economical quality of the 3D model of the building as it will be.'],
+            description: 'Assess the economical quality of the 3D model of the building as it will be.',
             names: [
                 'Payback period',
                 'Internal rate of return',
@@ -544,7 +544,7 @@ var common = {
             ],
         },
         KPI_ENERGICAL_TOBE: {
-            description: ['Assess the energy quality of the 3D model of the building as it will be.'],
+            description: 'Assess the energy quality of the 3D model of the building as it will be.',
             names:[
                 "Primary electric energy demand",
                 "Primary thermal energy demand",
@@ -695,7 +695,7 @@ var common = {
                 ],
         },
         KPI_SOCIAL_TOBE: {
-            description: ['Assess the social quality of the 3D model of the building as it will be.'],
+            description: 'Assess the social quality of the 3D model of the building as it will be.',
             names:[
                 "Occupant satisfaction",
                 "Arrears on utility bills",
@@ -810,7 +810,7 @@ var common = {
                 ]
         },
         KPI_COMFORT_TOBE: {
-            description: ['Assess the comfort quality of the 3D model of the building as it will be.'],
+            description: 'Assess the comfort quality of the 3D model of the building as it will be.',
             names:[
                 "Room temperature",
                 "Thermal comfort / Humidity",

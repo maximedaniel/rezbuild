@@ -44,11 +44,11 @@ var logger = createLogger({
   })
 
 // Override console channels
-console.log = (message) => logger.log({level: 'verbose', message:message, color:'purple'});
-console.debug = (message) => logger.log({level: 'debug', message:message, color:'blue'});
-console.info = (message) => logger.log({level: 'info', message:message, color:'green'});
-console.warn = (message) => logger.log({level: 'warn', message:message, color:'orange'});
-console.error = (message) => logger.log({level: 'error', message:message, color:'red'});
+console.log = (message) => logger.log({level: 'verbose', message:JSON.stringify(message), color:'purple'});
+console.debug = (message) => logger.log({level: 'debug', message:JSON.stringify(message), color:'blue'});
+console.info = (message) => logger.log({level: 'info', message:JSON.stringify(message), color:'green'});
+console.warn = (message) => logger.log({level: 'warn', message:JSON.stringify(message), color:'orange'});
+console.error = (message) => logger.log({level: 'error', message:JSON.stringify(message), color:'red'});
 
 // Override process uncaughtException
 process.on('uncaughtException', function (error) {
