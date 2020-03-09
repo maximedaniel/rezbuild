@@ -51,8 +51,6 @@ console.warn = (message) => logger.log({level: 'warn', message:JSON.stringify(me
 console.error = (message) => logger.log({level: 'error', message:JSON.stringify(message), color:'red'});
 
 // Override process uncaughtException
-process.on('uncaughtException', function (error) {
-    console.error(error);
- });
+process.on('uncaughtException',  (error) => console.error(error));
 
 export default logger;
