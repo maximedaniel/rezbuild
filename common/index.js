@@ -24,7 +24,7 @@ var common = {
     },
     ACTIONS: {
         MODEL_ASIS: {
-            description: 'Upload the 3D model of the building as it.',
+            description: 'Upload the 3D model of the building as it is.',
             names: ['ASIS model'],
             formats: ['.ifc'],
             typeValues: [Object],
