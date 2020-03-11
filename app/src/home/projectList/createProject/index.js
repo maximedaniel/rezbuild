@@ -122,13 +122,13 @@ class CreateProjectFormCore extends Component {
         </div>
         <div className="input-field col s4">
           <select required defaultValue={"Temperate zone"} id="climat" ref="climat">
-            <option value="" disabled>Choose a climat zone</option>
+            <option value="" disabled>Choose a climate zone</option>
             <option name="context" value="Tropical zone" id="climat_tropical">Tropical zone</option>
             <option name="context" value="Subtropical zone" id="climat_subtropical">Subtropical zone</option>
             <option name="context" value="Temperate zone" id="climat_temperate">Temperate zone</option>
             <option name="context" value="Cold zone" id="climat_cold">Cold zone</option>
           </select>
-          <label>Climat Zone</label>
+          <label>Climate Zone</label>
         </div>
 
         </div>

@@ -30,9 +30,14 @@
     "react-scripts": "2.0.5"
   },
   "scripts": {
+<<<<<<< HEAD
     "linkage": "npm link common",
     "dev": "nodemon src",
     "start": "forever start src/index.js",
     "comment": "forever start src/index.js"
+=======
+    "dev": "npm link ../common && nodemon src",
+    "start": "npm link ../common && forever start src/index.js"
+>>>>>>> release/0.1.30
   }
 }
