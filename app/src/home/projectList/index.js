@@ -20,6 +20,7 @@ class ProjectListCore extends Component {
     this.state = {projects : null, error : false, pending : false}
   }
 
+  // Get the projects of the user
   update(){
     this.setState({projects : null, error : false, pending : true}, () => {
         var filter = {users: { "$in" : ["token"] } }
@@ -47,7 +48,6 @@ class ProjectListCore extends Component {
       if (prevState.projects !== this.state.projects) {
             $('.modal').modal();
             $('.tooltipped').tooltip({delay:0, html:true});
-            //$('.tap-target').tapTarget();
       }
   }
 
@@ -109,28 +109,6 @@ class ProjectListCore extends Component {
                 })
               }
            </div>
-           /*{ <table>
-              <thead className='rezbuild-text'>
-                <tr style={{borderBottom: '2px solid #f7931e'}}>
-                    <th>Name</th>
-                    <th>Creation date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  this.state.projects.map((project, index) => {
-                      return <tr key={index}>
-                        <td>{project.name}</td>
-                        <td>{new Date(project.date).toString().split('GMT')[0]}</td>
-                        <td className="right-align">
-                          <a className="btn waves-effect waves-light col s5" href="#!" onClick={() => browserHistory.push('/'+project._id) }> Open <i className="material-icons right">open_in_browser</i></a>
-                          <a className="btn waves-effect waves-light white rezbuild-text modal-trigger col s5" style={{marginLeft:'1rem'}} href={"#modal_removeproject_"+project._id}><i className="material-icons left">remove_circle</i> Remove</a>
-                            <RemoveProjectForm project={project}/>
-                        </td>
-                  </tr>})
-                }
-              </tbody>
-              </table>}*/
             
         }
         let actionComponent;

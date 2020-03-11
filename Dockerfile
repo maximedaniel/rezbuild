@@ -35,26 +35,28 @@ RUN npm cache clean --force
 WORKDIR /usr/src/common
 COPY common/package.json .
 RUN npm install
-RUN npm link
 COPY common/ .
+
+WORKDIR /usr/src/react-trello
+COPY react-trello/package.json .
+RUN npm install
+COPY react-trello/ .
 
 WORKDIR /usr/src/app
 COPY app/package.json .
 RUN npm install
-RUN npm link common
 COPY app/ .
+RUN npm run build
 
 WORKDIR /usr/src/api
 COPY api/package.json .
 RUN npm install
-RUN npm link common
 COPY api/ .
 
 
 WORKDIR /usr/src/db
 COPY db/package.json .
 RUN npm install
-RUN npm link common
 COPY db/ .
 
 EXPOSE 3000

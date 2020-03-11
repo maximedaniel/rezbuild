@@ -33,6 +33,7 @@ class DashboardCore extends Component {
     this.setState({compareMode:!this.state.compareMode});
   }
 
+   // Fetch tasks of the project
   fetchTasks(){
     var filter = {project: this.props.project._id}
     this.props.socket.emit('/api/task/get', filter, res => {
@@ -45,6 +46,7 @@ class DashboardCore extends Component {
     });
   }
 
+   // Fetch the user
   fetchUser(){
     var filter = { _id : "token" }
     this.props.socket.emit('/api/user/get', filter, res => {
@@ -62,6 +64,7 @@ class DashboardCore extends Component {
     });
   }
 
+   // Fetch the users of the project
   fetchUsers(){
     var filter = {_id: this.props.project._id }
     this.props.socket.emit('/api/project/get', filter, res => {
@@ -203,8 +206,8 @@ class DashboardCore extends Component {
                   <div className="section" style={{marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>
                       <div className='row'>
                         <div className="col l12 m12 s12 transparent">
-                            {/*<h5 className="rezbuild-text  tooltipped" data-position="top" data-tooltip="Explore the BIM models and KPI data of this version of the project">Version</h5>  */}
-                            <div className="section">
+                            {
+                              <div className="section">
                                   <VersionComparatorComponent
                                   project = {this.props.project}
                                   user = {this.props.user}
@@ -215,9 +218,10 @@ class DashboardCore extends Component {
                                   removeTask={this.removeTask}
                                   />
                             </div>
+                            }
                         </div>
                       </div>
-                    </div>:'')
+                      </div>:'')
                   }
              </div>
               <div className="section" style={{display:this.state.compareMode?'none':'block', marginLeft:'2%', marginRight:'2%', paddingTop:'0.2rem'}}>

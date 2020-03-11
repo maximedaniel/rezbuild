@@ -15,6 +15,8 @@ class TeamCore extends Component {
     this.state = {users : null,  error : false, pending : false}
   }
 
+  
+   // Fetch the users of the project
   update(){
     this.setState({users : null, error : false, pending : true}, () => {
         var filter = {_id: this.props.project._id }
@@ -87,7 +89,10 @@ class TeamCore extends Component {
                               <span className="title rezbuild-text" style={{fontWeight:'900'}}>{collaborator.firstname} {collaborator.lastname}</span>
                               <p>
                               {
-                                collaborator.roles.map(role => common.ROLES[role].name).join(', ')
+                                collaborator.roles
+                                .filter(role => common.ROLES.hasOwnProperty(role))
+                                .map(role => common.ROLES[role].name)
+                                .join(', ')
                               }
                               </p>
                               <a href={"mailto:"+collaborator.email} className="btn secondary-content"><i className="material-icons right">email</i> EMAIL</a>

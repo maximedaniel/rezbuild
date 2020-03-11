@@ -4,10 +4,8 @@
  * @description Create the form for creating a project
  */
 import React, { Component } from 'react'
-import axios from 'axios'
 import SocketContext from '../../../SocketContext'
 import common from 'common'
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -19,6 +17,7 @@ class CreateProjectFormCore extends Component {
    this.state = {error : false, pending : false}
   }
 
+  // Create a new project of the user
   submit(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {
@@ -34,7 +33,7 @@ class CreateProjectFormCore extends Component {
                     project: res.projects._id,
                     name: key,
                     lane:  'lane_backlog',
-                    content:  key,
+                    content:  action.description,
                     roles:  Object.keys(common.ROLES),
                     action: key,
                     names: action.names,
@@ -123,13 +122,13 @@ class CreateProjectFormCore extends Component {
         </div>
         <div className="input-field col s4">
           <select required defaultValue={"Temperate zone"} id="climat" ref="climat">
-            <option value="" disabled>Choose a climat zone</option>
+            <option value="" disabled>Choose a climate zone</option>
             <option name="context" value="Tropical zone" id="climat_tropical">Tropical zone</option>
             <option name="context" value="Subtropical zone" id="climat_subtropical">Subtropical zone</option>
             <option name="context" value="Temperate zone" id="climat_temperate">Temperate zone</option>
             <option name="context" value="Cold zone" id="climat_cold">Cold zone</option>
           </select>
-          <label>Climat Zone</label>
+          <label>Climate Zone</label>
         </div>
 
         </div>

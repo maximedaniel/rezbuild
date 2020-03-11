@@ -4,13 +4,8 @@
  * @description Create the form for removing a project
  */
 
- import React, { Component } from 'react'
-//import $ from 'jquery'
-//import M from "materialize-css/dist/js/materialize.js";
-import axios from 'axios'
+import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -30,6 +25,7 @@ class RemoveProjectFormCore extends Component {
       $("#modal_removeproject_"+this.props.project._id).modal('close');
   }
 
+  // Remove the user from the project
   handleRemoveProject(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {

@@ -15,6 +15,8 @@ class JoinProjectFormCore extends Component {
    this.handleJoinProject = this.handleJoinProject.bind(this);
    this.state = {projects: null, error : false, pending : false}
   }
+
+ // get projects not of the users
   update(){
     this.setState({projects: null, error : false, pending : true}, () => {
         var get = {users: { "$nin" : ["token"] }}
@@ -32,11 +34,13 @@ class JoinProjectFormCore extends Component {
         });
     });
   }
+
   componentDidMount() {
     this.update()
     this.props.socket.on('/api/project/done', () => {this.update()})
   }
 
+   // add the user to the project
   handleJoinProject(event){
    event.preventDefault();
    this.setState({projects: this.state.projects, error : false, pending : true}, () => {

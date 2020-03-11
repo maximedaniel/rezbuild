@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
 import common from 'common'
+
 var $ = window.$
 
 class SignupFormCore extends Component {
@@ -19,7 +20,6 @@ class SignupFormCore extends Component {
 
   componentDidMount() {
       $(document).ready(function() {
-        //M.FormSelect.init($('#roles'), {});
         $('select').material_select();
         $('.tooltipped').tooltip({delay:0, html:true});
       });
@@ -28,6 +28,8 @@ class SignupFormCore extends Component {
    $('.tooltipped').tooltip('remove');
  }
 
+ 
+   // Sign up the user
   handleSubmit(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {
