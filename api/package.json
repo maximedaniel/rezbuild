@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "common": "file:../common",
     "bufferutil": "4.0.1",
     "cors": "2.8.5",
     "dateformat": "3.0.3",
@@ -30,7 +31,7 @@
     "react-scripts": "2.0.5"
   },
   "scripts": {
-    "dev": "npm link ../common && nodemon src",
-    "start": "npm link ../common && forever start src/index.js"
+    "dev": "nodemon src",
+    "start": "forever start src/index.js"
   }
 }

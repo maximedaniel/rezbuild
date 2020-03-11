@@ -27,7 +27,7 @@ RUN \
 
 # Define mountable directories.
 
-VOLUME ["/usr/src/data/db", "/usr/src/api/src/files"]
+VOLUME ["/usr/src/data/db", "/usr/src/api/src/files", "/usr/src/common/node_modules", "/usr/src/react-trello/node_modules", "/usr/src/app/node_modules", "/usr/src/api/node_modules"]
 
 RUN npm config set strict-ssl false
 RUN npm cache clean --force
