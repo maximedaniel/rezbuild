@@ -1,7 +1,11 @@
+/**
+ * @class Card
+ * @extends Component
+ * @description Create the card part of the trello
+ */
 import React, { Component } from 'react'
-
-import RemoveTaskForm from './removeTask'
-import CreateTaskForm from './createTask'
+import RemoveTaskForm from './removeTaskForm'
+import CreateTaskForm from './createTaskForm'
 var $ = window.$
 
 class CardComponent extends Component {
@@ -12,10 +16,11 @@ class CardComponent extends Component {
     this.onOut = this.onOut.bind(this)
     this.state = {hover:false}
   }
+  
   onIn(){
     this.setState({hover: true})
     $("#content_"+this.props.id).css('opacity', '1');
-    $("#content_"+this.props.id).css('max-height', '400px');
+    $("#content_"+this.props.id).css('max-height', '15em');
 
 }
  onOut(){
@@ -27,7 +32,7 @@ class CardComponent extends Component {
   }
 
   componentDidUpdate() {
-    $('.rXSjd').css('min-width', '50px');
+    $('.rXSjd').css('min-width', '4em');
     $('#textarea_'+this.props.id).trigger('autoresize');
   }
 
@@ -37,9 +42,9 @@ class CardComponent extends Component {
         onMouseOver={ this.props.draggable?this.onIn:null}
         onMouseOut={this.props.draggable?this.onOut:null} 
         style={{
-        minWidth: '200px',
-        width: '200px',
-        maxWidth: '200px',
+        minWidth: '15em',
+        width: '15em',
+        maxWidth: '15em',
         color:'#000',
         backgroundColor:'#fff',
         fontFamily: 'Exo 2',
@@ -66,7 +71,7 @@ class CardComponent extends Component {
                     </div>: ""
                 }
                 {
-                 (this.props.lane === 'lane_todo' || this.props.lane === 'lane_inprogress')?
+                 (this.props.lane === 'lane_todo')?
                     <div className="row" style={{marginBottom:'0px'}}>
                         <div className="col s5 center">
                              <h6 className="black-text">{(new Date(this.props.startDate)).toLocaleDateString("en-US")}</h6>
@@ -90,17 +95,6 @@ class CardComponent extends Component {
                      <div className="col s12">
                         <textarea style={{pointerEvents:'none'}} id={"textarea_"+this.props.id} className="materialize-textarea black-text" defaultValue={this.props.content}></textarea>
                      </div>
-                     <div className="chip white-text grey lighten-4" style={{textShadow:"-2px -2px 2px #f7931e, 2px -2px 2px #f7931e,  -2px 2px 2px #f7931e, 2px 2px 2px #f7931e"}}>
-                        <b>{this.props.action}</b>
-                     </div>
-                     </div>
-
-                <div className="col s12">
-                    {
-                        (this.props.lane === 'lane_done') ?
-                        <h6 className="black-text">{(new Date(this.props.date)).toLocaleString("en-US")}</h6>
-                        : ''
-                    }
                 </div>
             </div>
            <RemoveTaskForm  task={this.props} />

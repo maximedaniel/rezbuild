@@ -1,12 +1,14 @@
+/**
+ * @class Navbar
+ * @extends Component
+ * @description Create the navigation bar
+ */
 import React, { Component } from 'react'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
-import axios from 'axios'
 import SettingsForm from './settings'
 import common from 'common'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -19,6 +21,7 @@ class NavbarCore extends Component {
     this.state = {user: null, error : false, pending : false}
   }
 
+  // Fetch the user
   update(){
     $('.button-collapse').sideNav('hide')
     this.setState({user : null, error : false, pending : true}, () => {
@@ -36,7 +39,7 @@ class NavbarCore extends Component {
                 }
             }
         });
-    })
+    });
   }
 
   componentDidMount() {
@@ -48,13 +51,13 @@ class NavbarCore extends Component {
         $(".button-collapse").sideNav();
         $('#modal_settings').modal();
         $('.tooltipped').tooltip({delay:0});
-
       }
   }
   componentWillUnmount(){
     $('.tooltipped').tooltip("remove");
   }
 
+ // Sign out the user
   handleSignout(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {
@@ -85,7 +88,10 @@ class NavbarCore extends Component {
                     <div className="col s12" style={{fontWeight:'bold'}}> {this.state.user.firstname} {this.state.user.lastname}</div>
                     <div className="col s12">
                     {
-                      this.state.user.roles.map(role => common.ROLES[role].name).join(', ')
+                      this.state.user.roles
+                      .filter(role => common.ROLES.hasOwnProperty(role))
+                      .map(role => common.ROLES[role].name)
+                      .join(', ')
                     }
                     </div>
                 </li>

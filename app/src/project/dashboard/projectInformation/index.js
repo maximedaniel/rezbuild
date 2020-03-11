@@ -1,3 +1,8 @@
+/**
+ * @class ProjectInformation
+ * @extends Component
+ * @description Create the project information part of the dashboard
+ */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
 
@@ -10,6 +15,8 @@ class ProjectInformationCore extends Component {
     this.submit = this.submit.bind(this);
     this.state = {project : null,  error : false, pending : false}
   }
+  
+   // Update the project
   submit(event){
     event.preventDefault();
      this.setState({error : false, pending : true}, () => {

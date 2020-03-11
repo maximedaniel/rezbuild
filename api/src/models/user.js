@@ -1,8 +1,12 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+/**
+ * @module UserModel
+ * @description Define a user with MongoDB schema
+ */
+import mongoose from 'mongoose'
+
+const Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
- // _id: {type: Schema.Types.ObjectId, index:true, required:true, auto:true},
   firstname: {type: String, required: [true, "can't be blank"]},
   lastname: {type: String, required: [true, "can't be blank"]},
   email: {type: String, required: [true, "can't be blank"], index: true, unique: true},

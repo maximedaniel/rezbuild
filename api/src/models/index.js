@@ -1,31 +1,24 @@
 
-var mongoose = require("mongoose");
+import mongoose from 'mongoose'
 
 var init = () => {
-    // mongodb://mdaniel:Avatar56.@ds155714.mlab.com:55714/rezbuild
-    // mongodb://127.0.0.1:27017/rezbuild
     mongoose.connect("mongodb://127.0.0.1:27017/rezbuild", {
+    useCreateIndex: true,
     useNewUrlParser: true,
-    reconnectInterval: 5000,
-    reconnectTries: Number.MAX_VALUE
+    useUnifiedTopology: true,
+    //reconnectInterval: 5000,
+    //reconnectTries: Number.MAX_VALUE
     });
 }
 
-mongoose.connection.on('connecting', () =>{
-    console.log('Connecting to db...')
-})
-mongoose.connection.on('connected', () =>{
-    console.log('Connected to db.')
-})
-mongoose.connection.on('error', (error) =>{
-    console.log(error)
-    setTimeout(init, 5000)
-})
+mongoose.connection.on('connecting', () => console.log('Connecting to db...'));
 
-init()
+mongoose.connection.on('connected', () => console.log('Connected to db.'));
 
+mongoose.connection.on('error', (error) => console.error(error) &&  setTimeout(init, 5000));
 
-//{useMongoClient: true }
+init();
+
 module.exports.User = require('./user');
 module.exports.Project = require('./project');
 module.exports.File = require('./file');

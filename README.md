@@ -1,56 +1,75 @@
+# DevOps
+
+![DevOps pipeline](doc/flow.jpg)
 
 
+## Running develop branch locally
 
+Open a terminal window:
 
-# IMPORTANT
+1. Enter `cd common`
+2. Enter `npm install`
+3. Enter `npm run linkage`
+4. Enter `cd ..`
+5. Enter `cd react-trello`
+6. Enter `npm install`
+7. Enter `npm run linkage`
 
+Open a terminal window:
 
-# TODO
-- Add information tooltip to each field of the project information
-- Set the form to blank.
-- After Login a new user doesn’t know where to start from. Something pointing / Highlighting the “edit” button (where I guess you shall start from) could be helpful here. 
-- Project Information → General Information, not clear what Exposure means. Maybe add details about roof/main entrance/etc.
-- App not multilingual. I think at least language of the 3 demo sites should be provided (Italian, Spanish, Norwegian). 
-- Project Information → General Information: “adjacent to unheated room” not clear what that means. 
-- Project Information → General Information:Clear inter-floor height (m) does not accept decimals (cannot enter 2.5 m). Similar issue for other linear dimensions.
-- Project Information → General Information: when editing/adding values, when click on Save no message is shown (like “Changes Have been saved”, even though they infact are saved)  and the window remains exactly the same, so user doesn’t get any feedback for his action. 
+1. Enter `cd api`
+2. Enter `npm run linkage`
+3. Enter `npm install`
+4. Enter `npm run dev`
 
+Open a terminal window:
 
-# DONE
-- Invite user remove '#field'
-- add float value to every fields
-- After Login could be useful to have somewhere indication of user, like “Welcome <username> 
-- Mouse over the “edit” button shows 2 buttons “+” and “upload ( I guess). Could be useful to have tooltips when mouse over those, showing something like “Add a new project”, “Upload …” .
-- Project Information → Wrap: better use Envelope instead of Wrap.
-- When open “Create project” fields are pre-filled with a French site, can it be made more generic? 
-- Giving 10 points to each KIPs expectations.
-- Download files does not work
-- Send mail when todo task assigned.
+1. Enter `cd app`
+2. Enter `npm run linkage`
+3. Enter `npm install`
+4. Enter `npm run dev`
 
-# Comment injecter et retirer mes volumes du container Doker ?
-n
-# TODO
-- Remove SIGN IN from SIGN UP PAGE
-- Change wrap to envellop
-Make a first step for owner to fill himself and have a first result such as "normal consumption" and possible comsumption after efurbishment.
-- Possibility to use BIM model to fill the infomations by a script
-- Seulement des fichiers bim qui contiennent des infos en plus après ajout de KPI?
-- Comment différencier deux taches crées en même temps avec le même nom?
-- Faire un mail au PO pour prévenir qu'on a développé Baboon mais qu'on ne l'utilisera pas???
+## Freezing develop branch locally
 
-# local build and run
-- docker build -t rezbuild .
-- docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 -it rezbuild
+Open a terminal window:
 
-# distant build and run
-- docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 --name rezbuild tydius/rezbuild
-- docker run -d --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock pyouroboros/ouroboros
+1. Enter `npm shrinkwrap` after any stable package is installed
 
+## Saving develop branch remotely
 
-# LAST DEBUGGING
+Open SourceTree software:
 
-V - taches grisées non interatives
-V - taches impossible après taches TODO
-~ - Visualiser toutes informations pour chaque modèle
-V - Tache customizée non fonctionnelle ASIS
-V - Récupérer base de données
+1. Click `BRANCHES > develop`
+2. Click and Complete `File Status > Stage All > Push changes... > Commit`
+
+Or open a git terminal:
+
+1. Enter `git add *`
+2. Enter `git commit -m '<your_message>'`
+3. Enter `git push origin develop:master`
+
+## Pushing develop branch to master branch remotely
+
+Open a SourceTree software:
+
+1. Click `BRANCHES > develop`
+2. Click and Complete `File Status > Stage All > Push changes... > Commit`
+3. Click and Complete `Git-flow > Start New Release > Release Name`
+3. Click and Complete `Git-flow > Finish Release > Release Name`
+
+Or open a Git Terminal:
+
+1. Enter `git add *`
+2. Enter `git commit -m '<your_message>'`
+3. Enter `git push origin develop:master`
+
+This proceduce will update the live version hosted at ESTIA (see <https://rezbuildapp.estia.fr>, <https://rezbuildapi.estia.fr>, <https://rezbuilddb.estia.fr>):
+
+1. DockerHub (see <https://hub.docker.com/>) will automatically start building the lastest version of the GitHub repository into a Docker Image named `tydius/rezbuild` (see <https://hub.docker.com/r/tydius/rezbuild>)
+2. The Docker at ESTIA will automatically download and run the lastest version of `tydius/rezbuild` thanks to ouroboros (see <https://github.com/pyouroboros/ouroboros>).
+
+Testing the Docker image locally:
+
+1. Open a Docker terminal
+2. Enter `docker run -p 3000:3000 -p 3001:3001 -p 27017:27017 -p 8081:8081 --name rezbuild tydius/rezbuild`
+3. Enter `docker run -d --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock pyouroboros/ouroboros`

@@ -1,9 +1,12 @@
+/**
+ * @class SigninForm
+ * @extends Component
+ * @description Create the sign in form
+ */
+
 import React, { Component } from 'react'
-import axios from 'axios'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -25,6 +28,7 @@ class SigninFormCore extends Component {
     $('.tooltipped').tooltip('remove');
   }
 
+   // Sign in the user
   handleSubmit(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {

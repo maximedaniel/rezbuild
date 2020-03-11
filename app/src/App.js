@@ -11,6 +11,11 @@ import io from 'socket.io-client';
 import SocketIOFileUpload  from 'socketio-file-upload'
 import SocketContext from './SocketContext'
 
+/**
+ * @class App
+ * @extends Component
+ * @description Create the routes of the REZBUILD application
+ */
 class App extends Component {
 
   constructor(props){
@@ -28,7 +33,6 @@ class App extends Component {
 
   render() {
     return (
-
         <div>
         <div style={
          {position:'fixed',
@@ -58,5 +62,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;

@@ -1,8 +1,11 @@
+/**
+ * @class CreateProjectForm
+ * @extends Component
+ * @description Create the form for creating a project
+ */
 import React, { Component } from 'react'
-import axios from 'axios'
 import SocketContext from '../../../SocketContext'
 import common from 'common'
-axios.defaults.withCredentials = true
 
 var $ = window.$
 
@@ -14,6 +17,7 @@ class CreateProjectFormCore extends Component {
    this.state = {error : false, pending : false}
   }
 
+  // Create a new project of the user
   submit(event){
    event.preventDefault();
     this.setState({error : false, pending : true}, () => {
@@ -29,7 +33,7 @@ class CreateProjectFormCore extends Component {
                     project: res.projects._id,
                     name: key,
                     lane:  'lane_backlog',
-                    content:  key,
+                    content:  action.description,
                     roles:  Object.keys(common.ROLES),
                     action: key,
                     names: action.names,

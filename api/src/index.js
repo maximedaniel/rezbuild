@@ -1,15 +1,13 @@
+/**
+ * @module Launcher
+ */
+
 'use strict';
+require('babel-register')({presets: ['env']});
+var {www} = require('./www');
 
-require('babel-register')({
-    presets: [ 'env' ]
-})
+const PORT = 3001;
+const HOST = '0.0.0.0';
 
-
-var {http} = require('./server');
-
-const PORT =  3001;
-const HOST =  '0.0.0.0';
-
-http.listen(PORT, HOST, function() {
-    console.log(`api running on ${HOST}:${PORT}`);
-});
+// Run the API on address {HOST}:{PORT}
+www.listen(PORT, HOST,  () => console.log(`api running on ${HOST}:${PORT}`));
