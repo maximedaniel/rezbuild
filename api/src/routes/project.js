@@ -4,7 +4,7 @@
  * @param {object} io WebsocketServer
  * @param {object} client WebsocketClient
  */
-module.exports = function(io, client, bim){
+module.exports = (io, client) => {
    // import Project model
    var Project = require('../models').Project
 
@@ -15,7 +15,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route create request
     */
-   client.on('/api/project/create', function (create, res) {
+   client.on('/api/project/create', (create, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/project/create] Creating a project for user<' + client.handshake.session.user._id + '>')
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
@@ -25,13 +25,8 @@ module.exports = function(io, client, bim){
                     res({error: error.message})
                    }
                    else {
-                   // bim.addProject(projects._id, 'ifc2x3tc1').then(bim_project => {
                         res({projects: projects})
                         io.emit('/api/project/done', {})
-                    //})
-                    //.catch(error => {
-                     //   res({error: error.message})
-                    //})
                    }
             });
         } else {
@@ -43,7 +38,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route get request
     */
-   client.on('/api/project/get', function (filter, res) {
+   client.on('/api/project/get', (filter, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/project/get] Getting project(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
@@ -64,7 +59,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route update request
     */
-   client.on('/api/project/update', function (filter, update, res) {
+   client.on('/api/project/update', (filter, update, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/project/update] Updating project(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
@@ -87,7 +82,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route delete request
     */
-   client.on('/api/project/delete', function (filter, res) {
+   client.on('/api/project/delete', (filter, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/project/delete] Deleting project(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))

@@ -5,12 +5,10 @@
  */
 import React, { Component } from 'react'
 import common from 'common'
-import axios from 'axios'
 import SocketContext from '../../../../SocketContext'
 import "../../../../../node_modules/react-datepicker/dist/react-datepicker.css"
 import sanitize from 'sanitize-filename'
 
-axios.defaults.withCredentials = true
 var $ = window.$
 var allAttachedFiles = [];
 var uploadedAttachedFiles = [];

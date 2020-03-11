@@ -11,13 +11,19 @@
 # dependencies
 /node_modules
 package-lock.json
+
+common/node_modules
+common/package-lock.json
+
 app/node_modules
 app/build
 app/package-lock.json
+
 api/node_modules
 api/package-lock.json
 api/src/files
 api/src/logs
+
 db/node_modules
 db/package-lock.json
 

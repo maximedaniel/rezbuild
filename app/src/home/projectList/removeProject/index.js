@@ -5,10 +5,7 @@
  */
 
 import React, { Component } from 'react'
-import axios from 'axios'
 import SocketContext from '../../../SocketContext'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 

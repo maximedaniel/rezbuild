@@ -4,7 +4,7 @@
  * @param {object} io WebsocketServer
  * @param {object} client WebsocketClient
  */
-module.exports = function(io, client){
+module.exports = (io, client) => {
     // import User model
     var User = require('../models').User
     /**
@@ -14,7 +14,7 @@ module.exports = function(io, client){
     /**
      * @description Route create request
      */
-    client.on('/api/user/create', function (create, res) {
+    client.on('/api/user/create', (create, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/user/create] Creating a user for user<' + client.handshake.session.user._id + '>')
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
@@ -40,7 +40,7 @@ module.exports = function(io, client){
     /**
      * @description Route get request
      */
-   client.on('/api/user/get', function (filter, res) {
+   client.on('/api/user/get', (filter, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/user/get] Getting user(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
@@ -65,7 +65,7 @@ module.exports = function(io, client){
     /**
      * @description Route update request
      */
-   client.on('/api/user/update', function (filter, update, res) {
+   client.on('/api/user/update', (filter, update, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/user/update] Updating user(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
@@ -90,7 +90,7 @@ module.exports = function(io, client){
     /**
      * @description Route delete request
      */
-   client.on('/api/user/delete', function (filter, res) {
+   client.on('/api/user/delete', (filter, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/user/delete] Deleting user(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))

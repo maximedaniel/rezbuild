@@ -8,12 +8,12 @@
  */
 
 import dateFormat from 'dateformat'
-module.exports = function(io, client, transporter){
+module.exports = (io, client, transporter) => {
     
     /**
      * @description Route email send request
      */
-    client.on('/api/email/send', function (request, res) {
+    client.on('/api/email/send', (request, res) => {
         console.info('[/api/email/send] Sending mail')
         if(request.user && request.task && request.project){
             const mailOptions = {

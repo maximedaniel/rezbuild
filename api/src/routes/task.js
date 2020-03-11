@@ -4,7 +4,7 @@
  * @param {object} io WebsocketServer
  * @param {object} client WebsocketClient
  */
-module.exports = function(io, client, bim){
+module.exports = (io, client) => {
    // import Task model
    var Task = require('../models').Task
    /**
@@ -14,7 +14,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route create request
     */
-   client.on('/api/task/create', function (create, res) {
+   client.on('/api/task/create', (create, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/task/create] Creating a task for user<' + client.handshake.session.user._id + '>')
             create = JSON.parse(JSON.stringify(create).split('token').join(client.handshake.session.user._id))
@@ -36,7 +36,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route get request
     */
-   client.on('/api/task/get', function (filter, res) {
+   client.on('/api/task/get', (filter, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/task/get] Getting task(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
@@ -58,7 +58,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route update request
     */
-   client.on('/api/task/update', function (filter, update, res) {
+   client.on('/api/task/update', (filter, update, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/task/update] Updating task(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
@@ -80,7 +80,7 @@ module.exports = function(io, client, bim){
    /**
     * @description Route delete request
     */
-   client.on('/api/task/delete', function (filter, res) {
+   client.on('/api/task/delete', (filter, res) => {
         console.info('/api/task/delete')
         if(client.handshake.session.user) {
             console.info('[/api/task/delete] Deleting task(s) for user<' + client.handshake.session.user._id + '>')

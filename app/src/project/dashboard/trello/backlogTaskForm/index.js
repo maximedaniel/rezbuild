@@ -4,10 +4,8 @@
  * @description Create the form for a BACKLOG task
  */
 import React, { Component } from 'react'
-import axios from 'axios'
 import SocketContext from '../../../../SocketContext'
 import "../../../../../node_modules/react-datepicker/dist/react-datepicker.css"
-axios.defaults.withCredentials = true
 
 var $ = window.$
 

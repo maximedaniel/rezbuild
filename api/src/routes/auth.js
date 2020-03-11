@@ -5,7 +5,7 @@
  * @param {object} client WebsocketClient
  */
 
-module.exports = function(io, client){
+module.exports = (io, client) => {
     // import User model
     var User = require('../models').User
 
@@ -17,7 +17,7 @@ module.exports = function(io, client){
     /**
      * @description Route signin request
      */
-    client.on('/api/signin', function (email, password, res) {
+    client.on('/api/signin', (email, password, res)  => {
         console.info('[/api/signin] Signing in ' + email);
          User.findOne({email:email, password:password}, (error, user) => {
                        if(error) {
@@ -42,7 +42,7 @@ module.exports = function(io, client){
     /**
      * @description Route signup request
      */
-    client.on('/api/signup', function (create, res) {
+    client.on('/api/signup', (create, res) => {
          var user = new User(create)
          console.info('[/api/signup] Signin up ' + user.email);
          user.save( (error) => {
@@ -61,7 +61,7 @@ module.exports = function(io, client){
     /**
      * @description Route signout request
      */
-    client.on('/api/signout', function (empty, res) {
+    client.on('/api/signout', (empty, res) => {
         console.info('[/api/signout] Signed out ' + client.handshake.session.user.email);
          client.handshake.session.user = null
          client.handshake.session.save()
@@ -71,7 +71,7 @@ module.exports = function(io, client){
     /**
      * @description Route user token request
      */
-    client.on('/api/token', function (empty, res) {
+    client.on('/api/token',  (empty, res) => {
         console.info('[/api/token] Sending token to ' + client.handshake.session.user.email);
         res({user: client.handshake.session.user})
     });
