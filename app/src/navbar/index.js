@@ -7,11 +7,8 @@ import React, { Component } from 'react'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
-import axios from 'axios'
 import SettingsForm from './settings'
 import common from 'common'
-
-axios.defaults.withCredentials = true
 
 var $ = window.$
 

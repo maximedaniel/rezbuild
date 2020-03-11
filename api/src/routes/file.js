@@ -10,7 +10,7 @@
 import sanitize from 'sanitize-filename'
 import fs from 'fs'
 
-module.exports = function(io, client, uploader){
+module.exports = (io, client, uploader) => {
    // import File model
    var File = require('../models').File
    /**
@@ -32,7 +32,7 @@ module.exports = function(io, client, uploader){
    /**
     * @description Route file get request
     */
-   client.on('/api/files', function (taskId, res) {
+   client.on('/api/files', (taskId, res) => {
         if(client.handshake.session.user) {
             var dirPath = uploader.dir + '/' + taskId
             console.error('[/api/file/get] reading files in directory '+ dirPath);

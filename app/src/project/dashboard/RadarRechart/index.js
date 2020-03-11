@@ -44,6 +44,7 @@ class RadarRechartComponent extends Component {
                                    isAnimationActive={false}
                                     dataKey={serieID} 
                                     position="top"  
+                                    angle="0"
                                     paintOrder = "stroke"
                                     fill="#f7931e"
                                     stroke= "white"

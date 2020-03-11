@@ -4,10 +4,8 @@
  * @description Create the form for creating a project
  */
 import React, { Component } from 'react'
-import axios from 'axios'
 import SocketContext from '../../../SocketContext'
 import common from 'common'
-axios.defaults.withCredentials = true
 
 var $ = window.$
 

@@ -43,6 +43,7 @@ var logger = createLogger({
     exitOnError: false
   })
 
+
 // Override console channels
 console.log = (message) => logger.log({level: 'verbose', message:JSON.stringify(message), color:'purple'});
 console.debug = (message) => logger.log({level: 'debug', message:JSON.stringify(message), color:'blue'});

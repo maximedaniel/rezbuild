@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
 import common from 'common'
+
 var $ = window.$
 
 class SignupFormCore extends Component {
