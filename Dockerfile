@@ -35,38 +35,22 @@ RUN npm cache clean --force
 WORKDIR /usr/src/common
 COPY common/package.json .
 RUN npm install
-<<<<<<< HEAD
-RUN npm run linkage
-=======
->>>>>>> release/0.1.30
 COPY common/ .
 
 WORKDIR /usr/src/react-trello
 COPY react-trello/package.json .
 RUN npm install
-<<<<<<< HEAD
-RUN npm run linkage
-=======
->>>>>>> release/0.1.30
 COPY react-trello/ .
 
 WORKDIR /usr/src/app
 COPY app/package.json .
 RUN npm install
-<<<<<<< HEAD
-RUN npm run linkage
-=======
->>>>>>> release/0.1.30
 COPY app/ .
 RUN npm run build
 
 WORKDIR /usr/src/api
 COPY api/package.json .
 RUN npm install
-<<<<<<< HEAD
-RUN npm run linkage
-=======
->>>>>>> release/0.1.30
 COPY api/ .
 
 

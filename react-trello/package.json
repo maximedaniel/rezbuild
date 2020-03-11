@@ -10,10 +10,6 @@
     "README"
   ],
   "scripts": {
-<<<<<<< HEAD
-    "linkage": "npm link",
-=======
->>>>>>> release/0.1.30
     "prepublish": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "storybook": "start-storybook -p 9002",
