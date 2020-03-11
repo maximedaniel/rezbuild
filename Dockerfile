@@ -46,7 +46,7 @@ WORKDIR /usr/src/app
 COPY app/package.json .
 RUN npm install
 COPY app/ .
-RUN npm run build
+#RUN npm run build
 
 WORKDIR /usr/src/api
 COPY api/package.json .

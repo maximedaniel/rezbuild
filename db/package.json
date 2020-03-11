@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cross-env": "^6.0.3",
-    "mongo-express": "^0.53.0"
+    "cross-env": "7.0.2",
+    "mongo-express": "0.54.0"
   }
 }

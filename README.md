@@ -9,31 +9,21 @@ Open a terminal window:
 
 1. Enter `cd common`
 2. Enter `npm install`
-3. Enter `npm run linkage`
-4. Enter `cd ..`
-5. Enter `cd react-trello`
-6. Enter `npm install`
-7. Enter `npm run linkage`
+3. Enter `cd ..`
+4. Enter `cd react-trello`
+5. Enter `npm install`
 
 Open a terminal window:
 
 1. Enter `cd api`
-2. Enter `npm run linkage`
-3. Enter `npm install`
-4. Enter `npm run dev`
+2. Enter `npm install`
+3. Enter `npm run dev`
 
 Open a terminal window:
 
 1. Enter `cd app`
-2. Enter `npm run linkage`
-3. Enter `npm install`
-4. Enter `npm run dev`
-
-## Freezing develop branch locally
-
-Open a terminal window:
-
-1. Enter `npm shrinkwrap` after any stable package is installed
+2. Enter `npm install`
+3. Enter `npm run dev`
 
 ## Saving develop branch remotely
 
