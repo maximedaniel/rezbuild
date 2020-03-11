@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "common": "file:../common/common-1.0.0.tgz",
-    "react-trello": "file:../common/react-trello-1.0.0.tgz",
+    "react-trello": "file:../react-trello/react-trello-1.0.0.tgz",
     "@vx/responsive": "0.0.184",
     "d3": "5.15.0",
     "jquery": "3.4.1",
