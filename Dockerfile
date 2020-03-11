@@ -27,26 +27,28 @@ RUN \
 
 # Define mountable directories.
 
-VOLUME ["/usr/src/data/db", "/usr/src/api/src/files", "/usr/src/common/node_modules", "/usr/src/react-trello/node_modules", "/usr/src/app/node_modules", "/usr/src/api/node_modules"]
+VOLUME ["/usr/src/data/db", "/usr/src/api/src/files"]
 
 RUN npm config set strict-ssl false
 RUN npm cache clean --force
 
 WORKDIR /usr/src/common
-COPY common/package.json .
-RUN npm install
-COPY common/ .
+COPY common/common-1.0.0.tgz .
+#COPY common/package.json .
+#RUN npm install
+#COPY common/ .
 
 WORKDIR /usr/src/react-trello
-COPY react-trello/package.json .
-RUN npm install
-COPY react-trello/ .
+COPY react-trello/react-trello-1.0.0.tgz .
+#COPY react-trello/package.json .
+#RUN npm install
+#COPY react-trello/ .
 
 WORKDIR /usr/src/app
 COPY app/package.json .
 RUN npm install
 COPY app/ .
-#RUN npm run build
+RUN npm run build
 
 WORKDIR /usr/src/api
 COPY api/package.json .
