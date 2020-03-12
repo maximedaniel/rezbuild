@@ -50,7 +50,7 @@ class RemoveProjectFormCore extends Component {
         <div className="rezbuild center" style={{marginBottom:'0'}}>
             <h4 className="white-text" style={{lineHeight:'150%'}}>Remove project</h4>
         </div>
-          <form className="col s12">
+          <form className="col s12" lang="en">
           <div className="row">
               <div className="col s12 center">
               <h5 className="rezbuild-text">Do you want to remove <strong style={{fontWeight:'900'}}>{this.props.project.name}</strong> ?</h5>

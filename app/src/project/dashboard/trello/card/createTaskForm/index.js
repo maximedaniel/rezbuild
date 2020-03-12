@@ -116,7 +116,7 @@ class CreateTaskFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>{this.state.id? "Update Task":"Create Task"}</h4>
             </div>
             <div className="modal-content" style={{paddingTop:0}}>
-                  <form className="col s12" onSubmit={this.submit}>
+                  <form className="col s12" onSubmit={this.submit} lang="en">
                      <div className="row">
                         <div className="input-field col s12">
                               <input id={"input_name"+ this.state.id}
