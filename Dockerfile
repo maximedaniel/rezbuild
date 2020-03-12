@@ -32,14 +32,14 @@ VOLUME ["/usr/src/data/db", "/usr/src/api/src/files"]
 RUN npm config set strict-ssl false
 RUN npm cache clean --force
 
-WORKDIR /usr/src/local/common
-COPY local/common/common-1.0.0.tgz .
+WORKDIR /usr/src/common
+COPY common/common-1.0.0.tgz .
 #COPY common/package.json .
 #RUN npm install
 #COPY common/ .
 
-WORKDIR /usr/src/local/react-trello
-COPY local/react-trello/react-trello-1.0.0.tgz .
+WORKDIR /usr/src/react-trello
+COPY react-trello/react-trello-1.0.0.tgz .
 #COPY react-trello/package.json .
 #RUN npm install
 #COPY react-trello/ .

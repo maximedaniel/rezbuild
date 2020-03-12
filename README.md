@@ -2,9 +2,9 @@
 
 ![DevOps pipeline](doc/flow.jpg)
 
-## Requirements
+## Tools
 
-Visual Studio Code (<https://code.visualstudio.com/>) for development and SourceTree (<https://www.sourcetreeapp.com/>) for source code version managment.
+Visual Studio Code for development and SourceTree for source code version managment.
 
 ## Installation
 
@@ -17,33 +17,32 @@ Open SourceTree:
 5. Wait for clone to complete
 6. Click `Git-flow` tab and `Ok` button
 
-## Working develop branch locally
+## Running develop branch locally
 
-Open Visual Studio Code. First, install the local dependencies:
+Open Visual Studio Code. First, we install the local dependencies:
 
 1. Click `Terminal > New Terminal`
-2. Enter `cd local/common`
+2. Enter `cd common`
 3. Enter `npm install`
 4. :warning: Enter `npm pack` after any `common` source code change
-5. Enter `cd ../react-trello`
-6. Enter `npm install`
-7. :warning: Enter `npm pack` after  any `react-trello` source code change
+5. Enter `cd ..`
+6. Enter `cd react-trello`
+7. Enter `npm install`
+8. :warning: Enter `npm pack` after  any `react-trello` source code change
 
-Then, install and run the REZBUILD Application Protocol Interface (API):
+Then, we install and run the rezbuild Application Protocol Interface (API):
 
 1. Click `Terminal > New Terminal`
 2. Enter `cd api`
 3. Enter `npm install`
 4. Enter `npm run dev`
-5. :warning: Enter `npm start` for production testing
 
-Finally, install and run the REZBUILD Application (APP):
+Finally, we install and run the rezbuild Application (APP):
 
 1. Click `Terminal > New Terminal`
 2. Enter `cd app`
 3. Enter `npm install`
 4. Enter `npm run dev`
-5. :warning: Enter `npm run build && npm start` for production testing
 
 ## Saving develop branch remotely
 

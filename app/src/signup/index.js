@@ -66,7 +66,7 @@ class SignupFormCore extends Component {
                 <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
                 </div>
               </div> 
-          <form className="col s12" onSubmit={this.handleSubmit} lang="en">
+          <form className="col s12" onSubmit={this.handleSubmit}>
                     <div className="input-field col s12">
                         <input  id="input_firstname" ref="firstname" name="firstname" type="text" required/>
                         <label htmlFor="input_firstname">First name</label>

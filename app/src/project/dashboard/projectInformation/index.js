@@ -638,7 +638,7 @@ class ProjectInformationCore extends Component {
         </div>
       }
       return (
-        <form className="col s12" onSubmit={this.submit} lang="en">
+        <form className="col s12" onSubmit={this.submit} >
         {projectInformation}
         { this.state.pending ?
         <div className="preloader-wrapper small active">

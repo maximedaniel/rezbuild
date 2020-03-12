@@ -33,7 +33,7 @@ class RemoveTaskFormCore extends Component {
         <div className="rezbuild center" style={{marginBottom:'0'}}>
             <h4 className="white-text" style={{lineHeight:'150%'}}>Remove task</h4>
         </div>
-          <form className="col s12" lang="en">
+          <form className="col s12">
           <div className="row">
               <div className="col s12 center">
               <h5 className="rezbuild-text">Do you want to remove <strong style={{fontWeight:'900'}}>{this.props.task.name}</strong> ?</h5>

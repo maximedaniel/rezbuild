@@ -131,12 +131,12 @@ class AddUserFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>Invite user</h4>
         </div>
        <div className="modal-content">
-          <form className="col s12" onSubmit={this.handleAddUser} autoComplete="off" lang="en">
+          <form className="col s12" onSubmit={this.handleAddUser} autoComplete="off">
               {usersComponent}
               {preloaderComponent}
               {errorComponent}
           </form>
-          <form className="col s12"   onSubmit={this.handleCopyUrl} autoComplete="off" lang="en">
+          <form className="col s12"   onSubmit={this.handleCopyUrl} autoComplete="off">
           <div className="row">
             <div className="input-field col l10 m9 s12">
               <input id="input_projecturl" type="text" ref="input_projecturl"    className="validate"  defaultValue={window.location.href.split('#')[0]  + '/signin'} />

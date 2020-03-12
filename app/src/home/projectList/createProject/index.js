@@ -79,7 +79,7 @@ class CreateProjectFormCore extends Component {
         <div className="rezbuild center" style={{marginBottom:'0'}}>
             <h4 className="white-text" style={{lineHeight:'150%'}}>Create project</h4>
         </div>
-        <form className="col s12" onSubmit={this.submit} lang="en">
+        <form className="col s12" onSubmit={this.submit}>
         <div className="row">
         <div className="col s12">
           <ul className="tabs" style={{display:"none"}}>

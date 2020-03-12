@@ -164,7 +164,7 @@ class TodoTaskFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>{this.props.task.name}</h4>
             </div>
             <div className="modal-content">
-                  <form className="col s12" lang="en">
+                  <form className="col s12">
                      <div className="row">
                         {formBody}
                      </div>

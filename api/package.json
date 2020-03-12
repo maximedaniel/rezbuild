@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "common": "file:../local/common/common-1.0.0.tgz",
+    "common": "file:../common/common-1.0.0.tgz",
     "bufferutil": "4.0.1",
     "cors": "2.8.5",
     "dateformat": "3.0.3",
@@ -33,7 +33,6 @@
   "scripts": {
     "dev": "nodemon src",
     "start": "forever start src/index.js",
-    "comment": "nodemon src",
-    "docs": "jsdoc2md src/*.js > README.md && jsdoc2md src/**/*.js >> README.md && jsdoc2md src/**/**/*.js >> README.md && jsdoc2md src/**/**/**/*.js >> README.md && jsdoc2md src/**/**/**/**/*.js >> README.md"
+    "comment":"nodemon src"
   }
 }
