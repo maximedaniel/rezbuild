@@ -2,56 +2,63 @@
 
 ![DevOps pipeline](doc/flow.jpg)
 
+## Tools
+
+Visual Studio Code for development and SourceTree for source code version managment.
+
+## Installation
+
+Open SourceTree:
+
+1. Click `Clone` tab
+2. Enter `https://gitlab.estia.fr/m.daniel/rezbuild.git` in `Source Path / URL` field
+3. Complete the remaining fields
+4. Click `Clone` button
+5. Wait for clone to complete
+6. Click `Git-flow` tab and `Ok` button
 
 ## Running develop branch locally
 
-Open a terminal window:
+Open Visual Studio Code. First, we install the local dependencies:
 
-1. Enter `cd common`
-2. Enter `npm install`
-3. Enter `cd ..`
-4. Enter `cd react-trello`
-5. Enter `npm install`
+1. Click `Terminal > New Terminal`
+2. Enter `cd common`
+3. Enter `npm install`
+4. :warning: Enter `npm pack` after any `common` source code change
+5. Enter `cd ..`
+6. Enter `cd react-trello`
+7. Enter `npm install`
+8. :warning: Enter `npm pack` after  any `react-trello` source code change
 
-Open a terminal window:
+Then, we install and run the rezbuild Application Protocol Interface (API):
 
-1. Enter `cd api`
-2. Enter `npm install`
-3. Enter `npm run dev`
+1. Click `Terminal > New Terminal`
+2. Enter `cd api`
+3. Enter `npm install`
+4. Enter `npm run dev`
 
-Open a terminal window:
+Finally, we install and run the rezbuild Application (APP):
 
-1. Enter `cd app`
-2. Enter `npm install`
-3. Enter `npm run dev`
+1. Click `Terminal > New Terminal`
+2. Enter `cd app`
+3. Enter `npm install`
+4. Enter `npm run dev`
 
 ## Saving develop branch remotely
 
-Open SourceTree software:
+Open SourceTree:
 
 1. Click `BRANCHES > develop`
 2. Click and Complete `File Status > Stage All > Push changes... > Commit`
 
-Or open a git terminal:
-
-1. Enter `git add *`
-2. Enter `git commit -m '<your_message>'`
-3. Enter `git push origin develop:master`
-
 ## Pushing develop branch to master branch remotely
 
-Open a SourceTree software:
+Open SourceTree:
 
 1. Click `BRANCHES > develop`
 2. Click and Complete `File Status > Stage All > Push changes... > Commit`
 3. Click and Complete `Git-flow > Start New Release > Release Name`
-3. Click and Complete `Git-flow > Finish Release > Release Name`
-
-Or open a Git Terminal:
-
-1. Enter `git add *`
-2. Enter `git commit -m '<your_message>'`
-3. Enter `git push origin develop:master`
+4. Click and Complete `Git-flow > Finish Release > Release Name`
 
 This proceduce will update the live version hosted at ESTIA (see <https://rezbuildapp.estia.fr>, <https://rezbuildapi.estia.fr>, <https://rezbuilddb.estia.fr>):
 

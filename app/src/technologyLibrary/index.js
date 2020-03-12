@@ -67,7 +67,7 @@ class TechnologyLibraryCore extends Component {
         {category: 'INSULATION', family: 'Placotherm',  company: 'PLACO', name:'Ventilated Facade Placotherm'},
         {category: 'HVAC', family: 'Radiant Floor', company: 'EXPLODED View', name:'HP Radiant Floor Pactherm'},
         {category: 'HVAC', family: 'Heat Pump', company: 'UNOTT', name:'Solar Assisted Heat Pump'},
-        {category: 'RENEWABLES', family: 'Photovoltaic Panels', company: 'ONYX', name:'Amorphous Silicon PV Glass'},
+        {category: 'RENEWABLES', family: 'Photovoltaic Panels', company: 'ONYX', name:'Amorphous Silicon PV GLass'},
         {category: 'RENEWABLES', family: 'Photovoltaic Panels', company: 'ONYX', name:'Christalline PV Glass'},
         {category: 'FACADE', family: 'Additive Manufacturing', company: 'VIAS', name:'3D Printing Facade'},
         {category: 'BEMS', family: 'Advanced BEMS', company: 'MAETRICS', name:'SmartBox'}
