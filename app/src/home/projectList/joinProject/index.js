@@ -120,7 +120,7 @@ class JoinProjectFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>Join project</h4>
         </div>
        <div className="modal-content">
-          <form className="col s12" onSubmit={this.handleJoinProject} autoComplete="off">
+          <form className="col s12" onSubmit={this.handleJoinProject} autoComplete="off" lang="en">
               {unauthorizedprojectlistComponent}
               {preloaderComponent}
               {errorComponent}
