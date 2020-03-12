@@ -73,7 +73,7 @@ class SigninFormCore extends Component {
                 <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
                 </div>
               </div> 
-             <form className="col s12" onSubmit={this.handleSubmit}>
+             <form className="col s12" onSubmit={this.handleSubmit} lang="en">
                 <div className="input-field col s12">
                       <input id="input_email" name='email' ref="email" type="email" autoComplete="username email" required/>
                       <label htmlFor="input_email">Email</label>

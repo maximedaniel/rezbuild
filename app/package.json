@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "common": "file:../common/common-1.0.0.tgz",
-    "react-trello": "file:../react-trello/react-trello-1.0.0.tgz",
+    "common": "file:../local/common/common-1.0.0.tgz",
+    "react-trello": "file:../local/react-trello/react-trello-1.0.0.tgz",
     "@vx/responsive": "0.0.184",
     "d3": "5.15.0",
     "jquery": "3.4.1",
@@ -34,7 +34,7 @@
     "start": "serve -l 3000 -s build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "docs": "jsdoc2md src/*.js > docs.md && jsdoc2md src/**/*.js >> docs.md && jsdoc2md src/**/**/*.js >> docs.md && jsdoc2md src/**/**/**/*.js >> docs.md && jsdoc2md src/**/**/**/**/*.js >> docs.md"
+    "docs": "jsdoc2md src/*.js > README.md && jsdoc2md src/**/*.js >> README.md && jsdoc2md src/**/**/*.js >> README.md && jsdoc2md src/**/**/**/*.js >> README.md && jsdoc2md src/**/**/**/**/*.js >> README.md"
   },
   "eslintConfig": {
     "extends": "react-app"

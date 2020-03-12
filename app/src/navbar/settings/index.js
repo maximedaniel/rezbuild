@@ -67,7 +67,7 @@ class SettingsFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>Settings</h4>
             </div>
             <div className="modal-content">
-                  <form className="col s12"  onSubmit={this.handleSubmit}>
+                  <form className="col s12"  onSubmit={this.handleSubmit} lang="en">
                      <div className="row">
                         <div className="input-field col s6" style={{lineHeight:'1.5'}}>
                             <input  id="input_firstname" ref="firstname" name="firstname" type="text" defaultValue={this.props.user.firstname} required/>
