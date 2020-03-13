@@ -122,9 +122,15 @@ class VersionComparatorCore extends Component {
                         <div className="carousel col s7 transparent grey-text" id="carousel-version-comparator" key={'carousel-'+this.props.selectedTasks.length}>
                             {
                                 this.props.selectedTasks.map(selectedTask => 
-                                    <a className="carousel-item z-depth-1 white" id={'carousel-item-'+selectedTask._id} key={'carousel-item-'+selectedTask._id} ref={'carousel-item-'+selectedTask._id} href={'#carousel-item-'+selectedTask._id}>
-                                        <div className="row">
-                                            <div className="col s12 center rezbuild">
+                                    <a className="carousel-item z-depth-1 white" 
+                                    id={'carousel-item-'+selectedTask._id}
+                                    key={'carousel-item-'+selectedTask._id}
+                                    ref={'carousel-item-'+selectedTask._id}
+                                    href={'#carousel-item-'+selectedTask._id}
+                                    style={{height:'auto'}}
+                                    >
+                                        <div className="row" style={{marginBottom:0}}>
+                                            <div className="col s12 center rezbuild"  style={{padding:0}}>
                                                 <h6 className="white-text col s12" style={{marginBottom:'0.1rem'}}>
                                                     <b>{selectedTask.action}</b>
                                                 </h6>
@@ -133,7 +139,7 @@ class VersionComparatorCore extends Component {
                                                     {moment(selectedTask.date).format('LLL')}
                                                 </h6>
                                             </div>
-                                            <div className='col s12 center white'>
+                                            <div className='col s12 center white' style={{padding:0}}>
                                                 <ModelViewerComponent modelTask={selectedTask} allowFullScreen={false}/>
                                             </div>
                                         </div>
