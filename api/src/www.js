@@ -83,9 +83,14 @@ app.use(
  */
 app.use('/ifc/:Id', (req, res, next) => {
   try {
-    var splittedId = req.params.Id.split('_', 2)
+    var Id = req.params.Id
+    if (!Id.endsWith('.ifc')) Id = Id + '.ifc';
+    var splittedId = Id.split('_')
+    console.log(splittedId)
     var taskId = splittedId[0]
-    var filename = splittedId.slice(1, splittedId.length-1).join('') + '.ifc'
+    console.log(taskId)
+    var filename = splittedId.slice(1, splittedId.length).join('_')
+    console.log(filename)
     console.info('[api/ifc/'+ req.params.Id + '] Sending file ' + fileDir + "/" + taskId + "/" + filename);
     res.sendFile(fileDir + "/" + taskId + "/" + filename, { root: __dirname })
   }
