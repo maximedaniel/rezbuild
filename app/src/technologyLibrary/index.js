@@ -152,9 +152,9 @@ class TechnologyLibraryCore extends Component {
 }
 
 
-const TechnologyLibraryComponent = props => (
+const TechnologyLibrary = props => (
     <SocketContext.Consumer>
     { (context) => <TechnologyLibraryCore {...props} host={context.host} socket={context.socket} uploader={context.uploader} />}
     </SocketContext.Consumer>
   )
-  export default TechnologyLibraryComponent;
+  export default TechnologyLibrary;

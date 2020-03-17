@@ -4,9 +4,9 @@
  * @description Create the project list
  */
  import React, { Component } from 'react'
-import CreateProjectForm from './createProject'
-import JoinProjectForm from './joinProject'
-import RemoveProjectForm from './removeProject'
+import CreateProjectForm from './createProjectForm'
+import JoinProjectForm from './joinProjectForm'
+import RemoveProjectForm from './removeProjectForm'
 import {browserHistory} from 'react-router'
 import SocketContext from '../../SocketContext'
 
@@ -20,8 +20,8 @@ class ProjectListCore extends Component {
     this.state = {projects : null, error : false, pending : false}
   }
 
-  // Get the projects of the user
-  update(){
+  // Fetch the projects of the user
+  fetch(){
     this.setState({projects : null, error : false, pending : true}, () => {
         var filter = {users: { "$in" : ["token"] } }
         this.props.socket.emit('/api/project/get', filter, (res) => {
@@ -40,8 +40,8 @@ class ProjectListCore extends Component {
   }
 
   componentDidMount() {
-    this.update()
-    this.props.socket.on('/api/project/done', () => {this.update()})
+    this.fetch()
+    this.props.socket.on('/api/project/done', () => {this.fetch()})
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -53,7 +53,7 @@ class ProjectListCore extends Component {
 
   componentWillUnmount() {
     $('.tooltipped').tooltip('remove');
-    this.props.socket.off('/api/project/done', () => {this.update()})
+    this.props.socket.off('/api/project/done', () => {this.fetch()})
   }
 
   render() {

@@ -39,8 +39,7 @@ class ProjectInformationCore extends Component {
      })
    };
 
-  update(){
-
+  fetch(){
     this.setState({users : null, error : false, pending : true}, () => {
         var filter = {_id: this.props.project._id }
         this.props.socket.emit('/api/project/get', filter, res => {
@@ -59,9 +58,9 @@ class ProjectInformationCore extends Component {
         $('#projectInformation').tabs('select_tab', 'general');
         $('select').material_select();
     });
-    this.update();
+    this.fetch();
     this.props.socket.on('/api/project/done', res => {
-        this.update()
+        this.fetch()
      });
   }
   componentDidUpdate(prevState) {

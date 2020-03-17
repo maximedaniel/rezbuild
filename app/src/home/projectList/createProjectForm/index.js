@@ -73,6 +73,7 @@ class CreateProjectFormCore extends Component {
       $('select').material_select();
     });
   }
+  
   render() {
     return (
     <div id="modal_createproject" className="modal">

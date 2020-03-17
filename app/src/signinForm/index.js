@@ -14,7 +14,7 @@ class SigninFormCore extends Component {
 
   constructor(props){
    super(props);
-   this.handleSubmit = this.handleSubmit.bind(this);
+   this.submit = this.submit.bind(this);
    this.state = {error : false, pending : false}
   }
 
@@ -29,7 +29,7 @@ class SigninFormCore extends Component {
   }
 
    // Sign in the user
-  handleSubmit(event){
+  submit(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {
     this.props.socket.emit('/api/signin', this.refs.email.value, this.refs.password.value, res => {
@@ -73,7 +73,7 @@ class SigninFormCore extends Component {
                 <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
                 </div>
               </div> 
-             <form className="col s12" onSubmit={this.handleSubmit} lang="en">
+             <form className="col s12" onSubmit={this.submit} lang="en">
                 <div className="input-field col s12">
                       <input id="input_email" name='email' ref="email" type="email" autoComplete="username email" required/>
                       <label htmlFor="input_email">Email</label>
