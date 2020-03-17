@@ -5,7 +5,7 @@
  */
 import React, { Component } from 'react'
 import SocketContext from '../../../SocketContext'
-import AddUserForm from './addUser'
+import AddUserForm from './addUserForm'
 import common from 'common'
 
 class TeamCore extends Component {
@@ -17,7 +17,7 @@ class TeamCore extends Component {
 
   
    // Fetch the users of the project
-  update(){
+  fetch(){
     this.setState({users : null, error : false, pending : true}, () => {
         var filter = {_id: this.props.project._id }
         this.props.socket.emit('/api/project/get', filter, res => {
@@ -40,12 +40,12 @@ class TeamCore extends Component {
   }
 
   componentDidMount() {
-    this.update();
+    this.fetch();
     this.props.socket.on('/api/project/done', res => {
-        this.update()
+        this.fetch()
      });
     this.props.socket.on('/api/user/done', res => {
-        this.update()
+        this.fetch()
      });
   }
 

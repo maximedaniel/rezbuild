@@ -38,13 +38,13 @@ class FileExplorerCore extends Component {
     }
     
    // Fetch the files of the tasks
-    fetchFiles() {
+    fetch() {
         if(this.props.task)this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
             
     }
     
    componentDidMount(){
-       this.fetchFiles()
+       this.fetch()
        $(document).ready(() => {
          $('.tooltipped').tooltip({delay:0, html:true});
         // window.scrollTo(0, 0);
@@ -57,7 +57,7 @@ class FileExplorerCore extends Component {
 
    componentDidUpdate(prevProps, prevState) {
      if (prevProps.task !== this.props.task){
-        this.fetchFiles()
+        this.fetch()
          $('.tooltipped').tooltip({delay:0, html:true});
      }
     }

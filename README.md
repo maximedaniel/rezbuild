@@ -4,7 +4,7 @@
 
 ## Requirements
 
-Visual Studio Code (<https://code.visualstudio.com/>) for development and SourceTree (<https://www.sourcetreeapp.com/>) for source code version managment.
+Visual Studio Code (<https://code.visualstudio.com/>) for development and SourceTree (<https://www.sourcetreeapp.com/>) for source code version management.
 
 ## Installation
 

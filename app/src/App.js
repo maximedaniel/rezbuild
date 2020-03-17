@@ -1,12 +1,12 @@
 // App.js
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {Route, Router, browserHistory} from 'react-router'
-import SigninForm from './signin'
-import SignupForm from './signup'
-import RezbuildComponent from './home'
-import ProjectComponent from './project'
-import TechnologyLibraryComponent from './technologyLibrary'
+import SigninForm from './signinForm'
+import SignupForm from './signupForm'
+import Home from './home'
+import Project from './project'
+import TechnologyLibrary from './technologyLibrary'
 import io from 'socket.io-client';
 import SocketIOFileUpload  from 'socketio-file-upload'
 import SocketContext from './SocketContext'
@@ -49,11 +49,11 @@ class App extends Component {
         </div>
          <SocketContext.Provider value={this.state}>
             <Router history={browserHistory}>
-                    <Route path ='/' component={RezbuildComponent} />
+                    <Route path ='/' component={Home} />
                     <Route path='/signin' component={SigninForm} />
                     <Route path='/signup' component={SignupForm} />
-                    <Route path='/technologies' component={TechnologyLibraryComponent} />
-                    <Route path='/:_id' component={ProjectComponent} />
+                    <Route path='/technologies' component={TechnologyLibrary} />
+                    <Route path='/:_id' component={Project} />
                     <Route path='/:_id/signin' component={SigninForm} />
                     <Route path='/:_id/signup' component={SignupForm} />
             </Router>

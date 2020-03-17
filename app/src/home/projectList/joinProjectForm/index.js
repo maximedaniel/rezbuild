@@ -12,12 +12,12 @@ class JoinProjectFormCore extends Component {
 
   constructor(props){
    super(props);
-   this.handleJoinProject = this.handleJoinProject.bind(this);
+   this.submit = this.submit.bind(this);
    this.state = {projects: null, error : false, pending : false}
   }
 
- // get projects not of the users
-  update(){
+ // fetch projects not of the users
+  fetch(){
     this.setState({projects: null, error : false, pending : true}, () => {
         var get = {users: { "$nin" : ["token"] }}
         this.props.socket.emit('/api/project/get', get, res => {
@@ -36,12 +36,12 @@ class JoinProjectFormCore extends Component {
   }
 
   componentDidMount() {
-    this.update()
-    this.props.socket.on('/api/project/done', () => {this.update()})
+    this.fetch()
+    this.props.socket.on('/api/project/done', () => {this.fetch()})
   }
 
    // add the user to the project
-  handleJoinProject(event){
+  submit(event){
    event.preventDefault();
    this.setState({projects: this.state.projects, error : false, pending : true}, () => {
        var project = this.state.projects.filter((project, index) => {
@@ -68,7 +68,7 @@ class JoinProjectFormCore extends Component {
 
 
   componentWillUnmount() {
-    this.props.socket.off('/api/project/done', () => {this.update()})
+    this.props.socket.off('/api/project/done', () => {this.fetch()})
   }
 
   render() {
@@ -120,7 +120,7 @@ class JoinProjectFormCore extends Component {
             <h4 className="white-text" style={{lineHeight:'150%'}}>Join project</h4>
         </div>
        <div className="modal-content">
-          <form className="col s12" onSubmit={this.handleJoinProject} autoComplete="off" lang="en">
+          <form className="col s12" onSubmit={this.submit} autoComplete="off" lang="en">
               {unauthorizedprojectlistComponent}
               {preloaderComponent}
               {errorComponent}

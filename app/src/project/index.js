@@ -43,10 +43,10 @@ class ProjectCore extends Component {
     }
 }
 
-const ProjectComponent = props => (
+const Project = props => (
   <SocketContext.Consumer>
   { (context) => <ProjectCore {...props} socket={context.socket} uploader={context.uploader} />}
   </SocketContext.Consumer>
 )
 
-export default ProjectComponent
+export default Project

@@ -7,7 +7,7 @@ import React, { Component } from 'react'
 import {Link} from 'react-router'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
-import SettingsForm from './settings'
+import SettingsForm from './settingsForm'
 import common from 'common'
 
 var $ = window.$
@@ -16,13 +16,13 @@ class NavbarCore extends Component {
 
   constructor(props){
     super(props);
-    this.handleSignout = this.handleSignout.bind(this);
-    this.update = this.update.bind(this)
+    this.submit = this.submit.bind(this);
+    this.fetch = this.fetch.bind(this)
     this.state = {user: null, error : false, pending : false}
   }
 
   // Fetch the user
-  update(){
+  fetch(){
     $('.button-collapse').sideNav('hide')
     this.setState({user : null, error : false, pending : true}, () => {
         var filter = { _id : "token" }
@@ -43,7 +43,7 @@ class NavbarCore extends Component {
   }
 
   componentDidMount() {
-    this.update()
+    this.fetch()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -58,7 +58,7 @@ class NavbarCore extends Component {
   }
 
  // Sign out the user
-  handleSignout(event){
+  submit(event){
    event.preventDefault();
    this.setState({error : false, pending : true}, () => {
        this.props.socket.emit('/api/signout', {}, res => {
@@ -97,7 +97,7 @@ class NavbarCore extends Component {
                 </li>
 
                 <li><a className="modal-trigger" href="#modal_settings" ><i className="material-icons">settings</i>Settings</a></li>
-                <li><a href="#!" onClick={this.handleSignout}><i className="material-icons">arrow_back</i>Sign out</a></li>
+                <li><a href="#!" onClick={this.submit}><i className="material-icons">arrow_back</i>Sign out</a></li>
 
               </ul>
             <div className="nav-wrapper">
@@ -113,7 +113,7 @@ class NavbarCore extends Component {
 
             </div>
            </div>
-           <SettingsForm user={this.state.user} update={this.update}/>
+           <SettingsForm user={this.state.user} fetch={this.fetch}/>
           </nav>
         );
     } else return <div/>;
