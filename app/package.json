@@ -7,7 +7,7 @@
     "react-trello": "file:../local/react-trello/react-trello-1.0.0.tgz",
     "@vx/responsive": "0.0.184",
     "d3": "5.15.0",
-    "jquery": "3.4.1",
+    "jquery": "3.5.0",
     "jsdoc": "3.6.3",
     "moment": "2.24.0",
     "node-sass": "4.13.1",
