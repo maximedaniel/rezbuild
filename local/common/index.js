@@ -649,7 +649,7 @@ var common = {
                     0,
                     0,
                     0,
-                    6,
+                    0,
                 ],
                 maxValues: [
                     2,
@@ -670,7 +670,7 @@ var common = {
                     15000,
                     100,
                     100,
-                    'A',
+                    6,
                 ],
                 priorities: [
                     false,
