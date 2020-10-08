@@ -6,20 +6,20 @@ var common = {
     },
     ROLES: {
         CUSTOMER: {name: 'Customer', description: 'A customer...', actions: []},
-        ANALYST: {name: 'Analyst', description: 'An analyst...', actions: ['KPI_ECONOMICAL_ASIS', 'KPI_SOCIAL_ASIS', 'KPI_ENERGICAL_ASIS', 'KPI_COMFORT_ASIS', 'KPI_ECONOMICAL_TOBE', 'KPI_SOCIAL_TOBE', 'KPI_ENERGICAL_TOBE', 'KPI_COMFORT_TOBE']},
+        ANALYST: {name: 'Analyst', description: 'An analyst...', actions: ['KPI_ECON_AND_FIN_ASIS', 'KPI_SOCIAL_ASIS', 'KPI_ENERGY_AND_ENV_ASIS', 'KPI_COMFORT_ASIS', 'KPI_ECON_AND_FIN_TOBE', 'KPI_SOCIAL_TOBE', 'KPI_ENERGY_AND_ENV_TOBE', 'KPI_COMFORT_TOBE']},
         DESIGNER: {name: 'Designer', description: 'A designer...', actions: ['MODEL_ASIS', 'MODEL_TOBE']},
     },
     STATUS: {
         INIT: ['MODEL_ASIS'],
-        MODEL_ASIS: ['MODEL_ASIS', 'KPI_ECONOMICAL_ASIS', 'KPI_SOCIAL_ASIS', 'KPI_ENERGICAL_ASIS', 'KPI_COMFORT_ASIS', 'MODEL_TOBE'],
-        MODEL_TOBE: ['MODEL_TOBE', 'KPI_ECONOMICAL_TOBE', 'KPI_SOCIAL_TOBE', 'KPI_ENERGICAL_TOBE', 'KPI_COMFORT_TOBE'],
-        KPI_ECONOMICAL_ASIS: ['KPI_ECONOMICAL_ASIS'],
+        MODEL_ASIS: ['MODEL_ASIS', 'KPI_ECON_AND_FIN_ASIS', 'KPI_SOCIAL_ASIS', 'KPI_ENERGY_AND_ENV_ASIS', 'KPI_COMFORT_ASIS', 'MODEL_TOBE'],
+        MODEL_TOBE: ['MODEL_TOBE', 'KPI_ECON_AND_FIN_TOBE', 'KPI_SOCIAL_TOBE', 'KPI_ENERGY_AND_ENV_TOBE', 'KPI_COMFORT_TOBE'],
+        KPI_ECON_AND_FIN_ASIS: ['KPI_ECON_AND_FIN_ASIS'],
         KPI_SOCIAL_ASIS: ['KPI_SOCIAL_ASIS'],
-        KPI_ENERGICAL_ASIS: ['KPI_ENERGICAL_ASIS'],
+        KPI_ENERGY_AND_ENV_ASIS: ['KPI_ENERGY_AND_ENV_ASIS'],
         KPI_COMFORT_ASIS: ['KPI_COMFORT_ASIS'],
-        KPI_ECONOMICAL_TOBE: ['KPI_ECONOMICAL_TOBE'],
+        KPI_ECON_AND_FIN_TOBE: ['KPI_ECON_AND_FIN_TOBE'],
         KPI_SOCIAL_TOBE: ['KPI_SOCIAL_TOBE'],
-        KPI_ENERGICAL_TOBE: ['KPI_ENERGICAL_TOBE'],
+        KPI_ENERGY_AND_ENV_TOBE: ['KPI_ENERGY_AND_ENV_TOBE'],
         KPI_COMFORT_TOBE: ['KPI_COMFORT_TOBE']
     },
     ACTIONS: {
@@ -33,8 +33,8 @@ var common = {
             maxValues: [''],
             priorities: [true],
         },
-        KPI_ECONOMICAL_ASIS: {
-            description: 'Assess the economical quality of the 3D model of the building as it is.',
+        KPI_ECON_AND_FIN_ASIS: {
+            description: 'Assess the economic and financial quality of the 3D model of the building as it is.',
             names: [
                 'Payback period',
                 'Internal rate of return',
@@ -120,7 +120,7 @@ var common = {
                 false,
             ],
         },
-        KPI_ENERGICAL_ASIS: {
+        KPI_ENERGY_AND_ENV_ASIS: {
             description: 'Assess the energy quality of the 3D model of the building as it is.',
             names:[
                 "Primary electric energy demand",
@@ -456,8 +456,8 @@ var common = {
             priorities: [true],
         },
         
-        KPI_ECONOMICAL_TOBE: {
-            description: 'Assess the economical quality of the 3D model of the building as it will be.',
+        KPI_ECON_AND_FIN_TOBE: {
+            description: 'Assess the economic and financial quality of the 3D model of the building as it will be.',
             names: [
                 'Payback period',
                 'Internal rate of return',
@@ -543,7 +543,7 @@ var common = {
                 false,
             ],
         },
-        KPI_ENERGICAL_TOBE: {
+        KPI_ENERGY_AND_ENV_TOBE: {
             description: 'Assess the energy quality of the 3D model of the building as it will be.',
             names:[
                 "Primary electric energy demand",

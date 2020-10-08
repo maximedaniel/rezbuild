@@ -23,12 +23,12 @@ class FileExplorerCore extends Component {
             modelMode :false,
             environmentalTask : null,
             environmentalMode :false,
-            economicalTask :null,
-            economicalMode :false,
+            economicTask :null,
+            economicMode :false,
             socialTask : null,
             socialMode :false,
-            energicalTask : null,
-            energicalMode :false,
+            energyTask : null,
+            energyMode :false,
             comfortTask : null,
             comfortMode :false,
             error: false,
@@ -98,10 +98,10 @@ class FileExplorerCore extends Component {
        let socialKpiViewer;
        let environmentalKpiViewer;
        let comfortKpiViewer;
-       let energicalKpiViewer;
+       let energyKpiViewer;
        
-       if(this.state.economicalTask) economicalKpiViewer = this.renderKPIsOfTask(this.state.economicalTask);
-       if(this.state.energicalTask) energicalKpiViewer = this.renderKPIsOfTask(this.state.energicalTask);
+       if(this.state.economicTask) economicalKpiViewer = this.renderKPIsOfTask(this.state.economicTask);
+       if(this.state.energyTask) energyKpiViewer = this.renderKPIsOfTask(this.state.energyTask);
        if(this.state.socialTask) socialKpiViewer = this.renderKPIsOfTask(this.state.socialTask);
        if(this.state.environmentalTask) environmentalKpiViewer = this.renderKPIsOfTask(this.state.environmentalTask);
        if(this.state.comfortTask) comfortKpiViewer = this.renderKPIsOfTask(this.state.comfortTask);
@@ -111,23 +111,23 @@ class FileExplorerCore extends Component {
         KpiFileExplorer = 
             <div className="col s12">
                 {/*
-                !(this.state.economicalTask 
+                !(this.state.economicTask 
                 || this.state.environmentalTask 
                 || this.state.socialTask 
-                || this.state.energicalTask
+                || this.state.energyTask
                 || this.state.comfortTask)?
                 <i className="material-icons rezbuild-text center">block</i>: ''*/
                 }
-                {this.state.economicalTask?
+                {this.state.economicTask?
                     <div className='col s12'>
                     <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>ECONOMICAL</h6>
+                    <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>ECONOMIC AND FINANCIAL</h6>
                     <button className="btn-flat center col s2 waves-effect waves-light" 
-                    onClick={(e) => {e.preventDefault();this.setState({economicalMode:!this.state.economicalMode})}}
+                    onClick={(e) => {e.preventDefault();this.setState({economicMode:!this.state.economicMode})}}
                     >
-                    <i className="material-icons rezbuild-text">{this.state.economicalMode?"expand_less":"expand_more"}</i></button>
+                    <i className="material-icons rezbuild-text">{this.state.economicMode?"expand_less":"expand_more"}</i></button>
                     </div>
-                     { this.state.economicalMode?economicalKpiViewer: ''}
+                     { this.state.economicMode?economicalKpiViewer: ''}
                 </div> : ''}
                 {this.state.environmentalTask?
                 <div className='col s12'>
@@ -153,16 +153,16 @@ class FileExplorerCore extends Component {
                      { this.state.socialMode?socialKpiViewer: ''}
                 </div>:''}
 
-                {this.state.energicalTask?
+                {this.state.energyTask?
                 <div className='col s12'>
                 <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENERGY</h6>
+                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENERGY AND ENVIRONMENTAL</h6>
                     <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({energicalMode:!this.state.energicalMode})}}
+                    onClick={(e) => {e.preventDefault();this.setState({energyMode:!this.state.energyMode})}}
                     >
-                    <i className="material-icons rezbuild-text">{this.state.energicalMode?"expand_less":"expand_more"}</i></button>
+                    <i className="material-icons rezbuild-text">{this.state.energyMode?"expand_less":"expand_more"}</i></button>
                     </div>
-                     { this.state.energicalMode?energicalKpiViewer: ''}
+                     { this.state.energyMode?energyKpiViewer: ''}
                 </div>:''}
 
                 {this.state.comfortTask?
