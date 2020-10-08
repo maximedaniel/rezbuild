@@ -94,13 +94,13 @@ class FileExplorerCore extends Component {
 
     render(){
        let KpiFileExplorer;
-       let economicalKpiViewer;
+       let economicKpiViewer;
        let socialKpiViewer;
        let environmentalKpiViewer;
        let comfortKpiViewer;
        let energyKpiViewer;
        
-       if(this.state.economicTask) economicalKpiViewer = this.renderKPIsOfTask(this.state.economicTask);
+       if(this.state.economicTask) economicKpiViewer = this.renderKPIsOfTask(this.state.economicTask);
        if(this.state.energyTask) energyKpiViewer = this.renderKPIsOfTask(this.state.energyTask);
        if(this.state.socialTask) socialKpiViewer = this.renderKPIsOfTask(this.state.socialTask);
        if(this.state.environmentalTask) environmentalKpiViewer = this.renderKPIsOfTask(this.state.environmentalTask);
@@ -127,7 +127,7 @@ class FileExplorerCore extends Component {
                     >
                     <i className="material-icons rezbuild-text">{this.state.economicMode?"expand_less":"expand_more"}</i></button>
                     </div>
-                     { this.state.economicMode?economicalKpiViewer: ''}
+                     { this.state.economicMode?economicKpiViewer: ''}
                 </div> : ''}
                 {this.state.environmentalTask?
                 <div className='col s12'>
