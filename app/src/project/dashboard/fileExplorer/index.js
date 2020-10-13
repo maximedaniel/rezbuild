@@ -11,36 +11,59 @@ import ComputeVersion from '../ComputeVersion'
 import { ParentSize } from '@vx/responsive'
 import ModelViewerComponent from '../ModelViewer'
 import IndicatorExplorerComponent from '../IndicatorExplorer'
+import EditDoneTaskForm from '../trello/editDoneTaskForm'
+
 var $ = window.$;
 
-
 class FileExplorerCore extends Component {
+
     constructor(props){
         super(props)
         this.state = {
 
             modelTask : null,
             modelMode :false,
-            environmentalTask : null,
-            environmentalMode :false,
             economicTask :null,
-            economicMode :false,
             socialTask : null,
-            socialMode :false,
             energyTask : null,
-            energyMode :false,
             comfortTask : null,
-            comfortMode :false,
+            taskMode : [false,false,false,false],
             error: false,
             pending: false
         };
         this.renderKPIsOfTask = this.renderKPIsOfTask.bind(this);
+        this.renderKpiViewer = this.renderKpiViewer.bind(this);
     }
-    
+
+    getTaskIndex = (taskType) => {
+        switch (taskType) {
+            case "economic" : return 0;
+            case "social"   : return 1;
+            case "energy"   : return 2;
+            case "comfort"  : return 3;
+            default : return -1;
+        }
+    }
+
+    getTaskMode = (taskType) => {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1)
+            return this.state.taskMode[i];
+        return false;
+    }
+
+    switchTaskMode = (taskType) => {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1) {
+            var _taskMode = this.state.taskMode;
+            _taskMode[i] = !_taskMode[i]
+            this.setState({taskMode: _taskMode})
+        }
+    }
+
    // Fetch the files of the tasks
     fetch() {
         if(this.props.task)this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
-            
     }
     
    componentDidMount(){
@@ -58,7 +81,7 @@ class FileExplorerCore extends Component {
    componentDidUpdate(prevProps, prevState) {
      if (prevProps.task !== this.props.task){
         this.fetch()
-         $('.tooltipped').tooltip({delay:0, html:true});
+        $('.tooltipped').tooltip({delay:0, html:true});
      }
     }
 
@@ -92,91 +115,50 @@ class FileExplorerCore extends Component {
         );
     };
 
-    render(){
-       let KpiFileExplorer;
-       let economicKpiViewer;
-       let socialKpiViewer;
-       let environmentalKpiViewer;
-       let comfortKpiViewer;
-       let energyKpiViewer;
-       
-       if(this.state.economicTask) economicKpiViewer = this.renderKPIsOfTask(this.state.economicTask);
-       if(this.state.energyTask) energyKpiViewer = this.renderKPIsOfTask(this.state.energyTask);
-       if(this.state.socialTask) socialKpiViewer = this.renderKPIsOfTask(this.state.socialTask);
-       if(this.state.environmentalTask) environmentalKpiViewer = this.renderKPIsOfTask(this.state.environmentalTask);
-       if(this.state.comfortTask) comfortKpiViewer = this.renderKPIsOfTask(this.state.comfortTask);
+    renderKpiViewer(_task, _taskType, _caption) {
+        if (_task) {
+            var kpiViewer = this.renderKPIsOfTask(_task);
 
+            return (
+                <div className='col s12'>
+                    <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                        <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>{_caption}</h6>
+                        <button className="btn-flat center col s2 waves-effect waves-light" 
+                            onClick={ (e) => { e.preventDefault(); this.switchTaskMode(_taskType); }}>
+                            <i className="material-icons rezbuild-text">{ this.getTaskMode(_taskType)?"expand_less":"expand_more" }</i>
+                        </button>
+                        <div>
+                            <EditDoneTaskForm task={_task} event={this.state.cancelForm} cancel={() => {}} />
+                        </div>
+                        <a className="modal-trigger" href={ "#modal_editdonetask_" + _task._id} 
+                            onClick = { 
+                                (e) => {
+                                    e.preventDefault();
+                                    $("#modal_editdonetask_" + _task._id).modal('open');
+                                }
+                            }>
+                            <i className="material-icons rezbuild-text">edit</i>
+                        </a>
+                    </div>
+                    { this.getTaskMode(_taskType)?kpiViewer: '' }
+                </div>
+            );
+        }
+        return '';
+    }
+
+    render(){
+        
         var kpiScores = ComputeVersion.computeScoreOfRelevantTask(this.props.tasks, this.props.task);
            
-        KpiFileExplorer = 
+        var KpiFileExplorer = 
             <div className="col s12">
-                {/*
-                !(this.state.economicTask 
-                || this.state.environmentalTask 
-                || this.state.socialTask 
-                || this.state.energyTask
-                || this.state.comfortTask)?
-                <i className="material-icons rezbuild-text center">block</i>: ''*/
-                }
-                {this.state.economicTask?
-                    <div className='col s12'>
-                    <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>ECONOMIC AND FINANCIAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light" 
-                    onClick={(e) => {e.preventDefault();this.setState({economicMode:!this.state.economicMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.economicMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.economicMode?economicKpiViewer: ''}
-                </div> : ''}
-                {this.state.environmentalTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENVIRONMENTAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({environmentalMode:!this.state.environmentalMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.environmentalMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.environmentalMode?environmentalKpiViewer: ''}
-                </div>:''}
-
-                {this.state.socialTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>SOCIAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({socialMode:!this.state.socialMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.socialMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.socialMode?socialKpiViewer: ''}
-                </div>:''}
-
-                {this.state.energyTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENERGY AND ENVIRONMENTAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({energyMode:!this.state.energyMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.energyMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.energyMode?energyKpiViewer: ''}
-                </div>:''}
-
-                {this.state.comfortTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>COMFORT</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({comfortMode:!this.state.comfortMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.comfortMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.comfortMode?comfortKpiViewer: ''}
-                </div> : ''}
+                { this.renderKpiViewer(this.state.economicTask, "economic", "ECONOMIC AND FINANCIAL") }
+                { this.renderKpiViewer(this.state.socialTask, "social", "SOCIAL") }
+                { this.renderKpiViewer(this.state.energyTask, "energy", "ENERGY AND ENVIRONMENTAL") }
+                { this.renderKpiViewer(this.state.comfortTask, "comfort", "COMFORT") }
             </div>;
+
         return (
          <div className="section white white-text z-depth-1" style={{paddingTop:0}}>
              <div className= "row" style={{marginBottom:0}}>
