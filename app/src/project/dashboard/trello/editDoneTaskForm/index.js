@@ -135,6 +135,18 @@ class EditDoneTaskFormCore extends Component {
         this.props.cancel()
         $("#" + this.componentId).modal('close');
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.task !== this.props.task){
+            this.componentId = "modal_editdonetask_"+this.props.task._id;
+            this.formId = "modal_editdonetask_form_"+this.props.task._id;
+            this.setState({
+                error : false,
+                pending : false,
+                progress : 0
+            });
+        }
+    }
     
     componentDidMount() {
         this.props.uploader.addEventListener("start", (event) => {

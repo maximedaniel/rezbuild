@@ -61,9 +61,11 @@ class FileExplorerCore extends Component {
         }
     }
 
-   // Fetch the files of the tasks
+   // Fetch the tasks by category
     fetch() {
-        if(this.props.task)this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
+        if(this.props.task)
+            this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
+            this.setState({taskMode : [false,false,false,false]});
     }
     
    componentDidMount(){
