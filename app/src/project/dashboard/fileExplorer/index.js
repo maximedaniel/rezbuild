@@ -27,7 +27,8 @@ class FileExplorerCore extends Component {
             socialTask : null,
             energyTask : null,
             comfortTask : null,
-            taskMode : [false,false,false,false],
+            expandedTasks : [false,false,false,false],
+            editedTasks : [false,false,false,false],
             error: false,
             pending: false
         };
@@ -45,27 +46,43 @@ class FileExplorerCore extends Component {
         }
     }
 
-    getTaskMode = (taskType) => {
+    getTaskExpanded = (taskType) => {
         var i = this.getTaskIndex(taskType);
         if (i != -1)
-            return this.state.taskMode[i];
+            return this.state.expandedTasks[i];
         return false;
     }
 
-    switchTaskMode = (taskType) => {
+    switchTaskExpanded = (taskType) => {
         var i = this.getTaskIndex(taskType);
         if (i != -1) {
-            var _taskMode = this.state.taskMode;
-            _taskMode[i] = !_taskMode[i]
-            this.setState({taskMode: _taskMode})
+            var _expandedTasks = this.state.expandedTasks;
+            _expandedTasks[i] = !_expandedTasks[i]
+            this.setState({expandedTasks: _expandedTasks})
         }
     }
 
-   // Fetch the tasks by category
+    getTaskEdited = (taskType) => {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1)
+            return this.state.editedTasks[i];
+        return false;
+    }
+
+    editTask(taskType, edit) {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1) {
+            var _editedTasks = this.state.editedTasks;
+            _editedTasks[i] = edit;
+            this.setState({editedTasks: _editedTasks})
+        }
+    }
+
+    // Fetch the tasks by category
     fetch() {
         if(this.props.task)
             this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
-            this.setState({taskMode : [false,false,false,false]});
+            this.setState({expandedTasks : [false,false,false,false], editedTasks : [false,false,false,false]});
     }
     
    componentDidMount(){
@@ -126,23 +143,17 @@ class FileExplorerCore extends Component {
                     <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
                         <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>{_caption}</h6>
                         <button className="btn-flat center col s2 waves-effect waves-light" 
-                            onClick={ (e) => { e.preventDefault(); this.switchTaskMode(_taskType); }}>
-                            <i className="material-icons rezbuild-text">{ this.getTaskMode(_taskType)?"expand_less":"expand_more" }</i>
+                            onClick={ (e) => { e.preventDefault(); this.switchTaskExpanded(_taskType); }}>
+                            <i className="material-icons rezbuild-text">{ this.getTaskExpanded(_taskType)?"expand_less":"expand_more" }</i>
                         </button>
                         <div>
-                            <EditDoneTaskForm task={_task} event={this.state.cancelForm} cancel={() => {}} />
+                            <EditDoneTaskForm task={_task} show={this.getTaskEdited(_taskType)} onClose={(e) => { e.preventDefault(); this.editTask(_taskType, false); }} />
                         </div>
-                        <a className="modal-trigger" href={ "#modal_editdonetask_" + _task._id} 
-                            onClick = { 
-                                (e) => {
-                                    e.preventDefault();
-                                    $("#modal_editdonetask_" + _task._id).modal('open');
-                                }
-                            }>
+                        <a className="modal-trigger" href="" onClick = { (e) => { e.preventDefault(); this.editTask(_taskType, true); }}>
                             <i className="material-icons rezbuild-text">edit</i>
                         </a>
                     </div>
-                    { this.getTaskMode(_taskType)?kpiViewer: '' }
+                    { this.getTaskExpanded(_taskType)?kpiViewer: '' }
                 </div>
             );
         }

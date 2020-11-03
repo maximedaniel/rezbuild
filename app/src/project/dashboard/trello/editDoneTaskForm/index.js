@@ -6,7 +6,6 @@
 import React, { Component } from 'react'
 import common from 'common'
 import SocketContext from '../../../../SocketContext'
-import "../../../../../node_modules/react-datepicker/dist/react-datepicker.css"
 import sanitize from 'sanitize-filename'
 
 var $ = window.$
@@ -30,7 +29,7 @@ class EditDoneTaskFormCore extends Component {
 
     generateFormLine = (task, name, index) => {
         var minValue, maxValue;
-        var idv = "values_" + task._id + "_" + name;
+        var idv = "values_" + task._id + "_" + index;
         switch(common.ACTIONS[task.action].typeValues[index]) {
             case Number:
                 minValue = common.ACTIONS[task.action].minValues[index];
@@ -63,11 +62,11 @@ class EditDoneTaskFormCore extends Component {
                     <h6 className="grey-text">{name}</h6>
                     <div className="btn rezbuild col s1">
                     <i className="material-icons white-text">cloud_upload</i>
-                    <input required type="file" id={idv} key={idv} ref={idv} defaultValue=""
+                    <input required type="file" id={idv} key={idv} ref={idv} defaultValue={task.files[index]}
                         accept={task.formats[index]}/>
                     </div>
                     <div className="file-path-wrapper col s11">
-                        <input className="file-path validate" type="text" placeholder={"Upload " + name} />
+                        <input className="file-path validate" type="text" placeholder={task.files[index] ? task.files[index] : "Upload attached file"} />
                     </div>
                 </div>
                  );
@@ -92,16 +91,16 @@ class EditDoneTaskFormCore extends Component {
             uploadedAttachedFiles = [];
 
             this.props.task.names.forEach((name, index) => {
-                var valuesRefName = "values_"+this.props.task._id+'_'+name;
-                var filesRefName = "files_"+this.props.task._id+'_'+name;
+                var valuesRefName = "values_"+this.props.task._id+'_'+index;
+                var filesRefName = "files_"+this.props.task._id+'_'+index;
 
                 update.names.push(name)
                 
                 var value = (this.refs[valuesRefName].files)?this.refs[valuesRefName].files[0].name:this.refs[valuesRefName].value
                 update.values.push(value)
                 
-                var file = ""
-                if(this.refs[filesRefName].files.length)  {
+                var file = this.props.task.files[index]
+                if (this.refs[filesRefName].files.length)  {
                     allAttachedFiles.push(this.refs[filesRefName].files[0])
                     file = sanitize(this.refs[filesRefName].files[0].name)
                 }
@@ -118,8 +117,7 @@ class EditDoneTaskFormCore extends Component {
                 if(res.tasks){
                     this.setState({pending:false, error: false}, () => {
                         if(uploadedAttachedFiles.length >= allAttachedFiles.length){
-                            $("#" + this.formId).trigger('reset');
-                            $("#" + this.componentId).modal('close');
+                            this.close();
                             this.props.socket.emit('/api/task/done');
                         }
                     })
@@ -131,9 +129,45 @@ class EditDoneTaskFormCore extends Component {
         })
     }
 
-    cancel() {
-        this.props.cancel()
+    removeFileUploadListeners() {
+        this.props.uploader.removeEventListener("start");
+        this.props.uploader.removeEventListener("progress");
+        this.props.uploader.removeEventListener("complete");
+    }
+
+    onClose = (e) => {
+        this.props.onClose && this.props.onClose(e);
+    }
+
+    close() {
+        $("#" + this.formId).trigger('reset');
+        $("#" + this.componentId).scrollTop(0);
         $("#" + this.componentId).modal('close');
+    }
+
+    cancel() {
+        this.close()
+    }
+
+    addFileUploadListeners() {
+        this.props.uploader.addEventListener("start", (event) => {
+            event.file.meta.taskId = this.props.task._id;
+            this.setState({progress: 0}, () => {
+            })
+        });
+        this.props.uploader.addEventListener("progress", (event) => {
+            this.setState({progress: (event.bytesLoaded / event.file.size * 100).toFixed(0)}, () => {
+            })
+        });
+        this.props.uploader.addEventListener("complete", (event) => {
+            this.setState({progress: 0}, () => {
+                uploadedAttachedFiles.push(event.file);
+                if(uploadedAttachedFiles.length >= allAttachedFiles.length){
+                    this.close();
+                    this.props.socket.emit('/api/task/done');
+                }
+            })
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -146,38 +180,23 @@ class EditDoneTaskFormCore extends Component {
                 progress : 0
             });
         }
+        if (prevProps.show != this.props.show) {
+            if (this.props.show) {
+                this.addFileUploadListeners();
+                $("#" + this.componentId).modal('open');
+            } else {
+                this.removeFileUploadListeners();
+            }
+        }
     }
     
     componentDidMount() {
-        this.props.uploader.addEventListener("start", (event) => {
-            event.file.meta.taskId = this.props.task._id;
-            this.setState({progress: 0}, () => {
-            })
-        });
-    
         $(document).ready(() => {
             $("#" + this.componentId).modal({dismissible: false});
-            this.props.uploader.addEventListener("progress", (event) => {
-                this.setState({progress: (event.bytesLoaded / event.file.size * 100).toFixed(0)}, () => {
-                })
-            });
-            this.props.uploader.addEventListener("complete", (event) => {
-                this.setState({progress: 0}, () => {
-                    uploadedAttachedFiles.push(event.file);
-                    if(uploadedAttachedFiles.length >= allAttachedFiles.length){
-                        $("#" + this.formId).trigger('reset');
-                        $("#" + this.componentId).modal('close');
-                        this.props.socket.emit('/api/task/done');
-                    }
-                })
-            });
         })
     }
 
     componentWillUnmount(){
-        this.props.uploader.removeEventListener("start");
-        this.props.uploader.removeEventListener("progress");
-        this.props.uploader.removeEventListener("complete");
     }
 
     render() {
@@ -197,14 +216,14 @@ class EditDoneTaskFormCore extends Component {
                             <div className="btn rezbuild col s1">
                                 <i className="material-icons white-text">cloud_upload</i>
                                 <input type="file"
-                                    id={"files_" +this.props.task._id+'_'+name} 
-                                    key={"files_" +this.props.task._id+'_'+name} 
-                                    ref= {'files_'+this.props.task._id+'_'+name} 
+                                    id={"files_" +this.props.task._id+'_'+index} 
+                                    key={"files_" +this.props.task._id+'_'+index} 
+                                    ref= {'files_'+this.props.task._id+'_'+index} 
                                     defaultValue=""
                                 />
                             </div>
                             <div className="file-path-wrapper col s11">
-                                <input className="file-path validate" type="text" placeholder="Upload attached file"/>
+                                <input className="file-path validate" type="text" placeholder={this.props.task.files[index] ? this.props.task.files[index] : "Upload attached file"}/>
                             </div>
                         </div>
                     </div>

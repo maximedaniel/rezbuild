@@ -19,14 +19,14 @@ module.exports = (io, client, uploader) => {
    uploader.on("saved", (event) => {
         if (event.error) console.info('[/api/file/save] Receiving file with error ' + event.error);
         else console.info('[/api/file/save] Receiving file ' + event.file.name  + ' with state ' + event.file.success);
-        console.info('[/api/file/save] creating directory ' + uploader.dir + event.file.meta.taskId)
+        console.info('[/api/file/save] Creating directory ' + uploader.dir + event.file.meta.taskId)
         fs.mkdir(uploader.dir+'/'+event.file.meta.taskId, { recursive: true }, (err) => {
-            if (err)  console.error('[/api/file/save] ' + err);
-          });
+            if (err) console.error('[/api/file/save] ' + err);
+        });
         var newFilename = sanitize(event.file.name);
-        console.info('[/api/file/save] sanitizing and renamin file ' + uploader.dir + event.file.name + ' into ' + uploader.dir+event.file.meta.taskId + '/' + newFilename)
+        console.info('[/api/file/save] Sanitizing and renaming file ' + uploader.dir + event.file.name + ' into ' + uploader.dir+event.file.meta.taskId + '/' + newFilename)
         fs.rename(uploader.dir+ '/' + event.file.name, uploader.dir+'/'+event.file.meta.taskId + '/' + newFilename, function(err) {
-            if ( err ) console.error('[/api/file/save] ' + err);
+            if (err) console.error('[/api/file/save] ' + err);
         });
    });
    /**
