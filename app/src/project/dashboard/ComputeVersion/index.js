@@ -4,7 +4,7 @@
  * @description Define a set of static functions for version graph exploration
  */
 //import {mean} from 'mathjs'
-//import moment from 'moment'
+import moment from 'moment'
 import common from 'common'
 
 class ComputeVersion {
@@ -149,18 +149,17 @@ class ComputeVersion {
         static computeScoreOfRelevantTask(tasks, ...taskList) {
             var data = [];
             var economicDatum = {
-                //id: task._id,
-                //name: task.name + ' (' + moment(task.date).format('LLL') + ')', 
-                category: 'ECONOMIC_AND_FINANCIAL',
+                parentTask: new Map(),
+                category: 'ECONOMIC AND FINANCIAL',
                 data: []
             }
             var energyDatum = {
-                //id: task._id,
-               // name: task.name + ' (' + moment(task.date).format('LLL') + ')', 
-                category: 'ENERGY_AND_ENVIRONMENTAL',
+                parentTask : new Map(),
+                category: 'ENERGY AND ENVIRONMENTAL',
                 data: []
             }
             taskList.forEach(task => {
+                let taskFullname = task.name + ' (' + moment(task.date).format('LLL') + ')';
                 var state = ComputeVersion.fetchRelevantTasks(task, tasks);
                 if(state.economicTask){
                     for (let i = 0; i < state.economicTask.names.length; i++){
@@ -181,6 +180,7 @@ class ComputeVersion {
                             }
                         }
                     }
+                    economicDatum.parentTask.set(task._id, taskFullname);
                 }
                 if(state.energyTask){
                     for (let i = 0; i < state.energyTask.names.length; i++){
@@ -201,6 +201,7 @@ class ComputeVersion {
                             }
                         }
                     }
+                    energyDatum.parentTask.set(task._id, taskFullname);
                 }
             } );
             data.push(economicDatum);

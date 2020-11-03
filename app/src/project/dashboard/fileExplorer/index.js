@@ -203,9 +203,10 @@ class FileExplorerCore extends Component {
                                         <div>
                                         {(kpiScore.data && kpiScore.data.length >0)?<h6 className="rezbuild-text col s12 center-align"  style={{padding:0}}>{kpiScore.category} SCORE</h6>:''}
                                         <RadarRechartComponent 
-                                            key={kpiScore.id + kpiScore.category}
+                                            // key={kpiScore.id + kpiScore.category}
                                             highlightedTask = {this.props.task} 
                                             data={kpiScore.data}
+                                            parentTask={kpiScore.parentTask}
                                             parentWidth={parent.width}
                                             parentTop={parent.top}
                                             parentLeft={parent.left}

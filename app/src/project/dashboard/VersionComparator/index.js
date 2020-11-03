@@ -163,6 +163,7 @@ class VersionComparatorCore extends Component {
                                             key={datum.category+'-'+new Date().getTime()}
                                             highlightedTask = {this.state.highlightedTask} 
                                             data={datum.data}
+                                            parentTask={datum.parentTask}
                                             parentWidth={parent.width}
                                             parentTop={parent.top}
                                             parentLeft={parent.left}
