@@ -5,7 +5,7 @@
  * @description Create the KPIs radar rechart part of the dashboard
  */
 import React, { Component} from 'react';
-import {Radar,  RadarChart, PolarGrid, PolarAngleAxis, LabelList, PolarRadiusAxis} from 'recharts';
+import {Radar,  RadarChart, PolarGrid, PolarAngleAxis, LabelList, Legend, PolarRadiusAxis} from 'recharts';
 class RadarRechartComponent extends Component {
   render() {
     if(this.props.data.length === 0) return <div/>;
@@ -13,7 +13,8 @@ class RadarRechartComponent extends Component {
     let maxMark = 1;
     let height = 300;
     let outerRadius = Math.round(height/3.);
-    let seriesID = Object.keys(this.props.data[0]).filter(key => key!=='indicator')
+    let seriesID = Object.keys(this.props.data[0]).filter(key => key!=='indicator');
+    let colors = ["#F7921E", "#B9813F", "#A15B0A", "#FBAE56", "#FBC382"];
     return (
                 <RadarChart  
                   outerRadius={outerRadius}
@@ -23,24 +24,23 @@ class RadarRechartComponent extends Component {
                   margin={{ top: 0, right: 5, bottom: 0, left: 5}}
                   >
                   <PolarGrid />
-                  <PolarAngleAxis dataKey="indicator" fontSize= "10px" 
-                                    position="center" />
+                  <PolarAngleAxis dataKey="indicator" fontSize= "10px" position="center" />
                   <PolarRadiusAxis angle={90} domain={[minMark, maxMark]} fontSize= "10px"/>
                   {
-                    seriesID.map( serieID => 
+                    seriesID.map( (serieID, index) => 
                             <Radar isAnimationActive={false}
-                                  name={serieID}
+                                  name={this.props.parentTask.get(serieID)}
                                   dataKey={serieID} 
-                                  stroke="#f7931e" 
+                                  stroke={colors[index%colors.length]} 
                                   strokeWidth= {2}
-                                  fill="#f7931e" 
-                                  fillOpacity={(this.props.highlightedTask._id === serieID)?0.6:0.3} 
-                                  strokeOpacity={(this.props.highlightedTask._id === serieID)?1:0.5}
+                                  fill={colors[index%colors.length]} 
+                                  fillOpacity={0.6}
+                                  strokeOpacity={1}
                                   fontSize= "10px"
-                                  dot={{fill:"white", stroke: "#f7931e", strokeWidth: 2, fillOpacity:(this.props.highlightedTask._id === serieID)?1:0.5 }}
+                                  dot={{fill:"white", stroke: colors[index%colors.length], strokeWidth: 2, fillOpacity:1 }}
                                   key={serieID}
                               >
-                                  <LabelList  
+                                  {/* <LabelList  
                                    isAnimationActive={false}
                                     dataKey={serieID} 
                                     position="top"  
@@ -55,10 +55,11 @@ class RadarRechartComponent extends Component {
                                     fontWeight = "bold"
                                     strokeOpacity={(this.props.highlightedTask._id === serieID)?0.6:0.3} 
                                     fillOpacity={(this.props.highlightedTask._id === serieID)?1:0.5}
-                                  />
+                                  /> */}
                           </Radar>
                       )
                   }
+                  { (seriesID.length > 1) ? <Legend /> : '' }
                 </RadarChart>
     );
   }
