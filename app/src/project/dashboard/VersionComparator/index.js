@@ -136,7 +136,7 @@ class VersionComparatorCore extends Component {
                                                 </h6>
                                                 <br/>
                                                 <h6 className="white-text col s12" style={{fontSize:'10px', marginTop:'0.1rem'}}>
-                                                    {moment(selectedTask.date).format('LLL')}
+                                                    {moment(selectedTask.date).format('lll')}
                                                 </h6>
                                             </div>
                                             <div className='col s12 center white' style={{padding:0}}>
@@ -162,8 +162,7 @@ class VersionComparatorCore extends Component {
                                         <RadarRechartComponent 
                                             key={datum.category+'-'+new Date().getTime()}
                                             highlightedTask = {this.state.highlightedTask} 
-                                            data={datum.data}
-                                            parentTask={datum.parentTask}
+                                            data={datum}
                                             parentWidth={parent.width}
                                             parentTop={parent.top}
                                             parentLeft={parent.left}
@@ -177,23 +176,6 @@ class VersionComparatorCore extends Component {
                                 )
                             : ''
                             }
-                           {/* <ParentSize>
-                                {
-                                    parent => (
-                                        <RadarRechartComponent
-                                            key={'radar-rechart-'+new Date().getTime()}
-                                            highlightedTask = {this.state.highlightedTask}
-                                            data={this.state.data}
-                                            parentWidth={parent.width}
-                                            parentHeight={parent.height}
-                                            parentTop={parent.top}
-                                            parentLeft={parent.left}
-                                            parentRef={parent.ref}
-                                            resizeParent={parent.resize}
-                                        />
-                                    )
-                                }
-                            </ParentSize> */}
                         </div>
                      </div>
              </div>

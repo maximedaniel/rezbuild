@@ -147,66 +147,73 @@ class ComputeVersion {
             }
         }
         static computeScoreOfRelevantTask(tasks, ...taskList) {
-            var data = [];
             var economicDatum = {
-                parentTask: new Map(),
                 category: 'ECONOMIC AND FINANCIAL',
-                data: []
+                taskNames: [],
+                normData: [],
+                realData: []
             }
             var energyDatum = {
-                parentTask : new Map(),
                 category: 'ENERGY AND ENVIRONMENTAL',
-                data: []
+                taskNames: [],
+                normData: [],
+                realData: []
             }
             taskList.forEach(task => {
-                let taskFullname = task.name + ' (' + moment(task.date).format('LLL') + ')';
+                let taskFullname = task.name + ' (' + moment(task.date).format('lll') + ')';
                 var state = ComputeVersion.fetchRelevantTasks(task, tasks);
-                if(state.economicTask){
+                if (state.economicTask){
+                    economicDatum.taskNames.push({ taskId: task._id, taskFullname: taskFullname });
                     for (let i = 0; i < state.economicTask.names.length; i++){
-                        if(common.ACTIONS[state.economicTask.action].priorities[i]){
-                            let indicator = state.economicTask.names[i];
-                            let minValue = common.ACTIONS[state.economicTask.action].minValues[i];
-                            let maxValue = common.ACTIONS[state.economicTask.action].maxValues[i];
-                            let currValue = state.economicTask.values[i];
-                            let score = (currValue-minValue) / (maxValue-minValue);
-                            let datum = {indicator:indicator, [task._id]:score.toFixed(2)}
-                            // look for indicator
-                            if(economicDatum.data.filter(datum => datum.indicator === indicator).length > 0){
-                                economicDatum.data = economicDatum.data.map(prevDatum =>
-                                    (prevDatum.indicator === datum.indicator)? {...prevDatum, ...datum}: prevDatum
-                                );
+                        if (common.ACTIONS[state.economicTask.action].priorities[i]){
+                            let minValue = Number(common.ACTIONS[state.economicTask.action].minValues[i]);
+                            let maxValue = Number(common.ACTIONS[state.economicTask.action].maxValues[i]);
+                            let realValue = Number(state.economicTask.values[i]);
+                            let normValue = (realValue-minValue) / (maxValue-minValue);
+                            let indicator = state.economicTask.names[i].concat(", ", String(minValue), "-", String(maxValue), " [", state.economicTask.formats[i], "]");
+
+                            let normDatum = {indicator:indicator, [task._id]:normValue.toFixed(2)}
+                            let realDatum = {indicator:indicator, [task._id]:realValue.toFixed(2)}
+
+                            if(economicDatum.normData.filter(x => x.indicator === indicator).length > 0){
+                                economicDatum.normData = economicDatum.normData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...normDatum}: prevDatum);
+                                economicDatum.realData = economicDatum.realData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...realDatum}: prevDatum);
                             } else {
-                                economicDatum.data.push(datum);
+                                economicDatum.normData.push(normDatum);
+                                economicDatum.realData.push(realDatum);
                             }
                         }
                     }
-                    economicDatum.parentTask.set(task._id, taskFullname);
                 }
                 if(state.energyTask){
+                    energyDatum.taskNames.push({ taskId: task._id, taskFullname: taskFullname });
                     for (let i = 0; i < state.energyTask.names.length; i++){
-                        if(common.ACTIONS[state.energyTask.action].priorities[i]){
-                            let indicator = state.energyTask.names[i];
-                            let minValue = common.ACTIONS[state.energyTask.action].minValues[i];
-                            let maxValue = common.ACTIONS[state.energyTask.action].maxValues[i];
-                            let currValue = state.energyTask.values[i];
-                            let score = (currValue-minValue) / (maxValue-minValue);
-                            let datum = {indicator:indicator, [task._id]:score.toFixed(2)}
-                            // look for indicator
-                            if(energyDatum.data.filter(datum => datum.indicator === indicator).length > 0){
-                                energyDatum.data = energyDatum.data.map(prevDatum =>
-                                    (prevDatum.indicator === datum.indicator)? {...prevDatum, ...datum}: prevDatum
-                                );
+                        if (common.ACTIONS[state.energyTask.action].priorities[i]){
+                            let minValue = Number(common.ACTIONS[state.energyTask.action].minValues[i]);
+                            let maxValue = Number(common.ACTIONS[state.energyTask.action].maxValues[i]);
+                            let realValue = Number(state.energyTask.values[i]);
+                            let normValue = (realValue-minValue) / (maxValue-minValue);
+                            let indicator = state.energyTask.names[i].concat(", ", String(minValue), "-", String(maxValue), " [", state.energyTask.formats[i], "]");
+
+                            let normDatum = {indicator:indicator, [task._id]:normValue.toFixed(2)}
+                            let realDatum = {indicator:indicator, [task._id]:realValue.toFixed(2)}
+                            
+                            if (energyDatum.normData.filter(x => x.indicator === indicator).length > 0){
+                                energyDatum.normData = energyDatum.normData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...normDatum}: prevDatum);
+                                energyDatum.realData = energyDatum.realData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...realDatum}: prevDatum);
                             } else {
-                                energyDatum.data.push(datum);
+                                energyDatum.normData.push(normDatum);
+                                energyDatum.realData.push(realDatum);
                             }
                         }
                     }
-                    energyDatum.parentTask.set(task._id, taskFullname);
                 }
             } );
-            data.push(economicDatum);
-            data.push(energyDatum);
-            return data;
+            return [economicDatum, energyDatum];
         }
 } 
 export default ComputeVersion;

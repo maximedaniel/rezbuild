@@ -181,7 +181,7 @@ class FileExplorerCore extends Component {
                         </h6>
                         <br/>
                         <h6 className="white-text col s12" style={{fontSize:'10px', marginTop:'0.1rem'}}>
-                            {moment(this.props.task.date).format('LLL')}
+                            {moment(this.props.task.date).format('lll')}
                         </h6>
                     </div>
                      <div className="col s12 white grey-text">
@@ -201,12 +201,11 @@ class FileExplorerCore extends Component {
                                 {
                                     parent => (
                                         <div>
-                                        {(kpiScore.data && kpiScore.data.length >0)?<h6 className="rezbuild-text col s12 center-align"  style={{padding:0}}>{kpiScore.category} SCORE</h6>:''}
+                                        {(kpiScore.normData && kpiScore.normData.length >0)?<h6 className="rezbuild-text col s12 center-align"  style={{padding:0}}>{kpiScore.category} SCORE</h6>:''}
                                         <RadarRechartComponent 
                                             // key={kpiScore.id + kpiScore.category}
                                             highlightedTask = {this.props.task} 
-                                            data={kpiScore.data}
-                                            parentTask={kpiScore.parentTask}
+                                            data={kpiScore}
                                             parentWidth={parent.width}
                                             parentTop={parent.top}
                                             parentLeft={parent.left}
