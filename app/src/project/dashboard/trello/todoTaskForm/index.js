@@ -69,7 +69,7 @@ class TodoTaskFormCore extends Component {
                     if(create.user){
                       this.props.socket.emit('/api/user/get', {_id: create.user}, res => {
                         if(res.users){
-                          this.props.socket.emit('/api/email/send', {user: res.users[0], task: newTask, project: this.props.project}, res => {
+                          this.props.socket.emit('/api/email/todotask', {user: res.users[0], task: newTask, project: this.props.project}, res => {
                               /* CLOSE MODAL */
                               this.setState({pending:false, error: false}, () => {
                                 $("#modal_todotask").modal('close')

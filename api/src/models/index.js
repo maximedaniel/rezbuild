@@ -23,4 +23,5 @@ module.exports.User = require('./user');
 module.exports.Project = require('./project');
 module.exports.File = require('./file');
 module.exports.Task = require('./task');
+module.exports.Token = require('./token');
 
