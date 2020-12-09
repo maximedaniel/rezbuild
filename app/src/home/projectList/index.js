@@ -17,7 +17,7 @@ class ProjectListCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {projects : null, error : false, pending : false}
+    this.state = {projects : null, user : null, error : false, pending : false}
   }
 
   // Fetch the projects of the user
@@ -26,13 +26,13 @@ class ProjectListCore extends Component {
         var filter = {users: { "$in" : ["token"] } }
         this.props.socket.emit('/api/project/get', filter, (res) => {
             if (res.projects) {
-                this.setState({projects : res.projects, error : false, pending : false})
+                this.setState({projects : res.projects, user : res.user, error : false, pending : false})
             }
             else {
                 if(res.error){
-                    this.setState({projects : null, error : res.error, pending : false})
+                    this.setState({projects : null, user : null, error : res.error, pending : false})
                 } else {
-                    this.setState({projects : null, error : 'Network error', pending : false})
+                    this.setState({projects : null, user : null, error : 'Network error', pending : false})
                 }
             }
         });
@@ -89,22 +89,30 @@ class ProjectListCore extends Component {
         if (this.state.projects){
             projectListComponent = 
             <div className="col s12">
-              <div className="col s3  l3 rezbuild-text left-align"> <h6>Name</h6> </div>
-              <div className="col s5  l4 rezbuild-text left-align"><h6>Creation Date</h6> </div>
-              <div className="col s4  l5 white-text"><h6>Action</h6> </div>
+              <div className="col s2  l2 rezbuild-text left-align"> <h6>Name</h6> </div>
+              <div className="col s3  l3 rezbuild-text left-align"> <h6>Owner</h6> </div>
+              <div className="col s3  l3 rezbuild-text left-align"><h6>Creation Date</h6> </div>
+              <div className="col s2  l2 rezbuild-text left-align"><h6>&nbsp;</h6> </div>
+              <div className="col s2  l2 rezbuild-text left-align"><h6>&nbsp;</h6> </div>
              {
                 this.state.projects.map((project, index) => {
                     return (
                       <div className="col s12" style={{marginBottom:'1rem', padding:'0'}} key={index}>
-                        <div  className="col s3  l3 left-align">{project.name}</div>
-                        <div  className="col s5  l4 left-align">{new Date(project.date).toString().split('GMT')[0]}</div>
-                        <div  className="col s4  l5 right-align">
+                        <div  className="col s2  l2 left-align">{project.name}</div>
+                        <div  className="col s3  l3 left-align">{project.owner.firstname} {project.owner.lastname}</div>
+                        <div  className="col s3  l3 left-align">{new Date(project.date).toString().split('GMT')[0]}</div>
+                        <div  className="col s2  l2 left-align">
                           <a className="hide-on-large-only btn waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }><i className="material-icons">open_in_browser</i></a>
-                          <a className="hide-on-large-only btn waves-effect waves-light white rezbuild-text modal-trigger" style={{marginLeft:'1rem'}} href={"#modal_removeproject_"+project._id}><i className="material-icons">remove_circle</i></a>
                           <a className="hide-on-med-and-down btn waves-effect waves-light" href="#!" onClick={() => browserHistory.push('/'+project._id) }> Open <i className="material-icons right">open_in_browser</i></a>
-                          <a className="hide-on-med-and-down btn waves-effect waves-light white rezbuild-text modal-trigger" style={{marginLeft:'1rem'}} href={"#modal_removeproject_"+project._id}><i className="material-icons left">remove_circle</i> Remove</a>
-                            <RemoveProjectForm project={project}/>
                         </div>
+                        { (project.owner._id !== this.state.user._id) ?
+                          <div  className="col s2  l2 left-align">
+                            <a className="hide-on-large-only btn waves-effect waves-light white rezbuild-text" href={"#modal_removeproject_"+project._id}><i className="material-icons">remove_circle</i></a>
+                            <a className="hide-on-med-and-down btn waves-effect waves-light white rezbuild-text" href={"#modal_removeproject_"+project._id}><i className="material-icons left">remove_circle</i> Remove</a>
+                          </div>
+                          : ''
+                        }
+                        <RemoveProjectForm project={project}/>
                       </div>);
                 })
               }

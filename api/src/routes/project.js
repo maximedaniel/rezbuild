@@ -7,6 +7,7 @@
 module.exports = (io, client) => {
    // import Project model
    var Project = require('../models').Project
+   var User = require('../models').User
 
    /**
     * @description Route done request and broadcast it
@@ -38,19 +39,21 @@ module.exports = (io, client) => {
    /**
     * @description Route get request
     */
-   client.on('/api/project/get', (filter, res) => {
+    client.on('/api/project/get', (filter, res) => {
         if(client.handshake.session.user) {
             console.info('[/api/project/get] Getting project(s) for user<' + client.handshake.session.user._id + '>')
             filter = JSON.parse(JSON.stringify(filter).split('token').join(client.handshake.session.user._id))
-            Project.find(filter, (error, projects) => {
-                   if(error) {
-                        console.error('[/api/project/get] ' + error.message)
-                       res({error: error.message})
-                   }
-                   else {
-                       res({projects: projects})
-                   }
-            });
+            Project.find(filter)
+                .populate('owner')
+                .exec((error, projects) => {
+                    if(error) {
+                        console.error('[/api/project/get] ' + error.message);
+                        res({error: error.message});
+                    }
+                    else {
+                        res({projects: projects, user: client.handshake.session.user})
+                    }
+                });
         } else {
             console.error('[/api/project/get] User not signed in')
             res({error: 'User not signed in'})
