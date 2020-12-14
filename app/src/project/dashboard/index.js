@@ -18,7 +18,16 @@ class DashboardCore extends Component {
 
   constructor(props){
     super(props);
-    this.state = {compareMode: false, selectedTasks: [], tasks: [], users: [], user:[], error: false, pending: false};
+    this.state = {
+      compareMode: false,
+      selectedTasks: [],
+      tasks: [],
+      users: [],
+      user:[],
+      error: false,
+      pending: false
+    };
+
     this.setTask = this.setTask.bind(this);
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
@@ -285,7 +294,7 @@ class DashboardCore extends Component {
                  <div className="row transparent">
                       <div className="col s12 transparent">
                              <div className="section">
-                                <TeamComponent project={this.props.project} params={this.props.params}/>
+                                <TeamComponent project={this.props.project} user={this.state.user} params={this.props.params}/>
                              </div>
                       </div>
                  </div>

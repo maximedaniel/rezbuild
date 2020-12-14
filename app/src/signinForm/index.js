@@ -52,17 +52,23 @@ class SigninFormCore extends Component {
       if (this.refAction.current.value === SIGNIN_ACTIONS.signin) {
         this.props.socket.emit('/api/signin', window.location.host, this.refEmail.current.value, this.refPassword.current.value, res => {
           if (res.user) {
+            this.setState({error : null, pending : false}, () => { browserHistory.push('/') });
+
             if (this.props.params._id) {
-              var filter = {_id: this.props.params._id}
-              var update = {"$push" : {users : res.user._id}}
-              this.props.socket.emit('/api/project/update', filter, update, res => {
-                if (res.projects) {
-                  this.setState({error : false, pending : false}, () => { browserHistory.push('/') })
+              var req = {
+                filter : {_id: this.props.params._id},
+                update : {"$addToSet" : {usersToVerify : res.user._id}}
+              }
+
+              this.props.socket.emit('/api/project/update', req, resUpdate => {
+                if (!resUpdate.error) {
+                  this.setState({error : "The project's owner should receive an email and approve your membership's request.", pending : false});
                 }
-                if (res.error) {
-                  this.setState({error : res.error, pending : false});
+                else {
+                  this.setState({error : resUpdate.error, pending : false});
                 }
               });
+
             }
             else {
               this.setState({error : null, pending : false}, () => { browserHistory.push('/') });

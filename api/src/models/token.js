@@ -8,8 +8,7 @@ const Schema = mongoose.Schema;
 
 const TOKEN_ACTIONS = Object.freeze({
     confirm_user: 'confirm_user',
-    reset_password: 'reset_password',
-    join_project: 'join_project'
+    reset_password: 'reset_password'
 });
 
 const TokenSchema = new Schema({
