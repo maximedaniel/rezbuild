@@ -45,15 +45,29 @@ class EditDoneTaskFormCore extends Component {
                 </div>)
 
             case Boolean:
-                minValue = common.ACTIONS[task.action].minValues[index];
-                maxValue = common.ACTIONS[task.action].maxValues[index];
                 return (
                 <div className="input-field col s6">
                     <select required id={idv} key={idv} ref={idv} defaultValue={Number(task.values[index])}>
-                        <option  value={Number(minValue)} id={idv}>False</option>
-                        <option  value={Number(maxValue)} id={idv}>True</option>
+                        <option value="0" id={idv}>False</option>
+                        <option value="1" id={idv}>True</option>
                     </select>
-                    <label className="active" htmlFor={idv}>{name} ({minValue}-{maxValue}{task.formats[index]})</label>
+                    <label className="active" htmlFor={idv}>{name}</label>
+                </div>);
+            
+            case Text:
+                return (
+                <div className="input-field col s6">
+                    <input 
+                    required 
+                    id={"values_"+task._id+'_'+name}
+                    key={"values_"+task._id+'_'+name} 
+                    ref={"values_"+task._id+'_'+name}
+                    type="text" 
+                    // step="any" 
+                    // className="validate"  
+                    defaultValue={task.values[index]}
+                    />
+                    <label className="active" htmlFor={"values_"+task._id+'_'+name}>{name} {task.formats[index]}</label>
                 </div>);
 
             case Object:

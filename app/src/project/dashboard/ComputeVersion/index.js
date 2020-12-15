@@ -165,7 +165,7 @@ class ComputeVersion {
                 if (state.economicTask){
                     economicDatum.taskNames.push({ taskId: task._id, taskFullname: taskFullname });
                     for (let i = 0; i < state.economicTask.names.length; i++){
-                        if (common.ACTIONS[state.economicTask.action].priorities[i]){
+                        if (common.ACTIONS[state.economicTask.action].priorities[i] && common.ACTIONS[state.economicTask.action].typeValues[i] === Number){
                             let minValue = Number(common.ACTIONS[state.economicTask.action].minValues[i]);
                             let maxValue = Number(common.ACTIONS[state.economicTask.action].maxValues[i]);
                             let realValue = Number(state.economicTask.values[i]);
@@ -190,7 +190,7 @@ class ComputeVersion {
                 if(state.energyTask){
                     energyDatum.taskNames.push({ taskId: task._id, taskFullname: taskFullname });
                     for (let i = 0; i < state.energyTask.names.length; i++){
-                        if (common.ACTIONS[state.energyTask.action].priorities[i]){
+                        if (common.ACTIONS[state.energyTask.action].priorities[i] && common.ACTIONS[state.energyTask.action].typeValues[i] === Number){
                             let minValue = Number(common.ACTIONS[state.energyTask.action].minValues[i]);
                             let maxValue = Number(common.ACTIONS[state.energyTask.action].maxValues[i]);
                             let realValue = Number(state.energyTask.values[i]);
