@@ -49,6 +49,7 @@ class RadarRechartComponent extends Component {
   render() {
     if(this.props.data.length === 0) return <div/>;
     if(this.props.data.normData.length === 0) return <div/>;
+    if(this.props.parentWidth === 0) return <div/>;
     let tasksID = Object.keys(this.props.data.normData[0]).filter(key => key!=='indicator');
 
     return (
@@ -59,32 +60,32 @@ class RadarRechartComponent extends Component {
         height={this.height}
         margin={{ top: 0, right: 5, bottom: 0, left: 5}}
         fontSize="10px">
-      <PolarGrid />
-      <PolarAngleAxis dataKey="indicator" tick={this.renderIndicatorTick} />
-      <PolarRadiusAxis angle={90} domain={[this.minMark, this.maxMark]} tick={false}/>
-      {
-        tasksID.map( (taskID, index) => 
-          <Radar isAnimationActive={false}
-            name={this.props.data.taskNames.find(x => x.taskId === taskID).taskFullname}
-            dataKey={taskID} 
-            stroke={this.colors[index%this.colors.length]} 
-            strokeWidth= {2}
-            fill={this.colors[index%this.colors.length]} 
-            fillOpacity={0.6}
-            strokeOpacity={1}
-            fontSize= "10px"
-            dot={{fill:"white", stroke: this.colors[index%this.colors.length], strokeWidth: 2, fillOpacity:1 }}
-            key={taskID}
-            // label={(x) => this.props.extradata.find(item => item.taskId === taskID).indicators.find(item => item.indicator === x.name).label}
-          >
-          </Radar>
-        )
-      }
-      <Tooltip formatter={this.tooltipFormatter} />
-      {/* <Tooltip payload={this.replaceTooltipPayload} /> */}
-      {/* <Tooltip content={this.renderTooltip} /> */}
-      { (tasksID.length > 1) ? <Legend verticalAlign="bottom" verticalAnchor="start" fontSize="10px" margin={{ top: 10, right: 0, left: 0, bottom: 10 }} /> : '' }
-    </RadarChart>
+        <PolarGrid />
+        <PolarAngleAxis dataKey="indicator" tick={this.renderIndicatorTick} />
+        <PolarRadiusAxis angle={90} domain={[this.minMark, this.maxMark]} tick={false}/>
+        {
+          tasksID.map( (taskID, index) => 
+            <Radar isAnimationActive={false}
+              name={this.props.data.taskNames.find(x => x.taskId === taskID).taskFullname}
+              dataKey={taskID} 
+              stroke={this.colors[index%this.colors.length]} 
+              strokeWidth= {2}
+              fill={this.colors[index%this.colors.length]} 
+              fillOpacity={0.6}
+              strokeOpacity={1}
+              fontSize= "10px"
+              dot={{fill:"white", stroke: this.colors[index%this.colors.length], strokeWidth: 2, fillOpacity:1 }}
+              key={taskID}
+              // label={(x) => this.props.extradata.find(item => item.taskId === taskID).indicators.find(item => item.indicator === x.name).label}
+            >
+            </Radar>
+          )
+        }
+        <Tooltip formatter={this.tooltipFormatter} />
+        {/* <Tooltip payload={this.replaceTooltipPayload} /> */}
+        {/* <Tooltip content={this.renderTooltip} /> */}
+        { (tasksID.length > 1) ? <Legend verticalAlign="bottom" verticalAnchor="start" fontSize="10px" margin={{ top: 10, right: 0, left: 0, bottom: 10 }} /> : '' }
+      </RadarChart>
     );
   }
 }
