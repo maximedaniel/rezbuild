@@ -280,7 +280,7 @@ class DashboardCore extends Component {
                                     <p>Description of RankingTechnologyTool...</p>
                                   </div>
                                   <div className="card-action">
-                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="http://rezbuild-sorter.herokuapp.com">OPEN IN NEW TAB <i className="material-icons right">open_in_new</i></a>
+                                    <a className="btn waves-effect waves-light rezbuild white-text" target="_blank" rel="noopener noreferrer" href="https://rezbuild-tamarin.herokuapp.com/">OPEN IN NEW TAB <i className="material-icons right">open_in_new</i></a>
                                   </div>
                                 </div>
                               </div>
