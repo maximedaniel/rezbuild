@@ -17,7 +17,7 @@ import siofu from 'socketio-file-upload'
 import http from 'http'
 
 import logger from './tools/logger'
-import {User, Project, Task} from './models'
+import {User, Project, Task, Token} from './models'
 import {routeAuth, routeUser, routeProject, routeTask, routeFile, routeEmail} from './routes'
 
 // Declare relevant paths
@@ -76,7 +76,6 @@ app.use(
   '/RezBuild/',
   proxy({ target: 'http://35.189.193.44/', changeOrigin: true })
 );
-
 
 /**
  * @description Serve IFC files
@@ -145,8 +144,6 @@ app.use(session);
 io.set('origins',  '*:*');
 io.use(expressSocketIOSession(session));
 
-
-
 // Add websocket file upload to the express app
 app.use(siofu.router)
 
@@ -154,11 +151,12 @@ app.use(siofu.router)
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-         user: 'rezbuildapp@gmail.com',
-         pass: 'estia04081992'
-     }
+        //  user: 'rezbuildapp@gmail.com',
+        //  pass: 'estia04081992'
+         user: 'rezbuild.estia@gmail.com',
+         pass: '?S+K&zcJ.ub4N;1~del|'
+      }
  });
-
 
 // Configure the routes of the websocket broker
 io.on('connection', (client) => {
@@ -166,7 +164,7 @@ io.on('connection', (client) => {
     var uploader = new siofu()
     uploader.dir =  './src/files/'
     uploader.listen(client)
-    routeAuth(io, client)
+    routeAuth(io, client, transporter)
     routeUser(io, client)
     routeProject(io, client)
     routeTask(io, client)

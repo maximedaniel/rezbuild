@@ -10,6 +10,7 @@ var UserSchema = new Schema({
   firstname: {type: String, required: [true, "can't be blank"]},
   lastname: {type: String, required: [true, "can't be blank"]},
   email: {type: String, required: [true, "can't be blank"], index: true, unique: true},
+  isVerified: { type: Boolean, default: false },
   password: {type: String, required: [true, "can't be blank"]},
   roles: {type: [String], required: [true, "can't be blank"]},
   date: {type: Date, default: Date.now},

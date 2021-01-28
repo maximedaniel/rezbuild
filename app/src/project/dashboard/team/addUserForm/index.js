@@ -24,8 +24,9 @@ class AddUserFormCore extends Component {
         var filter = {_id: this.props.project._id }
         this.props.socket.emit('/api/project/get', filter, res => {
             if(res.projects){
-                var filter = {_id: { "$nin" : res.projects[0].users}}
-                this.props.socket.emit('/api/user/get', filter, res => {
+              // var filter = {_id: { "$nin" : [res.projects[0].users, res.projects[0].usersToVerify] }}
+              var filter = {_id: { "$nin" : res.projects[0].users.concat(res.projects[0].usersToVerify) }}
+              this.props.socket.emit('/api/user/get', filter, res => {
                     if(res.users){
                         this.setState({users : res.users, error : false, pending : false}, () =>{
                             var data = {}
@@ -59,30 +60,31 @@ class AddUserFormCore extends Component {
   }
 
   handleAddUser(event){
-   event.preventDefault();
-   if (this.refs.username.value.split('-').length < 2) {
-        this.setState({error : 'unknown user', pending : false});
-
-   } else {
-       this.setState({error : false, pending : true}, () => {
-            var id = this.refs.username.value.split('-')[1].trim();
-           var user = this.state.users.filter((user, index) => {
-                return user._id === id;
-           })[0]
-           var filter = {_id: this.props.params._id}
-           var update = {"$push" : {users : user._id}}
-           this.props.socket.emit('/api/project/update', filter, update, res => {
-                if (res.projects) {
-                    this.setState({error : false, pending : false}, () => {
-                        $('#modal_adduser').modal('close');
-                    })
-                }
-                if (res.error) {
-                    this.setState({error : res.error, pending : false});
-                }
-           });
-       })
-   }
+    event.preventDefault();
+    if (this.refs.username.value.split('-').length < 2) {
+      this.setState({error : 'unknown user', pending : false});
+    } else {
+      this.setState({error : false, pending : true}, () => {
+        var id = this.refs.username.value.split('-')[1].trim();
+        var user = this.state.users.filter((user, index) => {
+          return user._id === id;
+        })[0]
+        var req = {
+          filter : {_id: this.props.params._id},
+          update : {"$addToSet" : {users : user._id}}
+        }
+        this.props.socket.emit('/api/project/update', req, res => {
+          if (res.project) {
+            this.setState({error : false, pending : false}, () => {
+              $('#modal_adduser').modal('close');
+            })
+          }
+          if (res.error) {
+            this.setState({error : res.error, pending : false});
+          }
+        });
+      })
+    }
   };
 
   render() {
@@ -128,7 +130,7 @@ class AddUserFormCore extends Component {
     return (
     <div id="modal_adduser" className="modal">
         <div className="rezbuild center" style={{marginBottom:'0'}}>
-            <h4 className="white-text" style={{lineHeight:'150%'}}>Invite user</h4>
+            <h4 className="white-text" style={{lineHeight:'150%'}}>Add collaborator to project</h4>
         </div>
        <div className="modal-content">
           <form className="col s12" onSubmit={this.handleAddUser} autoComplete="off" lang="en">

@@ -48,9 +48,6 @@ class DoneTaskFormCore extends Component {
                     <label className="active" htmlFor={"values_"+task._id+'_'+name}>{name} ({minValue}-{maxValue}{task.formats[index]})</label>
                 </div>)
             case Boolean:
-                minValue = common.ACTIONS[task.action].minValues[index];
-                maxValue = common.ACTIONS[task.action].maxValues[index];
-                
                 return (
                 <div className="input-field col s6">
                     <select 
@@ -60,10 +57,25 @@ class DoneTaskFormCore extends Component {
                     ref={"values_"+task._id+'_'+name} 
                     defaultValue={Number(task.values[index])}
                     >
-                    <option  value={Number(minValue)} id={"values_"+task._id+'_'+name}>False</option>
-                    <option  value={Number(maxValue)} id={"values_"+task._id+'_'+name}>True</option>
+                    <option  value="0" id={"values_"+task._id+'_'+name}>False</option>
+                    <option  value="1" id={"values_"+task._id+'_'+name}>True</option>
                     </select>
-                    <label className="active" htmlFor={"values_"+task._id+'_'+name}>{name} ({minValue}-{maxValue}{task.formats[index]})</label>
+                    <label className="active" htmlFor={"values_"+task._id+'_'+name}>{name}</label>
+                </div>);
+            case Text:
+                return (
+                <div className="input-field col s6">
+                    <input 
+                    required 
+                    id={"values_"+task._id+'_'+name}
+                    key={"values_"+task._id+'_'+name} 
+                    ref={"values_"+task._id+'_'+name}
+                    type="text" 
+                    // step="any" 
+                    // className="validate"  
+                    defaultValue={task.values[index]}
+                    />
+                    <label className="active" htmlFor={"values_"+task._id+'_'+name}>{name} {task.formats[index]}</label>
                 </div>);
             case Object:
                 return(
@@ -281,7 +293,9 @@ class DoneTaskFormCore extends Component {
                 <form className="col s12" onSubmit={this.submit} id="modal_donetask_form" lang="en">
                     <div className="row">
                         { 
-                            this.props.task.names.map((name, index) => 
+                            this.props.task.names.map((name, index) => {
+                                console.info("DONETASK:" + name);
+                                return (
                                 <div className="row" key={index}>
                                     {this.generateForm(this.props.task, name, index)}
                                     <div className="file-field input-field col s6" style={{marginTop:'0'}}>
@@ -302,7 +316,8 @@ class DoneTaskFormCore extends Component {
                                             </div>
                                     </div>
                                 </div>
-                            )
+                                );
+                            })
                         }
                     </div>
                     { this.state.pending ?

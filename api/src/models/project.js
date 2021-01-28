@@ -85,6 +85,7 @@ var ProjectSchema = new Schema({
     presenceBalcony:{type: Boolean, default: false},
     owner: { type: Schema.Types.ObjectId, ref: 'User' },
     users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    usersToVerify: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     revisions: [{ type: Schema.Types.ObjectId, ref: 'Revision' }]
 });
 

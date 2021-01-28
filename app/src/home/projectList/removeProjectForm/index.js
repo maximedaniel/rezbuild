@@ -27,12 +27,16 @@ class RemoveProjectFormCore extends Component {
 
   // Remove the user from the project
   submit(event){
-   event.preventDefault();
+    event.preventDefault();
     this.setState({error : false, pending : true}, () => {
-       var filter = {_id: this.props.project._id}
-       var update = {"$pull" : {users : "token"}}
-       this.props.socket.emit('/api/project/update', filter, update, res => {
-            if (res.projects) {
+      var req = {
+        filter : {_id: this.props.project._id},
+        update : {
+          "$pull" : {users : "token", usersToVerify : "token"},
+        }
+      }
+       this.props.socket.emit('/api/project/update', req, res => {
+            if (res.project) {
                 this.setState({error : false, pending : false}, () => {
                     $("#modal_removeproject_"+this.props.project._id).modal('close');
                 })
@@ -56,7 +60,7 @@ class RemoveProjectFormCore extends Component {
               <h5 className="rezbuild-text">Do you want to remove <strong style={{fontWeight:'900'}}>{this.props.project.name}</strong> ?</h5>
               </div>
               <div className="input-field col s6 right-align">
-                  <a className="btn waves-effect waves-light" href="#!" onClick={this.submit}><i className="material-icons right">check</i>YES</a>
+                  <a className="btn waves-effect waves-light" href="#!" onClick={this.handleRemoveProject}><i className="material-icons right">check</i>YES</a>
               </div>
               <div className="input-field col s6 left-align">
                   <a className="btn waves-effect waves-light white rezbuild-text" href="#!"  onClick={() => $("#modal_removeproject_"+this.props.project._id).modal('close')}> <i className="material-icons left">clear</i>NO</a>

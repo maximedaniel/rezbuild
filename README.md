@@ -2,9 +2,26 @@
 
 ![DevOps pipeline](doc/flow.jpg)
 
-## Requirements
+## Tools
 
 Visual Studio Code (<https://code.visualstudio.com/>) for development and SourceTree (<https://www.sourcetreeapp.com/>) for source code version management.
+
+## Requirements
+
+Node.js:
+
+- Install [Node Version Manager (nvm) for Windows)(<https://github.com/coreybutler/nvm-windows>)
+- Enter `nvm on` (enable node version manager)
+- Enter `nvm install 10.15.0` (install Node.js v10.15.0)
+- Enter `nvm list` (list all Node.js versions)
+- Enter `nvm use 10.15.0` (set Node.js v10.15.0)
+
+MongoDB:
+
+- Install [MongoDB 4.0.5 for Windows](<https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows>)
+- Install [MongoDB Compass for Windows](<https://www.mongodb.com/try/download/compass>)
+- Open `MongoDB Compass` and connect to `localhost:27017`
+- Create `rezbuild` database
 
 ## Installation
 

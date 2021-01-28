@@ -28,9 +28,9 @@ class ProjectInformationCore extends Component {
            update[key] = value
            }
          );
-         this.props.socket.emit('/api/project/update', filter, update, res => {
-             if (res.projects){
-                this.setState({project : res.projects[0], error : false, pending : false});
+         this.props.socket.emit('/api/project/update', {filter : filter, update : update}, res => {
+             if (res.project){
+                this.setState({project : res.project, error : false, pending : false});
              }
              if (res.error) {
                  this.setState({project : null, error : res.error, pending : false});

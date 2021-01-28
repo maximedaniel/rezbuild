@@ -4,7 +4,7 @@
  * @description Define a set of static functions for version graph exploration
  */
 //import {mean} from 'mathjs'
-//import moment from 'moment'
+import moment from 'moment'
 import common from 'common'
 
 class ComputeVersion {
@@ -32,20 +32,20 @@ class ComputeVersion {
             let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_ASIS')||task:task;
             return {
                 modelTask : refTask,
-                economicalTask :ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ECONOMICAL_ASIS'),
+                economicTask :ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ECON_AND_FIN_ASIS'),
                 socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_SOCIAL_ASIS'),
-                energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENERGICAL_ASIS'),
+                energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENERGY_AND_ENV_ASIS'),
                 comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_COMFORT_ASIS'),
                 error: false, pending: false};
             }
-            else if(task.action.includes('KPI_ECONOMICAL_ASIS')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_ASIS')||task:task;
+            else if(task.action.includes('KPI_ECON_AND_FIN_ASIS')){
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECON_AND_FIN_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    economicalTask :refTask,
+                    economicTask :refTask,
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGY_AND_ENV_ASIS'),
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_ASIS'),
                     error: false, pending: false};
             } 
@@ -54,20 +54,20 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
+                    economicTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECON_AND_FIN_ASIS'),
                     socialTask :refTask, 
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGY_AND_ENV_ASIS'),
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_ASIS'),
                     error: false, pending: false};
             } 
-            else if(task.action.includes('KPI_ENERGICAL_ASIS')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGICAL_ASIS')||task:task;
+            else if(task.action.includes('KPI_ENERGY_AND_ENV_ASIS')){
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGY_AND_ENV_ASIS')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
+                    economicTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECON_AND_FIN_ASIS'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),  
-                    energicalTask : refTask,
+                    energyTask : refTask,
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_ASIS'),
                     error: false, pending: false};
             } 
@@ -76,9 +76,9 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_ASIS')
                 return {
                     modelTask : modelTask,
-                    economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_ASIS'),
+                    economicTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECON_AND_FIN_ASIS'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_ASIS'),  
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_ASIS'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGY_AND_ENV_ASIS'),
                     comfortTask : refTask,
                     error: false, pending: false};
             } 
@@ -86,20 +86,20 @@ class ComputeVersion {
                 let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'MODEL_TOBE')||task:task;
                 return {
                     modelTask : refTask,
-                    economicalTask :ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ECONOMICAL_TOBE'),
+                    economicTask :ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ECON_AND_FIN_TOBE'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_SOCIAL_TOBE'),
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENERGICAL_TOBE'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_ENERGY_AND_ENV_TOBE'),
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, refTask._id, 'KPI_COMFORT_TOBE'),
                     error: false, pending: false};
             }
-            else if(task.action.includes('KPI_ECONOMICAL_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECONOMICAL_TOBE')||task:task;
+            else if(task.action.includes('KPI_ECON_AND_FIN_TOBE')){
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ECON_AND_FIN_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    economicalTask :refTask,
+                    economicTask :refTask,
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks,modelTask._id, 'KPI_SOCIAL_TOBE'),
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks,modelTask._id, 'KPI_ENERGICAL_TOBE'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks,modelTask._id, 'KPI_ENERGY_AND_ENV_TOBE'),
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks,modelTask._id, 'KPI_COMFORT_TOBE'),
                     error: false, pending: false};
             } 
@@ -108,20 +108,20 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
+                    economicTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECON_AND_FIN_TOBE'),
                     socialTask :refTask, 
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_TOBE'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGY_AND_ENV_TOBE'),
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_TOBE'),
                     error: false, pending: false};
             } 
-            else if(task.action.includes('KPI_ENERGICAL_TOBE')){
-                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGICAL_TOBE')||task:task;
+            else if(task.action.includes('KPI_ENERGY_AND_ENV_TOBE')){
+                let refTask = (task.lane ==='lane_todo')?ComputeVersion.getFirstParentTaskWithAction(tasks, task._id, 'KPI_ENERGY_AND_ENV_TOBE')||task:task;
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
+                    economicTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECON_AND_FIN_TOBE'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_TOBE'),  
-                    energicalTask : refTask,
+                    energyTask : refTask,
                     comfortTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_COMFORT_TOBE'),
                     error: false, pending: false};
             } 
@@ -130,83 +130,90 @@ class ComputeVersion {
                 let modelTask =  ComputeVersion.getFirstParentTaskWithAction(tasks, refTask._id, 'MODEL_TOBE')
                 return {
                     modelTask : modelTask,
-                    economicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECONOMICAL_TOBE'),
+                    economicTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ECON_AND_FIN_TOBE'),
                     socialTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_SOCIAL_TOBE'),  
-                    energicalTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGICAL_TOBE'),
+                    energyTask : ComputeVersion.getLastChildTaskWithAction(tasks, modelTask._id, 'KPI_ENERGY_TOBE'),
                     comfortTask : refTask,
                     error: false, pending: false};
             } 
             else {
                 return {
                     modelTask : null,
-                    economicalTask :null,
+                    economicTask :null,
                     socialTask : null,
-                    energicalTask : null,
+                    energyTask : null,
                     comfortTask : null,
                     error: false, pending: true};
             }
         }
         static computeScoreOfRelevantTask(tasks, ...taskList) {
-            var data = [];
-            var economicalDatum = {
-                //id: task._id,
-                //name: task.name + ' (' + moment(task.date).format('LLL') + ')', 
-                category: 'ECONOMICAL',
-                data: [],
+            var economicDatum = {
+                category: 'ECONOMIC AND FINANCIAL',
+                taskNames: [],
+                normData: [],
+                realData: []
             }
-            var energicalDatum = {
-                //id: task._id,
-               // name: task.name + ' (' + moment(task.date).format('LLL') + ')', 
-                category: 'ENERGY',
-                data: [],
+            var energyDatum = {
+                category: 'ENERGY AND ENVIRONMENTAL',
+                taskNames: [],
+                normData: [],
+                realData: []
             }
             taskList.forEach(task => {
+                let taskFullname = task.name + ' (' + moment(task.date).format('lll') + ')';
                 var state = ComputeVersion.fetchRelevantTasks(task, tasks);
-                if(state.economicalTask){
-                    for (let i = 0; i < state.economicalTask.names.length; i++){
-                        if(common.ACTIONS[state.economicalTask.action].priorities[i]){
-                            let indicator = state.economicalTask.names[i];
-                            let minValue = common.ACTIONS[state.economicalTask.action].minValues[i];
-                            let maxValue = common.ACTIONS[state.economicalTask.action].maxValues[i];
-                            let currValue = state.economicalTask.values[i];
-                            let score = (currValue-minValue) / (maxValue-minValue);
-                            let datum = {indicator:indicator, [task._id]:score.toFixed(2)}
-                            // look for indicator
-                            if(economicalDatum.data.filter(datum => datum.indicator === indicator).length > 0){
-                                economicalDatum.data = economicalDatum.data.map(prevDatum =>
-                                    (prevDatum.indicator === datum.indicator)? {...prevDatum, ...datum}: prevDatum
-                                );
+                if (state.economicTask){
+                    economicDatum.taskNames.push({ taskId: task._id, taskFullname: taskFullname });
+                    for (let i = 0; i < state.economicTask.names.length; i++){
+                        if (common.ACTIONS[state.economicTask.action].priorities[i] && common.ACTIONS[state.economicTask.action].typeValues[i] === Number){
+                            let minValue = Number(common.ACTIONS[state.economicTask.action].minValues[i]);
+                            let maxValue = Number(common.ACTIONS[state.economicTask.action].maxValues[i]);
+                            let realValue = Number(state.economicTask.values[i]);
+                            let normValue = (realValue-minValue) / (maxValue-minValue);
+                            let indicator = state.economicTask.names[i].concat(", ", String(minValue), "-", String(maxValue), " [", state.economicTask.formats[i], "]");
+
+                            let normDatum = {indicator:indicator, [task._id]:normValue.toFixed(2)}
+                            let realDatum = {indicator:indicator, [task._id]:realValue.toFixed(2)}
+
+                            if(economicDatum.normData.filter(x => x.indicator === indicator).length > 0){
+                                economicDatum.normData = economicDatum.normData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...normDatum}: prevDatum);
+                                economicDatum.realData = economicDatum.realData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...realDatum}: prevDatum);
                             } else {
-                                economicalDatum.data.push(datum);
+                                economicDatum.normData.push(normDatum);
+                                economicDatum.realData.push(realDatum);
                             }
-                            
                         }
                     }
                 }
-                if(state.energicalTask){
-                    for (let i = 0; i < state.energicalTask.names.length; i++){
-                        if(common.ACTIONS[state.energicalTask.action].priorities[i]){
-                            let indicator = state.energicalTask.names[i];
-                            let minValue = common.ACTIONS[state.energicalTask.action].minValues[i];
-                            let maxValue = common.ACTIONS[state.energicalTask.action].maxValues[i];
-                            let currValue = state.energicalTask.values[i];
-                            let score = (currValue-minValue) / (maxValue-minValue);
-                            let datum = {indicator:indicator, [task._id]:score.toFixed(2)}
-                            // look for indicator
-                            if(energicalDatum.data.filter(datum => datum.indicator === indicator).length > 0){
-                                energicalDatum.data = energicalDatum.data.map(prevDatum =>
-                                    (prevDatum.indicator === datum.indicator)? {...prevDatum, ...datum}: prevDatum
-                                );
+                if(state.energyTask){
+                    energyDatum.taskNames.push({ taskId: task._id, taskFullname: taskFullname });
+                    for (let i = 0; i < state.energyTask.names.length; i++){
+                        if (common.ACTIONS[state.energyTask.action].priorities[i] && common.ACTIONS[state.energyTask.action].typeValues[i] === Number){
+                            let minValue = Number(common.ACTIONS[state.energyTask.action].minValues[i]);
+                            let maxValue = Number(common.ACTIONS[state.energyTask.action].maxValues[i]);
+                            let realValue = Number(state.energyTask.values[i]);
+                            let normValue = (realValue-minValue) / (maxValue-minValue);
+                            let indicator = state.energyTask.names[i].concat(", ", String(minValue), "-", String(maxValue), " [", state.energyTask.formats[i], "]");
+
+                            let normDatum = {indicator:indicator, [task._id]:normValue.toFixed(2)}
+                            let realDatum = {indicator:indicator, [task._id]:realValue.toFixed(2)}
+                            
+                            if (energyDatum.normData.filter(x => x.indicator === indicator).length > 0){
+                                energyDatum.normData = energyDatum.normData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...normDatum}: prevDatum);
+                                energyDatum.realData = energyDatum.realData.map(prevDatum =>
+                                    (prevDatum.indicator === indicator)? {...prevDatum, ...realDatum}: prevDatum);
                             } else {
-                                energicalDatum.data.push(datum);
+                                energyDatum.normData.push(normDatum);
+                                energyDatum.realData.push(realDatum);
                             }
                         }
                     }
                 }
             } );
-            data.push(economicalDatum);
-            data.push(energicalDatum);
-            return data;
+            return [economicDatum, energyDatum];
         }
 } 
 export default ComputeVersion;

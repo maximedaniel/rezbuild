@@ -11,36 +11,78 @@ import ComputeVersion from '../ComputeVersion'
 import { ParentSize } from '@vx/responsive'
 import ModelViewerComponent from '../ModelViewer'
 import IndicatorExplorerComponent from '../IndicatorExplorer'
+import EditDoneTaskForm from '../trello/editDoneTaskForm'
+
 var $ = window.$;
 
-
 class FileExplorerCore extends Component {
+
     constructor(props){
         super(props)
         this.state = {
 
             modelTask : null,
             modelMode :false,
-            environmentalTask : null,
-            environmentalMode :false,
-            economicalTask :null,
-            economicalMode :false,
+            economicTask :null,
             socialTask : null,
-            socialMode :false,
-            energicalTask : null,
-            energicalMode :false,
+            energyTask : null,
             comfortTask : null,
-            comfortMode :false,
+            expandedTasks : [false,false,false,false],
+            editedTasks : [false,false,false,false],
             error: false,
             pending: false
         };
         this.renderKPIsOfTask = this.renderKPIsOfTask.bind(this);
+        this.renderKpiViewer = this.renderKpiViewer.bind(this);
     }
-    
-   // Fetch the files of the tasks
+
+    getTaskIndex = (taskType) => {
+        switch (taskType) {
+            case "economic" : return 0;
+            case "social"   : return 1;
+            case "energy"   : return 2;
+            case "comfort"  : return 3;
+            default : return -1;
+        }
+    }
+
+    getTaskExpanded = (taskType) => {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1)
+            return this.state.expandedTasks[i];
+        return false;
+    }
+
+    switchTaskExpanded = (taskType) => {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1) {
+            var _expandedTasks = this.state.expandedTasks;
+            _expandedTasks[i] = !_expandedTasks[i]
+            this.setState({expandedTasks: _expandedTasks})
+        }
+    }
+
+    getTaskEdited = (taskType) => {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1)
+            return this.state.editedTasks[i];
+        return false;
+    }
+
+    editTask(taskType, edit) {
+        var i = this.getTaskIndex(taskType);
+        if (i != -1) {
+            var _editedTasks = this.state.editedTasks;
+            _editedTasks[i] = edit;
+            this.setState({editedTasks: _editedTasks})
+        }
+    }
+
+    // Fetch the tasks by category
     fetch() {
-        if(this.props.task)this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
-            
+        if(this.props.task)
+            this.setState(ComputeVersion.fetchRelevantTasks(this.props.task, this.props.tasks));
+            this.setState({expandedTasks : [false,false,false,false], editedTasks : [false,false,false,false]});
     }
     
    componentDidMount(){
@@ -58,7 +100,7 @@ class FileExplorerCore extends Component {
    componentDidUpdate(prevProps, prevState) {
      if (prevProps.task !== this.props.task){
         this.fetch()
-         $('.tooltipped').tooltip({delay:0, html:true});
+        $('.tooltipped').tooltip({delay:0, html:true});
      }
     }
 
@@ -92,91 +134,44 @@ class FileExplorerCore extends Component {
         );
     };
 
-    render(){
-       let KpiFileExplorer;
-       let economicalKpiViewer;
-       let socialKpiViewer;
-       let environmentalKpiViewer;
-       let comfortKpiViewer;
-       let energicalKpiViewer;
-       
-       if(this.state.economicalTask) economicalKpiViewer = this.renderKPIsOfTask(this.state.economicalTask);
-       if(this.state.energicalTask) energicalKpiViewer = this.renderKPIsOfTask(this.state.energicalTask);
-       if(this.state.socialTask) socialKpiViewer = this.renderKPIsOfTask(this.state.socialTask);
-       if(this.state.environmentalTask) environmentalKpiViewer = this.renderKPIsOfTask(this.state.environmentalTask);
-       if(this.state.comfortTask) comfortKpiViewer = this.renderKPIsOfTask(this.state.comfortTask);
+    renderKpiViewer(_task, _taskType, _caption) {
+        if (_task) {
+            var kpiViewer = this.renderKPIsOfTask(_task);
 
+            return (
+                <div className='col s12'>
+                    <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
+                        <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>{_caption}</h6>
+                        <button className="btn-flat center col s2 waves-effect waves-light" 
+                            onClick={ (e) => { e.preventDefault(); this.switchTaskExpanded(_taskType); }}>
+                            <i className="material-icons rezbuild-text">{ this.getTaskExpanded(_taskType)?"expand_less":"expand_more" }</i>
+                        </button>
+                        <div>
+                            <EditDoneTaskForm task={_task} show={this.getTaskEdited(_taskType)} onClose={(e) => { e.preventDefault(); this.editTask(_taskType, false); }} />
+                        </div>
+                        <a className="modal-trigger" href="" onClick = { (e) => { e.preventDefault(); this.editTask(_taskType, true); }}>
+                            <i className="material-icons rezbuild-text">edit</i>
+                        </a>
+                    </div>
+                    { this.getTaskExpanded(_taskType)?kpiViewer: '' }
+                </div>
+            );
+        }
+        return '';
+    }
+
+    render(){
+        
         var kpiScores = ComputeVersion.computeScoreOfRelevantTask(this.props.tasks, this.props.task);
            
-        KpiFileExplorer = 
+        var KpiFileExplorer = 
             <div className="col s12">
-                {/*
-                !(this.state.economicalTask 
-                || this.state.environmentalTask 
-                || this.state.socialTask 
-                || this.state.energicalTask
-                || this.state.comfortTask)?
-                <i className="material-icons rezbuild-text center">block</i>: ''*/
-                }
-                {this.state.economicalTask?
-                    <div className='col s12'>
-                    <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10" style={{padding:0}}>ECONOMICAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light" 
-                    onClick={(e) => {e.preventDefault();this.setState({economicalMode:!this.state.economicalMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.economicalMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.economicalMode?economicalKpiViewer: ''}
-                </div> : ''}
-                {this.state.environmentalTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENVIRONMENTAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({environmentalMode:!this.state.environmentalMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.environmentalMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.environmentalMode?environmentalKpiViewer: ''}
-                </div>:''}
-
-                {this.state.socialTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>SOCIAL</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({socialMode:!this.state.socialMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.socialMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.socialMode?socialKpiViewer: ''}
-                </div>:''}
-
-                {this.state.energicalTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>ENERGY</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({energicalMode:!this.state.energicalMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.energicalMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.energicalMode?energicalKpiViewer: ''}
-                </div>:''}
-
-                {this.state.comfortTask?
-                <div className='col s12'>
-                <div className='valign-wrapper col s12' style={{padding:0, paddingRight:'0.75rem', paddingBottom:'0.5rem'}}>
-                    <h6 className="rezbuild-text left-align col s10"  style={{padding:0}}>COMFORT</h6>
-                    <button className="btn-flat center col s2 waves-effect waves-light"
-                    onClick={(e) => {e.preventDefault();this.setState({comfortMode:!this.state.comfortMode})}}
-                    >
-                    <i className="material-icons rezbuild-text">{this.state.comfortMode?"expand_less":"expand_more"}</i></button>
-                    </div>
-                     { this.state.comfortMode?comfortKpiViewer: ''}
-                </div> : ''}
+                { this.renderKpiViewer(this.state.economicTask, "economic", "ECONOMIC AND FINANCIAL") }
+                { this.renderKpiViewer(this.state.socialTask, "social", "SOCIAL") }
+                { this.renderKpiViewer(this.state.energyTask, "energy", "ENERGY AND ENVIRONMENTAL") }
+                { this.renderKpiViewer(this.state.comfortTask, "comfort", "COMFORT") }
             </div>;
+
         return (
          <div className="section white white-text z-depth-1" style={{paddingTop:0}}>
              <div className= "row" style={{marginBottom:0}}>
@@ -186,7 +181,7 @@ class FileExplorerCore extends Component {
                         </h6>
                         <br/>
                         <h6 className="white-text col s12" style={{fontSize:'10px', marginTop:'0.1rem'}}>
-                            {moment(this.props.task.date).format('LLL')}
+                            {moment(this.props.task.date).format('lll')}
                         </h6>
                     </div>
                      <div className="col s12 white grey-text">
@@ -206,11 +201,11 @@ class FileExplorerCore extends Component {
                                 {
                                     parent => (
                                         <div>
-                                        {(kpiScore.data && kpiScore.data.length >0)?<h6 className="rezbuild-text col s12 center-align"  style={{padding:0}}>{kpiScore.category} SCORE</h6>:''}
+                                        {(kpiScore.normData && kpiScore.normData.length >0)?<h6 className="rezbuild-text col s12 center-align"  style={{padding:0}}>{kpiScore.category} SCORE</h6>:''}
                                         <RadarRechartComponent 
-                                            key={kpiScore.id + kpiScore.category}
+                                            // key={kpiScore.id + kpiScore.category}
                                             highlightedTask = {this.props.task} 
-                                            data={kpiScore.data}
+                                            data={kpiScore}
                                             parentWidth={parent.width}
                                             parentTop={parent.top}
                                             parentLeft={parent.left}

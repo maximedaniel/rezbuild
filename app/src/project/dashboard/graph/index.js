@@ -27,7 +27,7 @@ class GraphComponent extends Component {
 
     constructor(props){
         super(props)
-        this.did = false;
+        // this.did = false;
         this.state = {height:0, width:0, selectedTasks: [], nodes : [], links : []}
         this.countNodeAtDepthLevel = this.countNodeAtDepthLevel.bind(this);
         this.countNodeByDepthLevel = this.countNodeByDepthLevel.bind(this);
@@ -168,8 +168,7 @@ class GraphComponent extends Component {
     }
     var height = computeHeightOfNode(rootTask, minHeight);
     var width = computeWidthOfGraph(rootTask, minWidth, minWidth);
-     this.setState({height:height, width: width, selectedTasks: [], nodes:[], links:[]}, () => {
-     
+    this.setState({height:height, width: width, selectedTasks: [], nodes:[], links:[]}, () => {
 
       var iterate  = (currTask, x, y, nodes, links) => {
         
@@ -292,7 +291,7 @@ class GraphComponent extends Component {
         })
         .attr("x", function(d) { return d.target.x - sizeLabel-4; })
         .attr("y", function(d) { return d.target.y + sizeLabel + 4; })
-        .html( function (d) { return moment(d.task.date).format('LLL'); })
+        .html( function (d) { return moment(d.task.date).format('lll'); })
         .attr("fill", "#f7931e")
         .attr("text-anchor", "end")
         .attr("font-size", sizeSubLabel+"px")
@@ -386,10 +385,10 @@ class GraphComponent extends Component {
    }
 
     render(){
-        if(!this.did){
-            this.did = true
-            this.update()
-        }
+        // if(!this.did){
+        //     this.did = true
+        //     this.update()
+        // }
         return (
           <div>
             <svg id='svg-tree' width={this.state.width} height={this.state.height} />

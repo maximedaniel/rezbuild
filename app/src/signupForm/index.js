@@ -40,11 +40,12 @@ class SignupFormCore extends Component {
             lastname : this.refs.lastname.value.toUpperCase(),
             roles : $("#select_signup_roles  option:selected").map(function() {return $(this).val();}).get(),
         }
-        this.props.socket.emit('/api/signup', create, res => {
+        this.props.socket.emit('/api/signup', window.location.host, create, res => {
             if (res.user) {
-                this.setState({error : false, pending : false}, () =>{
-                    browserHistory.push(((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')
-                })
+                this.setState({user : null, msg : res.msg, pending : false});
+                // this.setState({error : error, pending : false}, () =>{
+                //     browserHistory.push(((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')
+                // })
             }
             if(res.error){
                 this.setState({user : null, error : res.error, pending : false});
@@ -116,12 +117,21 @@ class SignupFormCore extends Component {
                 </div> : ''
                 }
 
+                { this.state.msg ?
                 <div className="row">
-                    <div className="col s6">
-                          <button className="btn waves-effect waves-light" type="submit">SUBMIT  <i class="material-icons right">send</i></button>
+                    <div className="col s12">
+                        <h6 className='rezbuild-text'>{this.state.msg}</h6>
                     </div>
+                </div> : ''
+                }
+
+
+                <div className="row">
                   <div className="col s6">
-                            <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')}>  <i class="material-icons left">cancel</i> CANCEL</button>
+                    <button className="btn waves-effect waves-light" type="submit">SUBMIT  <i class="material-icons right">send</i></button>
+                  </div>
+                  <div className="col s6">
+                    <button className="btn waves-effect waves-light white rezbuild-text" onClick={() => browserHistory.push( ((this.props.params._id) ? ('/' + this.props.params._id):'') +'/signin')}>  <i class="material-icons left">cancel</i> CANCEL</button>
                   </div>
                 </div>
               </form>
