@@ -6,7 +6,12 @@
  * @param {object} transporter  NodeMailerClient
 */
 
-import crypto from 'crypto'
+let crypto;
+try {
+  crypto = require('crypto');
+} catch (err) {
+  console.log('crypto support is disabled!');
+}
 
 module.exports = (io, client, transporter) => {
     // import models
