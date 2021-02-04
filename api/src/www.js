@@ -29,7 +29,7 @@ var logDir = "./logs"
 var app = express();
 
 // Configure cross-origin resource sharing policy
-app.use(cors({credentials: true, origin: 'http://localhost:3000/'}))
+app.use(cors({credentials: true, origin: 'https://rezbuildapp.estia.fr/'}))
 
 // Define template for log file
 const template = {'<>':'div','html':'<span style="font:message-box; font-size:14px"><span style="color:${color}">${timestamp}</span> <span style="background-color:${color};color:white;font-weight:bold">&nbsp;${level}&nbsp;</span>&nbsp;${message}</span>'}
