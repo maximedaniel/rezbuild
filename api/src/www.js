@@ -29,7 +29,12 @@ var logDir = "./logs"
 var app = express();
 
 // Configure cross-origin resource sharing policy
-app.use(cors({credentials: true, origin: 'https://rezbuildapp.estia.fr/'}))
+app.use(
+  cors({
+    credentials: true, 
+    origin: ["http://localhost:3000", "https://rezbuildapp.estia.fr"],
+    methods: ["GET", "POST"]
+  }))
 
 // Define template for log file
 const template = {'<>':'div','html':'<span style="font:message-box; font-size:14px"><span style="color:${color}">${timestamp}</span> <span style="background-color:${color};color:white;font-weight:bold">&nbsp;${level}&nbsp;</span>&nbsp;${message}</span>'}
@@ -129,7 +134,17 @@ app.use('/:taskId/:filename', (req, res, next) => {
 var www = http.Server(app);
 
 //  Create a websocket broker using the HTTP server
-var io = SocketIO(www);
+var io = SocketIO(www, {
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Origin": req.headers.origin,
+      "Access-Control-Allow-Credentials": true
+    };
+    res.writeHead(200, headers);
+    res.end();
+  }
+});
 
 // Configure the user session 
 var session = expressSession({
