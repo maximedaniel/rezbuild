@@ -16,7 +16,7 @@ import expressSocketIOSession from 'express-socket.io-session'
 import siofu from 'socketio-file-upload'
 import http from 'http'
 
-import logger from './tools/logger'
+//import logger from './tools/logger'
 import {User, Project, Task, Token} from './models'
 import {routeAuth, routeUser, routeProject, routeTask, routeFile, routeEmail} from './routes'
 
