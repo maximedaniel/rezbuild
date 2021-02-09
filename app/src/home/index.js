@@ -10,9 +10,14 @@ import SocketContext from '../SocketContext'
 import NavbarComponent from '../navbar'
 import ProjectListComponent from './projectList'
 
+//Display the actual version of the REZBUILD package. Very usefull to check the version online into the ESTIA docker.
+console.info("The actual running version of the REZBUID package.json is : " + require("../../package.json").version)
+
 class HomeCore extends Component {
+
   render() {
         return (
+          
             <div>
                  <NavbarComponent path={['Projects']}/>
                  <ProjectListComponent />
