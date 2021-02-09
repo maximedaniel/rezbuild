@@ -1,6 +1,6 @@
 {
   "name": "rezbuild",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "External pre-assessment tool => Revit, etc.\r User story -> marketplace techonology",
   "main": "index.js",
   "directories": {
