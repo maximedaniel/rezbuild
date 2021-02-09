@@ -1,3 +1,4 @@
+// @ts-nocheck
 var common = {    
     LANES: {
         BACKLOG: 'lane_backlog',
@@ -50,7 +51,7 @@ var common = {
             typeValues: [
                 Number,
                 Number,
-                Text,
+                String,
                 Number
             ],
             minValues: [
@@ -436,10 +437,10 @@ var common = {
                 Number,
                 Number,
                 Number,
-                Text,
+                String,
                 Number,
-                Text,
-                Text 
+                String,
+                String 
             ],
             minValues: [
                 "0",
@@ -531,7 +532,7 @@ var common = {
                 Number,
                 Number,
                 Number,
-                Text,
+                String,
                 Number,
                 Number
             ],
@@ -890,10 +891,10 @@ var common = {
                 "ug/m3, ppm" 
             ],
             typeValues: [
-                Text,
+                String,
                 Number,
-                Text,
-                Text 
+                String,
+                String 
             ],
             minValues: [
                 "",
