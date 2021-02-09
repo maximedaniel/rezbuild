@@ -8,6 +8,8 @@ import React, { Component } from 'react'
 import {browserHistory} from 'react-router'
 import SocketContext from '../SocketContext'
 
+var version = require("../../package.json").version
+
 var $ = window.$
 
 const SIGNIN_ACTIONS = Object.freeze({
@@ -109,18 +111,24 @@ class SigninFormCore extends Component {
 
   render() {
     return (
+      
     <div className="row" style={{paddingTop:'25vh'}}>
+      
       <div className="col push-l4 l4 push-m3 m6 push-s1 s10 center white z-depth-1" style={{padding:'0rem', fontSize:'0'}}>
         <div className="col s12 rezbuild white-text">
-          <div className="col s6 left-align">
+          <div className="col s4 left-align">
           { (!this.props.location.query.action) ? <h5 className="header">Sign in</h5> : '' } 
           { (this.props.location.query.action === SIGNIN_ACTIONS.confirmation) ? <h5 className="header">Verify account</h5> : '' } 
           { (this.props.location.query.action === SIGNIN_ACTIONS.resetpassword || this.props.location.query.action === SIGNIN_ACTIONS.newpassword) ? <h5 className="header">Reset password</h5> : '' }
 
           </div>
-          <div className="col s6 right-align">
+          <div className="col s4 center-align">
+              <h6>v. {version} </h6>
+          </div>
+          <div className="col s4 center-align">
             <img src="/img/jpg/logo.jpg" alt='logo' style={{maxHeight:'4rem'}} />
           </div>
+          
         </div> 
         <form className="col s12" onSubmit={this.submit} lang="en">
           <input type="hidden" id="action" name="action" value={this.props.location.query.action ? this.props.location.query.action : "signin"} ref={this.refAction}/>
@@ -221,6 +229,7 @@ class SigninFormCore extends Component {
                 <h6 className='rezbuild-text'><a href="/signin?action=resetpassword">Reset my password</a></h6>
               </div>
             </div>
+            
             : ''
           }
         </form>
