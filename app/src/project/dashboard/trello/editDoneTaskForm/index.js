@@ -54,7 +54,7 @@ class EditDoneTaskFormCore extends Component {
                     <label className="active" htmlFor={idv}>{name}</label>
                 </div>);
             
-            case Text:
+            case String:
                 return (
                 <div className="input-field col s6">
                     <input 

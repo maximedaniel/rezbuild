@@ -62,7 +62,7 @@ class DoneTaskFormCore extends Component {
                     </select>
                     <label className="active" htmlFor={"values_"+task._id+'_'+name}>{name}</label>
                 </div>);
-            case Text:
+            case String:
                 return (
                 <div className="input-field col s6">
                     <input 
