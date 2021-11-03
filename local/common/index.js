@@ -87,6 +87,7 @@ var common = {
                 "Percentage of renewable energy use",
                 "Annual final energy consumption",
                 "Energy class of the building",
+                "Lifecycle CO2 emission",
 
                 "Energy source typology",
                 "Primary electric energy demand",
@@ -113,6 +114,7 @@ var common = {
                 "%",
                 "kWh/y",
                 "A-G [1-7]",
+                "ton",
 
                 "[1-Conventional, 2-Renewable, 3-Mixed]",
                 "toe",
@@ -151,6 +153,7 @@ var common = {
                 Number,
                 Number,
                 Number,
+                Number,
                 Boolean,
                 Number,
                 Number,
@@ -164,6 +167,7 @@ var common = {
                 "0",
                 "0",
                 "1",
+                "0",
 
                 "1",
                 "0",
@@ -190,6 +194,7 @@ var common = {
                 "0",
                 "0",
                 "1",
+                "0",
 
                 "1",
                 "0",
@@ -216,6 +221,7 @@ var common = {
                 "100",
                 "1000000",
                 "7",
+                "1000000",
 
                 "3",
                 "1000",
@@ -237,6 +243,7 @@ var common = {
                 "100"
             ],
             priorities: [
+                true,
                 true,
                 true,
                 true,
@@ -603,10 +610,12 @@ var common = {
                 "Primary energy demand reduction",
                 "Electric energy consumption per gross surface unit",
                 "Thermal energy consumption per gross surface unit",
-                "Reduction in annual final energy consumption",
+                "Lifecycle CO2 emission",
                 "Percentage of renewable energy use",
                 "Annual final energy consumption",
                 "Energy class of the building",
+
+                "Reduction in annual final energy consumption",
                 "Energy source typology",
                 "Primary electric energy demand",
                 "Primary thermal energy demand",
@@ -633,10 +642,12 @@ var common = {
                 "%",
                 "kWhe/m2 *y",
                 "kWht/m2 *y",
-                "% in kWh",
+                "ton",
                 "%",
                 "kWh/y",
                 "A-G [1-7]",
+
+                "% in kWh",
                 "[1-Conventional, 2-Renewable, 3-Mixed]",
                 "toe",
                 "toe",
@@ -666,6 +677,8 @@ var common = {
                 Number,
                 Number,
                 Number,
+                Number,
+
                 Number,
                 Number,
                 Number,
@@ -697,6 +710,8 @@ var common = {
                 "0",
                 "0",
                 "1",
+
+                "0",
                 "1",
                 "0",
                 "0",
@@ -727,6 +742,8 @@ var common = {
                 "0",
                 "0",
                 "1",
+
+                "0",
                 "1",
                 "0",
                 "0",
@@ -753,10 +770,12 @@ var common = {
                 "100",
                 "2000",
                 "5000",
-                "100",
+                "1000000",
                 "100",
                 "1000000",
                 "7",
+
+                "100",
                 "3",
                 "1000",
                 "1000",
@@ -787,6 +806,8 @@ var common = {
                 true,
                 true,
                 true,
+
+                false,
                 false,
                 false,
                 false,
